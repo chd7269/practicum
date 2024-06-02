@@ -1,0 +1,22 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+
+namespace Logic.DTO
+{
+    public class DebtDTO
+    {
+        public int Id { get; set; }
+        public string Description { get; set; }
+        public int Payments { get; set; }
+        public IdName Urgency { get; set; }
+        public int UserId { get; set; }
+        public bool IsActive { get; set; }
+        public int Sum { get; set; }
+        //כרגע אין צורך ב UserId 
+        //האדם שנכנס הוא בעל החוב, בהמשך יהיה גם מלווה שיוכל להכנס
+    }
+}
