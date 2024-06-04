@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Logic;
 
-public partial class MyMoneyContext : DbContext
+public partial class MyMoneyBContext : DbContext
 {
-    public MyMoneyContext()
+    public MyMoneyBContext()
     {
     }
 
-    public MyMoneyContext(DbContextOptions<MyMoneyContext> options)
+    public MyMoneyBContext(DbContextOptions<MyMoneyBContext> options)
         : base(options)
     {
     }
@@ -42,9 +42,8 @@ public partial class MyMoneyContext : DbContext
     public virtual DbSet<UserType> UserTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-      => optionsBuilder.UseSqlServer(@"Server=.;Database=MyMoneyB;user id=kollel;password=1234qwe!;TrustServerCertificate=true;");
-
-
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=.;Database=MyMoneyB;user id=kollel;password=1234qwe!;TrustServerCertificate=true");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -57,17 +56,17 @@ public partial class MyMoneyContext : DbContext
 
         modelBuilder.Entity<City>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Cities__3214EC07764346F3");
+            entity.HasKey(e => e.Id).HasName("PK__Cities__3214EC07534C2FBE");
         });
 
         modelBuilder.Entity<Debt>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Debts__3214EC0743EE213F");
+            entity.HasKey(e => e.Id).HasName("PK__Debts__3214EC07C8DE5E19");
 
             entity.HasOne(d => d.Urgency).WithMany(p => p.Debts)
                 .HasForeignKey(d => d.UrgencyId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Debts__UrgencyId__74AE54BC");
+                .HasConstraintName("FK__Debts__UrgencyId__3F466844");
 
             entity.HasOne(d => d.User).WithMany(p => p.Debts)
                 .HasForeignKey(d => d.UserId)
@@ -77,7 +76,7 @@ public partial class MyMoneyContext : DbContext
 
         modelBuilder.Entity<Document>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Document__3214EC071303E26B");
+            entity.HasKey(e => e.Id).HasName("PK__Document__3214EC076BCEDAEC");
 
             entity.Property(e => e.Content).HasColumnType("image");
 
@@ -116,7 +115,7 @@ public partial class MyMoneyContext : DbContext
 
         modelBuilder.Entity<Presence>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Presence__3214EC07874DF21B");
+            entity.HasKey(e => e.Id).HasName("PK__Presence__3214EC07B54D15FD");
 
             entity.ToTable("Presence");
 
@@ -132,7 +131,7 @@ public partial class MyMoneyContext : DbContext
 
         modelBuilder.Entity<Status>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Status__3214EC074177472D");
+            entity.HasKey(e => e.Id).HasName("PK__Status__3214EC076EEBFA3C");
 
             entity.ToTable("Status");
         });
@@ -161,7 +160,7 @@ public partial class MyMoneyContext : DbContext
 
         modelBuilder.Entity<UrgencyDebt>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__UrgencyD__3214EC075AB8BEA9");
+            entity.HasKey(e => e.Id).HasName("PK__UrgencyD__3214EC0746247550");
 
             entity.ToTable("UrgencyDebt");
         });
@@ -189,7 +188,7 @@ public partial class MyMoneyContext : DbContext
 
         modelBuilder.Entity<User2Area>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__User2Sub__3214EC07B13949F6");
+            entity.HasKey(e => e.Id).HasName("PK__User2Are__3214EC07C2E49832");
 
             entity.ToTable("User2Area");
 
