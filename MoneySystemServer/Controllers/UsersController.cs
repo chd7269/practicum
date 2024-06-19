@@ -121,5 +121,14 @@ namespace MoneySystemServer.Controllers
             var succes = userService.ChangeUserTypeOrLenderAndDelete(lenderParams.oldLender, lenderParams.userType, lenderParams.newLender);
             return Success();
         }
+
+        //[HttpGet]
+        
+        //public GResult<List<userTypeDTO>> getAllUserType()
+        //{
+        //    return Success(userService.GetAllUserType());
+            
+        //}
+
     }
 }

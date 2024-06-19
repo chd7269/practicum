@@ -11,6 +11,7 @@ namespace Logic.DTO
         Revenues = 1,
         Expenses = 2
     }
+
     public enum TableCode
     {
         UserTypes = 1,
@@ -21,11 +22,20 @@ namespace Logic.DTO
         Users = 8
     }
 
-
     public enum AnsOption
     {
         Yes = 1,
         No = 2,
         OtherOption = 3
     }
+
+    public enum userTypeDTO {
+        systemAdministrator = 1,
+        lender = 2,
+        user = 3,
+        lendersManager = 4,
+        userUnderLender = 5,
+        presenceUser = 6,
+    }
+
 }

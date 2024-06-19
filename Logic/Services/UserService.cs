@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Logic.Services
 {
@@ -18,6 +19,7 @@ namespace Logic.Services
         void ChangeUser2Manager(int id);
       
         bool ChangeUserTypeOrLenderAndDelete(int oldLender, int userType, int? newLender);
+        //public List<userTypeDTO> GetAllUserType();
     }
 
     public class UserService : IUserService
@@ -286,6 +288,19 @@ namespace Logic.Services
             return true;
         }
 
-    
+        //public List<userTypeDTO> GetAllUserType()
+        //{
+
+        //    var userTypesArray = Enum.GetValues(typeof(userTypeDTO));
+        //    var userTypesList = new List<userTypeDTO>(); 
+
+        //    foreach (var userType in userTypesArray)
+        //    {
+        //        userTypesList.Add((userTypeDTO)userType); 
+        //    }
+
+        //    return userTypesList; 
+        //}
+
     }
 }
