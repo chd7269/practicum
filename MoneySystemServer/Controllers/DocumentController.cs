@@ -64,6 +64,14 @@ namespace MoneySystemServer.Controllers
             }
             return Success();
         }
+        [HttpPut]
+        public Result UpdateDocument(DocumentDTO document)
+        {
+            var success = documentService.UpdateDocument(document, UserId.Value);
+            if (!success)
+                return Fail();
+            return Success();
+        }
 
 
     }
