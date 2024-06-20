@@ -10,6 +10,8 @@ namespace Logic.Services
     public interface IMovingService
     {
         List<MovingDTO> GetMovings(Search search, int CurrentUserId);
+    //    object SumOfTithe();
+
         bool AddMove(MovingDTO move, int CurrentUserId);
         bool UpdateMove(MovingDTO move, int CurrentUserId);
         bool DeleteMove(int id, int CurrentUserId);
@@ -31,9 +33,11 @@ namespace Logic.Services
 
         }
         public List<MovingDTO> GetMovings(Search search, int CurrentUserId)
-        {
+        { 
+            
             List<MovingDTO> list = new List<MovingDTO>();
             bool isCurrentMonth = false;
+         
             // if (dbService.entities.Movings.Any((x => x.UserId == CurrentUserId && x.User2Subject.Subject.Type == search.Type))|| search.Type==0)
             // {
             //User2Subject.Subject.Type במקום  User2Subject.Subject.Type לבדוק אם עובד שיניתי 
@@ -217,6 +221,26 @@ namespace Logic.Services
             return filters;
         }
 
+ //       public object  SumOfTithe()
+      //  {
+           
+
+         //   var query = from moving in dbService.entities.Movings
+                     //   join user2Area in dbService.entities.User2Areas
+                     //   on moving.User2AreaId equals user2Area.Id
+                     //   where user2Area.IsMaaser ==true
+                    //    select new
+                    //    {
+                          //  Moving = moving,
+                          ////  User2Area = user2Area
+                     //   };
+
+            // Execute the query to retrieve the results
+         //   var result = query.ToList();
+         //   return result;
+     //   }
+
+       
 
 
         //public bool SetMoveToUser2Sub()
