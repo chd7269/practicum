@@ -23,7 +23,7 @@ builder.Services.AddCors(opt =>
 });
 #endif
 
-builder.Services.AddDbContext<MyMoneyContext>(opt =>
+builder.Services.AddDbContext<MyMoneyBContext>(opt =>
 {
     opt.UseLazyLoadingProxies();
     opt.UseSqlServer(
@@ -31,7 +31,7 @@ builder.Services.AddDbContext<MyMoneyContext>(opt =>
         sql => sql.CommandTimeout(60 * 10));
 
 });
-builder.Services.AddDbContextFactory<MyMoneyContext>(opt =>
+builder.Services.AddDbContextFactory<MyMoneyBContext>(opt =>
 {
     opt.UseLazyLoadingProxies();
     opt.UseSqlServer(

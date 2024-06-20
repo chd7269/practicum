@@ -30,7 +30,7 @@ namespace Logic.Services
 
         public List<TaskDTO> GetTasks(int CurrentUserId)
         {
-            List<TaskDTO> tasks = new List<TaskDTO>();
+            List<TaskDTO> tasks = new List<TaskDTO>();            
             if (dbService.entities.Tasks.Any(x => x.UserId == CurrentUserId))
             {
                 tasks = dbService.entities.Tasks.Where(x => x.UserId == CurrentUserId).Select(x => new TaskDTO()
@@ -42,12 +42,12 @@ namespace Logic.Services
                     Status = new IdName
                     {
                         Id = x.Id,
-                        Name = x.Description
+                        Name = x.Status.Description
                     },
                     Urgency = new IdName
                     {
                         Id = x.Id,
-                        Name = x.Description
+                        Name = x.Urgency.Description
                     },
                     DoDate = x.DoDate
 
