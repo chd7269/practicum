@@ -11,7 +11,7 @@ namespace Logic.Services
 {
     public interface IDBService
     {
-        MyMoneyContext entities { get; }
+        MyMoneyBContext entities { get; }
 
         int Save();
         void DisposeInternal();
@@ -19,18 +19,18 @@ namespace Logic.Services
 
     public class DBService : IDBService
     {
-        private ConcurrentDictionary<int, MyMoneyContext> threads;
-        private IDbContextFactory<MyMoneyContext> dbContextFactory;
+        private ConcurrentDictionary<int, MyMoneyBContext> threads;
+        private IDbContextFactory<MyMoneyBContext> dbContextFactory;
         private IConfiguration configuration;
 
-        public DBService(IDbContextFactory<MyMoneyContext> dbContextFactory, IConfiguration configuration)
+        public DBService(IDbContextFactory<MyMoneyBContext> dbContextFactory, IConfiguration configuration)
         {
-            threads = new ConcurrentDictionary<int, MyMoneyContext>();
+            threads = new ConcurrentDictionary<int, MyMoneyBContext>();
             this.dbContextFactory = dbContextFactory;
             this.configuration = configuration;
         }
 
-        public MyMoneyContext entities
+        public MyMoneyBContext entities
         {
             get
             {
@@ -49,7 +49,7 @@ namespace Logic.Services
 
         public void DisposeInternal()
         {
-            if (threads.TryRemove(Thread.CurrentThread.ManagedThreadId, out MyMoneyContext entities1))
+            if (threads.TryRemove(Thread.CurrentThread.ManagedThreadId, out MyMoneyBContext entities1))
             {
                 entities1.Dispose();
             }

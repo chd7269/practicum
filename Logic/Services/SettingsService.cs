@@ -16,9 +16,9 @@ namespace Logic.Services
         private static string allowAllPermissions;
 
         #region CTOR
-        private MyMoneyContext db;
+        private MyMoneyBContext db;
 
-        public SettingsService(MyMoneyContext db)
+        public SettingsService(MyMoneyBContext db)
         {
             this.db = db;
         }

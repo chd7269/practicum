@@ -83,7 +83,7 @@ namespace Logic.Services
         public List<ActiveUser> GetActiveUsers(int customerId)
         {
             using var scope = serviceProvider.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<MyMoneyContext>();
+            var context = scope.ServiceProvider.GetRequiredService<MyMoneyBContext>();
 
             var activeUserList = new List<ActiveUser>();
             var userList = context.Users.Select(c => new { c.Id, c.Email }).ToList();
@@ -107,7 +107,7 @@ namespace Logic.Services
         public LogoutUserResult LogoutUser(int userId)
         {
             using var scope = serviceProvider.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<MyMoneyContext>();
+            var context = scope.ServiceProvider.GetRequiredService<MyMoneyBContext>();
             var customer = context.Users.Any(x => x.Id == userId);
 
             if (customer == false)
