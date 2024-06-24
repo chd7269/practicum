@@ -34,16 +34,12 @@ namespace Logic.Services
         {
             List<MovingDTO> list = new List<MovingDTO>();
             bool isCurrentMonth = false;
-            // if (dbService.entities.Movings.Any((x => x.UserId == CurrentUserId && x.User2Subject.Subject.Type == search.Type))|| search.Type==0)
-            // {
-            //User2Subject.Subject.Type במקום  User2Subject.Subject.Type לבדוק אם עובד שיניתי 
             var query = dbService.entities.Movings.Where(x => x.User2Area.UserId == CurrentUserId).ToList();
             if (search.Type > 0)
             {
                 query = query.Where(x => x.User2Area.Type == search.Type).ToList();
             }
 
-            //var query = dbService.entities.Movings.Where(x => x.UserId == CurrentUserId && x.User2Subject.Subject.Type == search.Type).ToList();
             if (search.IsToFullMaaser)
             {
                 return SetList(query);
@@ -54,6 +50,7 @@ namespace Logic.Services
                 DateTime from = (DateTime)search.From;
                 DateTime to = (DateTime)search.To;
                 query = query.Where(x => x.Date >= from && x.Date <= to).ToList();
+
                 isCurrentMonth = from.Month == to.Month;
             }
             else
@@ -83,20 +80,9 @@ namespace Logic.Services
                 return SetList(query);
             }
 
-            //if (search.From != null && search.To != null)
-            //{
             query = query.Where(x => x.Date >= search.From && x.Date <= search.To).ToList();
+
             isCurrentMonth = ((DateTime)search.From).Month == ((DateTime)search.To).Month;
-            //}
-            //else
-            //{
-            //    var month = DateTime.Now.Month;
-            //    var year = DateTime.Now.Year;
-            //    isCurrentMonth = true;
-
-            //    query = query.Where(x => x.Date.Month == month && x.Date.Year == year).ToList();
-            //}
-
 
             if (search.PayOptionId != null && search.PayOptionId > 0)
             {
@@ -110,7 +96,6 @@ namespace Logic.Services
                 list = CheckDeviation(CurrentUserId, list);
             }
 
-            // }
             return list;
         }
 
