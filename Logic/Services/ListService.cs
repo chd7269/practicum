@@ -47,6 +47,11 @@ namespace Logic.Services
                 Id = x.Id,
                 Name = x.Description
             }).ToList();
+            lists.Lenders = dbService.entities.Users.Where(x => x.UserTypeId == 2 && x.IsActive).Select(x => new IdName()
+            {
+                Id = x.Id,
+                Name = x.FirstName + " " + x.LastName
+            }).ToList();
             return lists;
         }
 
