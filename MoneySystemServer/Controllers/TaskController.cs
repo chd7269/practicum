@@ -35,10 +35,10 @@ namespace MoneySystemServer.Controllers
             return Success();
         }
 
-        [HttpDelete("{Id}")]
-        public Result DeleteDebt(int Id)
+        [HttpDelete("{id}")]
+        public Result DeleteTask(int id)
         {
-            var isTaskExist = TaskService.DeleteTask(Id);
+            var isTaskExist = TaskService.DeleteTask(id);
             if (!isTaskExist)
                 return Fail();
             return Success();
