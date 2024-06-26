@@ -16,7 +16,7 @@ namespace Logic.Services
         bool UpdateMove(MovingDTO move, int CurrentUserId);
         bool DeleteMove(int id, int CurrentUserId);
 
-        Tithe RepoTithe(int userId);
+        List<Tithe> RepoTithe(int userId);
         Filters GetFilters(int type, int CurrentUserId);
 
     }
@@ -208,30 +208,31 @@ namespace Logic.Services
         }
 
 
-        public Tithe RepoTithe(int userId)
+        public List<Tithe> RepoTithe(int userId)
         {
 
             var month = DateTime.Now.Month;
-       
-            var revenuesList = dbService.entities.Movings.Where(x => x.User2Area.UserId == userId && x.User2Area.Type == 1 && x.User2Area.IsMaaser == true && DateTime.Now.Month == x.Date.Month && DateTime.Now.Year == x.Date.Year).ToList();//&&date
+            List<Tithe> listTitheByYear = new List<Tithe>();
+            var revenuesList = dbService.entities.Movings.Where(x => x.User2Area.UserId == userId 
+            && x.User2Area.Type == 1 && x.User2Area.IsMaaser == true  && DateTime.Now.Year == x.Date.Year).ToList();
+            var expensesList = dbService.entities.Movings.Where(x => x.User2Area.UserId == userId &&
+            x.User2Area.Type == 2 && x.User2Area.IsMaaser == true  && DateTime.Now.Year == x.Date.Year).ToList();
 
-            var expensesList = dbService.entities.Movings.Where(x => x.User2Area.UserId == userId && x.User2Area.Type == 2 && x.User2Area.IsMaaser == true && DateTime.Now.Month == x.Date.Month && DateTime.Now.Year == x.Date.Year).ToList();//&&date
 
-            int sumOfRevenues = revenuesList.Sum(r => r.Sum);
-            int sumOfExpenses = expensesList.Sum(e => e.Sum);
-
-            Tithe tithe = new Tithe();
-            tithe.SumOfRevenues = sumOfRevenues;
-            tithe.SumOfExpenses = sumOfExpenses;
-            tithe.DateTithe = new DateTime(DateTime.Now.Year,DateTime.Now.Month,1);
-            return tithe;
+            for (int i = 1; i <= month; i++)
+            {
+                Tithe t = new Tithe();
+                t.SumOfRevenues = revenuesList.FindAll(x => x.Date.Month == i).Sum(x=>x.Sum);
+                t.SumOfExpenses = expensesList.FindAll(x => x.Date.Month == i).Sum(x => x.Sum);
+                t.DateTithe = new DateTime(DateTime.Now.Year, i, 1);
+                listTitheByYear.Add(t);
+            }
+    
+            return listTitheByYear;
 
         }
 
-            //ליצור נתון של האם זה הוצאה קבועה בתחומי הוצאות
-            //DTO : הכנסות, הוצאות, חודש ושנה ת מעשרות קבועות
-            //06.2024   25000    15000 
-            //pipe שעושה את חישוב המעשר לחודש זה
+      
 
 
 
