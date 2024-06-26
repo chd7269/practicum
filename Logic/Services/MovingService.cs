@@ -16,7 +16,7 @@ namespace Logic.Services
         bool UpdateMove(MovingDTO move, int CurrentUserId);
         bool DeleteMove(int id, int CurrentUserId);
 
-        List<Tithe> RepoTithe(int userId);
+        List<Tithe> RepoTithe(int userId, SerchTithe s);
         Filters GetFilters(int type, int CurrentUserId);
 
     }
@@ -208,36 +208,35 @@ namespace Logic.Services
         }
 
 
-        public List<Tithe> RepoTithe(int userId)
+        public List<Tithe> RepoTithe(int userId, SerchTithe s)
         {
 
-            var month = DateTime.Now.Month;
+
             List<Tithe> listTitheByYear = new List<Tithe>();
-            var revenuesList = dbService.entities.Movings.Where(x => x.User2Area.UserId == userId 
-            && x.User2Area.Type == 1 && x.User2Area.IsMaaser == true  && DateTime.Now.Year == x.Date.Year).ToList();
+            var revenuesList = dbService.entities.Movings.Where(x => x.User2Area.UserId == userId
+            && x.User2Area.Type == 1 && x.User2Area.IsMaaser == true && s.FromDate <= x.Date && s.ToDate >= x.Date).ToList();
             var expensesList = dbService.entities.Movings.Where(x => x.User2Area.UserId == userId &&
-            x.User2Area.Type == 2 && x.User2Area.IsMaaser == true  && DateTime.Now.Year == x.Date.Year).ToList();
+            x.User2Area.Type == 2 && x.User2Area.IsMaaser == true && s.FromDate <= x.Date && s.ToDate >= x.Date).ToList();
+          
 
-
-            for (int i = 1; i <= month; i++)
+            for (DateTime date = s.FromDate; date <= s.ToDate; date = date.AddMonths(1))
             {
                 Tithe t = new Tithe();
-                t.SumOfRevenues = revenuesList.FindAll(x => x.Date.Month == i).Sum(x=>x.Sum);
-                t.SumOfExpenses = expensesList.FindAll(x => x.Date.Month == i).Sum(x => x.Sum);
-                t.DateTithe = new DateTime(DateTime.Now.Year, i, 1);
+                t.SumOfRevenues = revenuesList.FindAll(x => x.Date.Month == date.Month && x.Date.Year == date.Year).Sum(x => x.Sum);
+                t.SumOfExpenses = expensesList.FindAll(x => x.Date.Month == date.Month && x.Date.Year == date.Year).Sum(x => x.Sum);
+                t.DateTithe = new DateTime(date.Year, date.Month, 1);
                 listTitheByYear.Add(t);
             }
-    
             return listTitheByYear;
 
         }
 
-      
 
 
 
-         
-        
+
+
+
         //       public object  SumOfTithe()
         //  {
 
@@ -287,6 +286,6 @@ namespace Logic.Services
 
 
         //    return true;
-        }
-    
+    }
+
 }

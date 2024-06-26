@@ -2,6 +2,7 @@
 using Logic.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.ServiceModel.Channels;
 
 namespace MoneySystemServer.Controllers
 {
@@ -64,12 +65,16 @@ namespace MoneySystemServer.Controllers
             }
             return Success();
         }
+
         [HttpPut]
-        public Result UpdateDocument(DocumentDTO document)
+        public Result UpdateDocument(IdName doc)
         {
-            var success = documentService.UpdateDocument(document, UserId.Value);
+            var success = documentService.UpdateDocument(doc);
+
             if (!success)
+
                 return Fail();
+
             return Success();
         }
 
