@@ -12,5 +12,6 @@ namespace Logic.DTO
         public List<IdName> Cities { get; set; }
         public List<IdName> Areas { get; set; }
         public List<IdName> UrgencyDebts { get; set; }
+        public List<IdName> Lenders { get;set; }
     }
 }
