@@ -122,13 +122,12 @@ namespace MoneySystemServer.Controllers
             return Success();
         }
 
-        //[HttpGet]
-        
-        //public GResult<List<userTypeDTO>> getAllUserType()
-        //{
-        //    return Success(userService.GetAllUserType());
-            
-        //}
+        [HttpGet]
+        public GResult<List<userTypeDTO>> getAllUserType()
+        {
+            return Success(userService.GetAllUserType());
+
+        }
 
     }
 }
