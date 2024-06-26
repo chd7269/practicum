@@ -10,11 +10,13 @@ namespace Logic.Services
     public interface IMovingService
     {
         List<MovingDTO> GetMovings(Search search, int CurrentUserId);
-    //    object SumOfTithe();
+        //    object SumOfTithe();
 
         bool AddMove(MovingDTO move, int CurrentUserId);
         bool UpdateMove(MovingDTO move, int CurrentUserId);
         bool DeleteMove(int id, int CurrentUserId);
+
+        List<Tithe> RepoTithe(int userId);
         Filters GetFilters(int type, int CurrentUserId);
 
     }
@@ -33,21 +35,16 @@ namespace Logic.Services
 
         }
         public List<MovingDTO> GetMovings(Search search, int CurrentUserId)
-        { 
-            
+        {
+
             List<MovingDTO> list = new List<MovingDTO>();
             bool isCurrentMonth = false;
-         
-            // if (dbService.entities.Movings.Any((x => x.UserId == CurrentUserId && x.User2Subject.Subject.Type == search.Type))|| search.Type==0)
-            // {
-            //User2Subject.Subject.Type במקום  User2Subject.Subject.Type לבדוק אם עובד שיניתי 
             var query = dbService.entities.Movings.Where(x => x.User2Area.UserId == CurrentUserId).ToList();
             if (search.Type > 0)
             {
                 query = query.Where(x => x.User2Area.Type == search.Type).ToList();
             }
 
-            //var query = dbService.entities.Movings.Where(x => x.UserId == CurrentUserId && x.User2Subject.Subject.Type == search.Type).ToList();
             if (search.IsToFullMaaser)
             {
                 return SetList(query);
@@ -58,6 +55,7 @@ namespace Logic.Services
                 DateTime from = (DateTime)search.From;
                 DateTime to = (DateTime)search.To;
                 query = query.Where(x => x.Date >= from && x.Date <= to).ToList();
+
                 isCurrentMonth = from.Month == to.Month;
             }
             else
@@ -87,20 +85,9 @@ namespace Logic.Services
                 return SetList(query);
             }
 
-            //if (search.From != null && search.To != null)
-            //{
             query = query.Where(x => x.Date >= search.From && x.Date <= search.To).ToList();
+
             isCurrentMonth = ((DateTime)search.From).Month == ((DateTime)search.To).Month;
-            //}
-            //else
-            //{
-            //    var month = DateTime.Now.Month;
-            //    var year = DateTime.Now.Year;
-            //    isCurrentMonth = true;
-
-            //    query = query.Where(x => x.Date.Month == month && x.Date.Year == year).ToList();
-            //}
-
 
             if (search.PayOptionId != null && search.PayOptionId > 0)
             {
@@ -114,7 +101,6 @@ namespace Logic.Services
                 list = CheckDeviation(CurrentUserId, list);
             }
 
-            // }
             return list;
         }
 
@@ -221,26 +207,57 @@ namespace Logic.Services
             return filters;
         }
 
- //       public object  SumOfTithe()
-      //  {
-           
 
-         //   var query = from moving in dbService.entities.Movings
-                     //   join user2Area in dbService.entities.User2Areas
-                     //   on moving.User2AreaId equals user2Area.Id
-                     //   where user2Area.IsMaaser ==true
-                    //    select new
-                    //    {
-                          //  Moving = moving,
-                          ////  User2Area = user2Area
-                     //   };
+        public List<Tithe> RepoTithe(int userId)
+        {
 
-            // Execute the query to retrieve the results
-         //   var result = query.ToList();
-         //   return result;
-     //   }
+            var month = DateTime.Now.Month;
+            List<Tithe> listTitheByYear = new List<Tithe>();
+            var revenuesList = dbService.entities.Movings.Where(x => x.User2Area.UserId == userId 
+            && x.User2Area.Type == 1 && x.User2Area.IsMaaser == true  && DateTime.Now.Year == x.Date.Year).ToList();
+            var expensesList = dbService.entities.Movings.Where(x => x.User2Area.UserId == userId &&
+            x.User2Area.Type == 2 && x.User2Area.IsMaaser == true  && DateTime.Now.Year == x.Date.Year).ToList();
 
-       
+
+            for (int i = 1; i <= month; i++)
+            {
+                Tithe t = new Tithe();
+                t.SumOfRevenues = revenuesList.FindAll(x => x.Date.Month == i).Sum(x=>x.Sum);
+                t.SumOfExpenses = expensesList.FindAll(x => x.Date.Month == i).Sum(x => x.Sum);
+                t.DateTithe = new DateTime(DateTime.Now.Year, i, 1);
+                listTitheByYear.Add(t);
+            }
+    
+            return listTitheByYear;
+
+        }
+
+      
+
+
+
+         
+        
+        //       public object  SumOfTithe()
+        //  {
+
+
+        //   var query = from moving in dbService.entities.Movings
+        //   join user2Area in dbService.entities.User2Areas
+        //   on moving.User2AreaId equals user2Area.Id
+        //   where user2Area.IsMaaser ==true
+        //    select new
+        //    {
+        //  Moving = moving,
+        ////  User2Area = user2Area
+        //   };
+
+        // Execute the query to retrieve the results
+        //   var result = query.ToList();
+        //   return result;
+        //   }
+
+
 
 
         //public bool SetMoveToUser2Sub()
@@ -270,6 +287,6 @@ namespace Logic.Services
 
 
         //    return true;
-        //}
-    }
+        }
+    
 }
