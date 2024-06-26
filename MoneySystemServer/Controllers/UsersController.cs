@@ -1,4 +1,5 @@
-﻿using Logic.DTO;
+﻿using Logic;
+using Logic.DTO;
 using Logic.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -36,20 +37,27 @@ namespace MoneySystemServer.Controllers
         [HttpPost]
         public Result AddUser(UserDTO newUser)
         {
+            var a = userTypeDTO.systemAdministrator;
             //var task = sessionService.GetCurrentUser();
             //UserDTO currentUser = null;
             //if (task != null)
             //{
             //    currentUser = task.Result;
             //}
-            var isEmailExist = userService.AddUser(newUser, UserId.Value);
+            int userId = 0;
+            if (UserId.Value > 0)
+            {
+                userId= UserId.Value;
+            }
+            var isEmailExist = userService.AddUser(newUser, userId);
             if (isEmailExist)
             {
                 return Fail(message: "user with such email already exist");
             }
             else
             {
-                if (newUser.UserType.Id == 1)
+                //if (newUser.UserType.Id == 1)
+                if (newUser.UserType.Id == (int)userTypeDTO.systemAdministrator)
                 {
                     ChangeUser2Manager(newUser.Id);
                 }
@@ -73,7 +81,8 @@ namespace MoneySystemServer.Controllers
             }
             else
             {
-                if (user.UserType.Id == 1)
+                //if (user.UserType.Id == 1)
+                if (user.UserType.Id == (int)userTypeDTO.systemAdministrator)
                 {
                     ChangeUser2Manager(user.Id);
                 }
