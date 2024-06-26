@@ -64,10 +64,10 @@ namespace MoneySystemServer.Controllers
             return Success(movingService.GetFilters(type, UserId.Value));
         }
 
-        [HttpGet]
-        public GResult<List<Tithe>> GetSumOfTithe()
+        [HttpPost]
+        public GResult<List<Tithe>> GetSumOfTithe(SerchTithe s )
         {
-            return Success(movingService.RepoTithe( UserId.Value));
+            return Success(movingService.RepoTithe( UserId.Value,s));
         }
     }
 }
