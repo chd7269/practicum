@@ -14,7 +14,7 @@ namespace Logic.Services
         bool DeleteDocument(int id, int CurrentUserId);
         DocumentDTO GetFile(int id);
     
-        bool UpdateDocument(DocumentDTO document, int userId);
+        bool UpdateDocument(IdName doc);
     }
     public class DocumentService : IDocumentService
     {
@@ -77,18 +77,13 @@ namespace Logic.Services
             }
             return doc;
         }
-        public bool UpdateDocument(DocumentDTO document, int userId)
+        public bool UpdateDocument(IdName doc)
         {
-            var dbDescrip = dBService.entities.Documents.FirstOrDefault(x => x.Id == document.Id );
+            var dbDescrip = dBService.entities.Documents.FirstOrDefault(x => x.Id == doc.Id );
             if (dbDescrip != null)
             {
-              //  dbDescrip.Content = document.Content;
-
-                dbDescrip.FileName = document.FileName;
-                dbDescrip.Description = document.Description;
-                dbDescrip.UserId = document.UserId;
-                //dbDescrip.User = document.User;
-                dBService.entities.SaveChanges();
+                dbDescrip.Description = doc.Name;
+                dBService.Save();
                 return true;
             }
             return false;
