@@ -21,6 +21,8 @@ namespace Logic.DTO
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
 
+        public bool AllDate { get; set; }
+
 
     }
 }

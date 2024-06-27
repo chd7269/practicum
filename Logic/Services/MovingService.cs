@@ -210,8 +210,12 @@ namespace Logic.Services
 
         public List<Tithe> RepoTithe(int userId, SerchTithe s)
         {
+           // if (s.AllDate)
+          //  {
+           //  var x  =    dbService.entities.Movings.OrderBy(m => m.Date).ToList()[0];
+           //     s.FromDate = x;
 
-
+         //   }
             List<Tithe> listTitheByYear = new List<Tithe>();
             var revenuesList = dbService.entities.Movings.Where(x => x.User2Area.UserId == userId
             && x.User2Area.Type == 1 && x.User2Area.IsMaaser == true && s.FromDate <= x.Date && s.ToDate >= x.Date).ToList();
