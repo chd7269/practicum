@@ -24,7 +24,8 @@ namespace Logic.Services
 
     public class UserService : IUserService
     {
-       // כל השורות המוסלשות של פנינה מכיוון שאי אפשר לבדוק על את הקוד אם הוא תקין
+        //  בעמוד זה יש שורות מוסלשות כי רחל אמרה שנטפל בקוד הזה בשבוע של ההרשאות לא למחוק פנינה
+
         private IDBService dbService;
 
         public UserService(IDBService dbService)
