@@ -51,7 +51,6 @@ namespace Logic.Services
                 users = users.Where(x => x.LenderId == currentUser.Id).ToList();
             }
 
-            if (userSerach != null)
             if (userSerach != null && !searchOptionList.Contains(userSerach.ToString()))
             {
                 if (userSerach.usersType.Id > 0)
