@@ -52,6 +52,7 @@ namespace Logic.Services
             }
 
             if (userSerach != null)
+            if (userSerach != null && !searchOptionList.Contains(userSerach.ToString()))
             {
                 if (userSerach.usersType.Id > 0)
                 {
