@@ -1,4 +1,5 @@
 ﻿using Logic.DTO;
+using Microsoft.AspNetCore.Http.Features;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,16 +9,16 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Logic.Services
 {
-     public interface IUserService
+    public interface IUserService
     {
-        List<UserDTO> GetUsers(int currentUserId);
+        List<UserDTO> GetUsers(int currentUserId, userSerach userSerach);
         List<IdName> GetUserTypes(int currentUserId);
         UserDTO GetUser(int id);
         bool AddUser(UserDTO user, int currentUserId);
         bool UpdateUser(UserDTO user);
         bool DeleteUser(int id);
         void ChangeUser2Manager(int id);
-      
+
         bool ChangeUserTypeOrLenderAndDelete(int oldLender, int userType, int? newLender);
         public List<userTypeDTO> GetAllUserType();
     }
@@ -25,15 +26,18 @@ namespace Logic.Services
     public class UserService : IUserService
     {
         private IDBService dbService;
+        private userSerach userSerach;
 
         public UserService(IDBService dbService)
         {
             this.dbService = dbService;
         }
-        public List<UserDTO> GetUsers(int currentUserId)
+        public List<UserDTO> GetUsers(int currentUserId, userSerach userSerach)
         {
             var users = dbService.entities.Users.ToList();
+
             var currentUser = dbService.entities.Users.FirstOrDefault(x => x.Id == currentUserId);
+
             if (currentUser.UserType.Id == 5)
             {
                 users = users.Where(x => x.ManagerId == currentUser.Id).ToList();
@@ -42,6 +46,32 @@ namespace Logic.Services
             {
                 users = users.Where(x => x.LenderId == currentUser.Id).ToList();
             }
+
+            if (userSerach != null)
+            {
+                if (userSerach.usersType.Id > 0)
+                {
+                    var u = users.Where(x => x.UserTypeId == userSerach.usersType.Id).ToList();
+                    users = u;
+                }
+                else
+                {
+                    if (userSerach.usersUnderLender.Id > 0)
+                    {
+                        var u = users.Where(x => x.UserTypeId == 5 && x.LenderId == userSerach.usersUnderLender.Id).ToList();
+                        users = u;
+                    }
+                    else
+                    {
+                        if (userSerach.lendersUnderManager.Id > 0)
+                        {
+                            var u = users.Where(x => x.UserTypeId == 2 && x.ManagerId == userSerach.lendersUnderManager.Id).ToList();
+                            users = u;
+                        }
+                    }
+                }
+            }
+
             return users.Select(x => new UserDTO()
             {
                 Id = x.Id,
@@ -61,7 +91,6 @@ namespace Logic.Services
                 PayDate = x.PayDate,
 
             }).ToList();
-
 
         }
 
@@ -106,7 +135,6 @@ namespace Logic.Services
             return new UserDTO();
         }
 
-
         public bool AddUser(UserDTO newUser, int currentUserId)
         {
             bool isExist = dbService.entities.Users.Any(x => x.Email == newUser.Email);
@@ -143,7 +171,7 @@ namespace Logic.Services
                     //    dbuser.UserTypeId = 2;
                     //    dbuser.ManagerId = currentUser.Id;
                     //}
-                     if (currentUser.UserType.Id == 2)//האם אתה מלווה
+                    if (currentUser.UserType.Id == 2)//האם אתה מלווה
                     {
                         dbuser.UserTypeId = 6;
                         dbuser.LenderId = currentUser.Id;
@@ -185,7 +213,7 @@ namespace Logic.Services
                         {
 
                             var change = dbService.entities.Users.Where(x => x.ManagerId == user.Id).ToList();
-                            change.ForEach(x=> x.ManagerId = null);
+                            change.ForEach(x => x.ManagerId = null);
                         }
                         else if (dbUser.UserTypeId == 6)
                         {
@@ -241,7 +269,6 @@ namespace Logic.Services
 
         }
 
-
         public void ChangeUser2Manager(int id)
         {
             var dbUser = dbService.entities.Users.FirstOrDefault(x => x.Id == id);
@@ -270,8 +297,6 @@ namespace Logic.Services
             }).ToList();
             return userTypes;
         }
-
-
 
         public bool ChangeUserTypeOrLenderAndDelete(int oldLender, int userType, int? newLender)
         {
