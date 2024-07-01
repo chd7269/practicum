@@ -69,5 +69,11 @@ namespace MoneySystemServer.Controllers
         {
             return Success(movingService.RepoTithe( UserId.Value,s));
         }
+
+        [HttpGet]
+        public GResult<List<int>> GetYears()
+        {
+            return Success(movingService.YearsMoovings(UserId.Value));
+        }
     }
 }

@@ -16,10 +16,11 @@ namespace MoneySystemServer.Controllers
             this.repotsService = ReportsService;
         }
 
+       
         [HttpGet]
-        public GResult<List<HistoryDTO>> GetHistory()
+        public GResult<List<MovingReportsDTO>> GetMovingReports()
         {
-            return Success(repotsService.GetHistory(UserId.Value));
+            return Success(repotsService.GetMovingReports(UserId.Value));
         }
 
 
