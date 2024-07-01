@@ -7,9 +7,15 @@ using System.Threading.Tasks;
 
 namespace Logic.Services
 {
+    //public interface IReportsServies
+    //{
+    //    List<HistoryDTO> GetHistory(int current);
+
+    //}
+
     public interface IReportsServies
     {
-        List<HistoryDTO> GetHistory(int current);
+        List<MovingReportsDTO> GetMovingReports(int current);
 
     }
 
@@ -24,10 +30,10 @@ namespace Logic.Services
             this.dbService = dbService;
         }
 
-        public List<HistoryDTO> GetHistory(int current)
+        public List<MovingReportsDTO> GetMovingReports(int current)
         {
 
-            var histories = new List<HistoryDTO>();
+            var reports = new List<MovingReportsDTO>();
 
             var oldMove = dbService.entities.Movings.Where(x => x.User2Area.UserId == current).OrderBy(x => x.Date).FirstOrDefault();
             if (oldMove != null)
@@ -63,7 +69,7 @@ namespace Logic.Services
                         }
                     }
 
-                    histories.Add(new HistoryDTO()
+                    reports.Add(new MovingReportsDTO()
                     {
                         Month = date.Month.ToString(),
                         Year = date.Year.ToString(),
@@ -76,7 +82,7 @@ namespace Logic.Services
                 }
             }
 
-            return histories;
+            return reports;
         }
 
 

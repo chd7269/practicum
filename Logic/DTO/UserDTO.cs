@@ -22,11 +22,7 @@ namespace Logic.DTO
         public DateTime? PayDate { get; set; }
         public IdName Lender { get; set; }
         public IdName Manager { get; set; }
-
-
-
     }
-
 
     public class LenderParams
     {
@@ -34,4 +30,12 @@ namespace Logic.DTO
         public int userType { get; set; }
         public int? newLender { get; set; }
     }
+
+    public class userSerach
+    {
+        public IdName usersType { get; set; }
+        public IdName usersUnderLender { get; set; }
+        public IdName lendersUnderManager { get; set; }
+    }
+
 }
