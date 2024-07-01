@@ -25,6 +25,7 @@ namespace Logic.Services
 
     public class UserService : IUserService
     {
+       // כל השורות המוסלשות של פנינה מכיוון שאי אפשר לבדוק על את הקוד אם הוא תקין
         private IDBService dbService;
         private userSerach userSerach;
 
@@ -37,12 +38,13 @@ namespace Logic.Services
             var users = dbService.entities.Users.ToList();
 
             var currentUser = dbService.entities.Users.FirstOrDefault(x => x.Id == currentUserId);
-
-            if (currentUser.UserType.Id == 5)
+            //  if (currentUser.UserType.Id == 5)
+            if (currentUser.UserType.Id == (int)userTypeDTO.userUnderLender)
             {
                 users = users.Where(x => x.ManagerId == currentUser.Id).ToList();
             }
-            else if (currentUser.UserType.Id == 2)
+            //else if (currentUser.UserType.Id == 2)
+            else if (currentUser.UserType.Id == (int)userTypeDTO.lender) 
             {
                 users = users.Where(x => x.LenderId == currentUser.Id).ToList();
             }
@@ -171,9 +173,13 @@ namespace Logic.Services
                     //    dbuser.UserTypeId = 2;
                     //    dbuser.ManagerId = currentUser.Id;
                     //}
-                    if (currentUser.UserType.Id == 2)//האם אתה מלווה
+
+                    //if (currentUser.UserType.Id == 2)//האם אתה מלווה
+                    if (currentUser.UserType.Id == (int)userTypeDTO.lender)
                     {
-                        dbuser.UserTypeId = 6;
+                        //dbuser.UserTypeId = 6;
+                        dbuser.UserTypeId = (int)userTypeDTO.presenceUser;
+
                         dbuser.LenderId = currentUser.Id;
                     }
                 }
@@ -181,7 +187,9 @@ namespace Logic.Services
                 {
                     if (currentUser == null)
                     {
-                        dbuser.UserTypeId = 3;
+                        //dbuser.UserTypeId = 3;
+                        dbuser.UserTypeId = (int)userTypeDTO.user;
+
                     }
                 }
                 dbService.entities.Users.Add(dbuser);
@@ -209,13 +217,16 @@ namespace Logic.Services
                     dbUser.Password = user.Password;
                     if (user.UserType.Id != dbUser.UserTypeId)
                     {
-                        if (dbUser.UserTypeId == 2)
+                        //if (dbUser.UserTypeId == 2)
+                        if (dbUser.UserTypeId == (int)userTypeDTO.lender)
+
                         {
 
                             var change = dbService.entities.Users.Where(x => x.ManagerId == user.Id).ToList();
                             change.ForEach(x => x.ManagerId = null);
                         }
-                        else if (dbUser.UserTypeId == 6)
+                        //else if (dbUser.UserTypeId == 6)
+                        else if (dbUser.UserTypeId == (int)userTypeDTO.presenceUser)
                         {
                             var change = dbService.entities.Users.Where(x => x.LenderId == user.Id).ToList();
                             change.ForEach(x => x.LenderId = null);
@@ -234,11 +245,13 @@ namespace Logic.Services
                     {
                         dbUser.LenderId = null;
                     }
-                    if (user.UserType.Id != 6)
+                    //if (user.UserType.Id != 6)
+                    if (user.UserType.Id != (int)userTypeDTO.presenceUser)
                     {
                         dbUser.LenderId = null;
                     }
-                    if (user.Manager == null || user.UserType.Id != 2)
+                    //if (user.Manager == null || user.UserType.Id != 2)
+                    if (user.Manager == null || user.UserType.Id != (int)userTypeDTO.lender)
                     {
                         dbUser.ManagerId = null;
                     }
@@ -274,7 +287,9 @@ namespace Logic.Services
             var dbUser = dbService.entities.Users.FirstOrDefault(x => x.Id == id);
             if (dbUser != null)
             {
-                dbUser.UserTypeId = 1;
+                //dbUser.UserTypeId = 1;
+                dbUser.UserTypeId = (int)userTypeDTO.systemAdministrator;
+
                 dbService.Save();
             }
         }
@@ -285,9 +300,11 @@ namespace Logic.Services
             var currentUser = dbService.entities.Users.FirstOrDefault(x => x.Id == currentUserId);
             if (currentUser != null)
             {
-                if (currentUser.UserType.Id != 1)
+                // if (currentUser.UserType.Id != 1)
+                if (currentUser.UserType.Id != (int)userTypeDTO.systemAdministrator)
                 {
-                    query = query.Where(x => x.Id != 1).ToList();
+                    //query = query.Where(x => x.Id != 1).ToList();
+                    query = query.Where(x => x.Id != (int)userTypeDTO.systemAdministrator).ToList();
                 }
             }
             var userTypes = query.Select(x => new IdName()
