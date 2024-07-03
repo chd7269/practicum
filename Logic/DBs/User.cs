@@ -45,6 +45,8 @@ public partial class User
 
     public virtual User? Manager { get; set; }
 
+    public virtual ICollection<ManagerDesign> ManagerDesigns { get; set; } = new List<ManagerDesign>();
+
     public virtual ICollection<PayOption> PayOptions { get; set; } = new List<PayOption>();
 
     public virtual ICollection<Presence> Presences { get; set; } = new List<Presence>();
