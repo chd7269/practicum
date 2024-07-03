@@ -36,6 +36,11 @@ namespace Logic.Services
                 Id = x.Id,
                 Name = x.Name
             }).ToList();
+            lists.Statuses = dbService.entities.Statuses.Select(x => new IdName()
+            {
+                Id = x.Id,
+                Name = x.Description
+            }).ToList();
             lists.Areas = dbService.entities.Areas.Select(x => new IdName()
             {
                 Id = x.Id,
@@ -133,6 +138,10 @@ namespace Logic.Services
                     {
                         return AddUrgencyDebt(idName);
                     }
+                case TableCode.Status:
+                    {
+                        return AddStatus(idName);
+                    }
                 default:
                     break;
             }
@@ -159,6 +168,10 @@ namespace Logic.Services
                     {
                         return DeleteUrgencyDebt(idName.Id);
                     }
+                case TableCode.Status:
+                    {
+                        return DeleteStatus(idName.Id);
+                    }
                 default:
                     break;
             }
@@ -184,6 +197,10 @@ namespace Logic.Services
                 case TableCode.UrgencyDebt:
                     {
                         return UpdateUrgencyDebt(idName);
+                    }
+                case TableCode.Status:
+                    {
+                        return UpdateStatus(idName);
                     }
                 default:
                     break;
@@ -225,6 +242,17 @@ namespace Logic.Services
             if (dBurgencyDebt != null)
             {
                 dBurgencyDebt.Description = idName.Name;
+                dbService.Save();
+                return true;
+            }
+            return false;
+        }
+        private bool UpdateStatus(IdName idName)
+        {
+            var dBStatuses = dbService.entities.Statuses.FirstOrDefault(x => x.Id == idName.Id);
+            if (dBStatuses != null)
+            {
+                dBStatuses.Description = idName.Name;
                 dbService.Save();
                 return true;
             }
@@ -273,6 +301,16 @@ namespace Logic.Services
             if (dbService.entities.UrgencyDebts.Any(x => x.Id == id))
             {
                 dbService.entities.UrgencyDebts.Remove(dbService.entities.UrgencyDebts.FirstOrDefault(x => x.Id == id));
+                dbService.Save();
+                return true;
+            }
+            return false;
+        }
+        private bool DeleteStatus(int id)
+        {
+            if (dbService.entities.Statuses.Any(x => x.Id == id))
+            {
+                dbService.entities.Statuses.Remove(dbService.entities.Statuses.FirstOrDefault(x => x.Id == id));
                 dbService.Save();
                 return true;
             }
@@ -330,6 +368,20 @@ namespace Logic.Services
                 Description = idName.Name
             };
             dbService.entities.UrgencyDebts.Add(newItem);
+            dbService.Save();
+            return true;
+        }
+        private bool AddStatus(IdNameDB idName)
+        {
+            if (dbService.entities.Statuses.Any(x => x.Description == idName.Name))
+            {
+                return false;
+            }
+            var newItem = new Status()
+            {
+                Description = idName.Name
+            };
+            dbService.entities.Statuses.Add(newItem);
             dbService.Save();
             return true;
         }
