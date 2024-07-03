@@ -65,7 +65,7 @@ namespace MoneySystemServer.Controllers
         }
 
         [HttpPost]
-        public GResult<List<Tithe>> GetSumOfTithe(SerchTithe s )
+        public GResult<TithesDataDTO> GetSumOfTithe(SerchTitheDTO s )
         {
             return Success(movingService.RepoTithe( UserId.Value,s));
         }
