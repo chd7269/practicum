@@ -34,9 +34,11 @@ namespace Logic.Services
         {
             this.dbService = dbService;
         }
+        
         public List<UserDTO> GetUsers(int currentUserId, userSerach userSerach)
         {
             var users = dbService.entities.Users.ToList();
+            List < String > searchOptionList = ["סוגי משתמשים","משתמשים תחת מלווה","מלווים תחת מנהל"];
 
             var currentUser = dbService.entities.Users.FirstOrDefault(x => x.Id == currentUserId);
             //  if (currentUser.UserType.Id == 5)
@@ -50,7 +52,7 @@ namespace Logic.Services
                 users = users.Where(x => x.LenderId == currentUser.Id).ToList();
             }
 
-            if (userSerach != null)
+            if (userSerach != null && !searchOptionList.Contains(userSerach.ToString()))
             {
                 if (userSerach.usersType.Id > 0)
                 {
