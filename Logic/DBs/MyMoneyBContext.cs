@@ -58,12 +58,12 @@ public partial class MyMoneyBContext : DbContext
 
         modelBuilder.Entity<City>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Cities__3214EC07C6F4B699");
+            entity.HasKey(e => e.Id).HasName("PK__Cities__3214EC07988EC890");
         });
 
         modelBuilder.Entity<Debt>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Debts__3214EC076E4C03CD");
+            entity.HasKey(e => e.Id).HasName("PK__Debts__3214EC0710171BA5");
 
             entity.HasOne(d => d.Urgency).WithMany(p => p.Debts)
                 .HasForeignKey(d => d.UrgencyId)
@@ -78,7 +78,7 @@ public partial class MyMoneyBContext : DbContext
 
         modelBuilder.Entity<Document>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Document__3214EC070DE1C5D3");
+            entity.HasKey(e => e.Id).HasName("PK__Document__3214EC07E7413EF0");
 
             entity.Property(e => e.Content).HasColumnType("image");
 
@@ -90,7 +90,7 @@ public partial class MyMoneyBContext : DbContext
 
         modelBuilder.Entity<ManagerDesign>(entity =>
         {
-            entity.HasKey(e => e.ManagerId).HasName("PK__ManagerD__3BA2AAE1CDA0B9EE");
+            entity.HasKey(e => e.ManagerId).HasName("PK__ManagerD__3BA2AAE1BBE0A0A5");
 
             entity.ToTable("ManagerDesign");
 
@@ -138,7 +138,7 @@ public partial class MyMoneyBContext : DbContext
 
         modelBuilder.Entity<Presence>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Presence__3214EC07761F3319");
+            entity.HasKey(e => e.Id).HasName("PK__Presence__3214EC07F8C3E5C2");
 
             entity.ToTable("Presence");
 
@@ -154,7 +154,7 @@ public partial class MyMoneyBContext : DbContext
 
         modelBuilder.Entity<Status>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Status__3214EC073D7024B1");
+            entity.HasKey(e => e.Id).HasName("PK__Status__3214EC07DFD4AEAE");
 
             entity.ToTable("Status");
         });
@@ -183,7 +183,7 @@ public partial class MyMoneyBContext : DbContext
 
         modelBuilder.Entity<UrgencyDebt>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__UrgencyD__3214EC0780B0DD57");
+            entity.HasKey(e => e.Id).HasName("PK__UrgencyD__3214EC07CB4D6F1C");
 
             entity.ToTable("UrgencyDebt");
         });
@@ -211,7 +211,7 @@ public partial class MyMoneyBContext : DbContext
 
         modelBuilder.Entity<User2Area>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__User2Are__3214EC07F61E8100");
+            entity.HasKey(e => e.Id).HasName("PK__User2Are__3214EC07380B85A3");
 
             entity.ToTable("User2Area");
 
