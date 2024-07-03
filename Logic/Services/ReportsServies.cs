@@ -1,21 +1,20 @@
 ﻿using Logic.DTO;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Text;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Logic.Services
 {
-    //public interface IReportsServies
-    //{
-    //    List<HistoryDTO> GetHistory(int current);
-
-    //}
+  
 
     public interface IReportsServies
     {
         List<MovingReportsDTO> GetMovingReports(int current);
+        List<HistoryDTO> GetHistory(int current);
+        bool AddHistory(int Id, User2Area oldDetails, AreaDTO newDetails);
 
     }
 
@@ -86,5 +85,43 @@ namespace Logic.Services
         }
 
 
+        public List<HistoryDTO> GetHistory(int current)
+        {
+            var history = new List<HistoryDTO>();
+            history.Add(new HistoryDTO()
+            {
+        
+            });
+            return history;
+        }
+
+
+        public bool AddHistory(int Id, User2Area oldDetails, AreaDTO newDetails)
+        {
+            History newHistory = new History();
+            newHistory.Id = Id;
+            newHistory.DateofChange = DateTime.Now;
+            newHistory.OldDomain = oldDetails.Description;
+            newHistory.NewDomain = newDetails.Description;
+            newHistory.OldAmount = oldDetails.Sum;
+            newHistory.NewAmount = newDetails.Sum;
+            dbService.entities.Histories.Add(newHistory);
+            try
+            {
+                //dbService.Save();
+                dbService.entities.SaveChanges();
+
+                return true;
+
+            }
+            catch (Exception)
+            {
+                return false;
+                
+            }
+          
+        }
     }
+
 }
+

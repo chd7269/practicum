@@ -23,6 +23,24 @@ namespace MoneySystemServer.Controllers
             return Success(repotsService.GetMovingReports(UserId.Value));
         }
 
+        //האם לעשות את זה בקונטרולר
+        [HttpGet]
+        public GResult<List<HistoryDTO>> GetHistory()
+        {
+            return Success(repotsService.GetHistory(UserId.Value));
+        }
 
-    }
+
+        //[HttpPost]
+        //public Result AddHistory(int iD,AreaDTO area, AreaDTO area1)
+        //{
+        //    //    var isAreaExist = areaService.AddArea(area, UserId.Value);
+        //    //    if (!isAreaExist)
+        //    //    {
+        //    //        return Fail(message: "area already exits");
+        //    //    }
+        //    return Success();
+        //}
+
+}
 }
