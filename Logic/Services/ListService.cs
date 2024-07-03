@@ -12,7 +12,7 @@ namespace Logic.Services
         ListsDTO GetAllLists();
         List<IdName> GetList(IdNameDB item);
         bool AddItem(IdNameDB idName);
-        bool DeleteItem(IdNameDB idName);
+        bool DeleteItem(IdNameDB item);
         bool UpdateItem(IdNameDB idName);
     }
     public class ListService : IListService
@@ -48,6 +48,11 @@ namespace Logic.Services
                 Name = x.Description
             }).ToList();
             lists.Lenders = dbService.entities.Users.Where(x => x.UserTypeId == 2 && x.IsActive).Select(x => new IdName()
+            {
+                Id = x.Id,
+                Name = x.FirstName + " " + x.LastName
+            }).ToList();
+            lists.Managers = dbService.entities.Users.Where(x => x.UserTypeId == 4 && x.IsActive).Select(x => new IdName()
             {
                 Id = x.Id,
                 Name = x.FirstName + " " + x.LastName
@@ -134,25 +139,25 @@ namespace Logic.Services
             return false;
         }
 
-        public bool DeleteItem(IdNameDB idName)
+        public bool DeleteItem(IdNameDB item)
         {
-            switch (idName.TableCode)
+            switch (item.TableCode)
             {
-                case TableCode.UserTypes:
-                    {
-                        return DeleteUserType(idName.Id);
-                    }
+                //case TableCode.UserTypes:
+                //    {
+                //        return DeleteUserType(idName.Id);
+                //    }
                 case TableCode.Cities:
                     {
-                        return DeleteCity(idName.Id);
+                        return DeleteCity(item.Id);
                     }
                 case TableCode.Areas:
                     {
-                        return DeleteSubject(idName.Id);
+                        return DeleteAreas(item.Id);
                     }
                 case TableCode.UrgencyDebt:
                     {
-                        return DeleteUrgencyDebt(idName.Id);
+                        return DeleteUrgencyDebt(item.Id);
                     }
                 default:
                     break;
@@ -164,10 +169,10 @@ namespace Logic.Services
         {
             switch (idName.TableCode)
             {
-                case TableCode.UserTypes:
-                    {
-                        return UpdateUserType(idName);
-                    }
+                //case TableCode.UserTypes:
+                //    {
+                //        return UpdateUserType(idName);
+                //    }
                 case TableCode.Cities:
                     {
                         return UpdateCity(idName);
@@ -251,9 +256,9 @@ namespace Logic.Services
             return false;
         }
 
-        private bool DeleteSubject(int id)
+        private bool DeleteAreas(int id)
         {
-            var ar = dbService.entities.User2Areas.FirstOrDefault(x => x.Id == id);
+            var ar = dbService.entities.Areas.FirstOrDefault(x => x.Id == id);
             if (ar != null)
             {
                 dbService.entities.Areas.Remove(dbService.entities.Areas.FirstOrDefault(x => x.Id == id));

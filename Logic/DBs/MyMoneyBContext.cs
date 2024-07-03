@@ -123,8 +123,8 @@ public partial class MyMoneyBContext : DbContext
         {
             entity.ToTable("PayOption");
 
-            entity.HasOne(d => d.User).WithMany(p => p.PayOptions)
-                .HasForeignKey(d => d.UserId)
+            entity.HasOne(d => d.Manager).WithMany(p => p.PayOptions)
+                .HasForeignKey(d => d.ManagerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PayOption_User");
         });

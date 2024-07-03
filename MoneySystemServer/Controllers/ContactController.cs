@@ -24,7 +24,7 @@ namespace Api.Controllers
         {
             model.Subject = "הודעת מייל מאתר תקציב לי";
 
-            string mailTo = "";
+            string mailTo = "mymonytest@gmail.com";
 
             var serverType = config["Server:Type"];
 
