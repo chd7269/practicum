@@ -16,7 +16,8 @@ namespace Logic.Services
         bool UpdateMove(MovingDTO move, int CurrentUserId);
         bool DeleteMove(int id, int CurrentUserId);
 
-        List<Tithe> RepoTithe(int userId, SerchTithe s);
+        TithesDataDTO RepoTithe(int userId, SerchTitheDTO s);
+        List<int> YearsMoovings(int userId);
         Filters GetFilters(int type, int CurrentUserId);
 
     }
@@ -208,31 +209,41 @@ namespace Logic.Services
         }
 
 
-        public List<Tithe> RepoTithe(int userId, SerchTithe s)
+        public TithesDataDTO RepoTithe(int userId, SerchTitheDTO s)
         {
-           // if (s.AllDate)
-          //  {
-           //  var x  =    dbService.entities.Movings.OrderBy(m => m.Date).ToList()[0];
-           //     s.FromDate = x;
-
-         //   }
-            List<Tithe> listTitheByYear = new List<Tithe>();
+            if (s.AllDate)
+            {
+                DateTime x = dbService.entities.Movings.Where(x => x.User2Area.UserId == userId).OrderBy(m => m.Date).ToList()[0].Date;
+                s.FromDate = x;
+                s.ToDate = DateTime.Now;
+            }
+            TithesDataDTO result = new TithesDataDTO();
+            result.TitheList = new List<TitheDTO>();
             var revenuesList = dbService.entities.Movings.Where(x => x.User2Area.UserId == userId
             && x.User2Area.Type == 1 && x.User2Area.IsMaaser == true && s.FromDate <= x.Date && s.ToDate >= x.Date).ToList();
             var expensesList = dbService.entities.Movings.Where(x => x.User2Area.UserId == userId &&
             x.User2Area.Type == 2 && x.User2Area.IsMaaser == true && s.FromDate <= x.Date && s.ToDate >= x.Date).ToList();
-          
+       //     s.FromDate = dbService.entities.Movings.Where(x => x.User2Area.UserId == userId && x.Date >= s.FromDate&&x.User2Area.IsMaaser==true).OrderBy(d => d.Date).ToList()[0].Date;
 
             for (DateTime date = s.FromDate; date <= s.ToDate; date = date.AddMonths(1))
             {
-                Tithe t = new Tithe();
+                TitheDTO t = new TitheDTO();
                 t.SumOfRevenues = revenuesList.FindAll(x => x.Date.Month == date.Month && x.Date.Year == date.Year).Sum(x => x.Sum);
                 t.SumOfExpenses = expensesList.FindAll(x => x.Date.Month == date.Month && x.Date.Year == date.Year).Sum(x => x.Sum);
                 t.DateTithe = new DateTime(date.Year, date.Month, 1);
-                listTitheByYear.Add(t);
+                if (t.SumOfExpenses > 0 || t.SumOfRevenues > 0)
+                    result.TitheList.Add(t);
+                else
+                    result.SkipMonth = true;
             }
-            return listTitheByYear;
 
+            return result;
+
+        }
+
+        public List<int> YearsMoovings(int userId)
+        {
+            return dbService.entities.Movings.Where(x => x.User2Area.UserId == userId).OrderBy(x => x.Date).Select(x => x.Date.Year).Distinct().ToList();
         }
 
 

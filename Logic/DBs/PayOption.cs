@@ -9,11 +9,11 @@ public partial class PayOption
 
     public string Description { get; set; } = null!;
 
-    public int UserId { get; set; }
+    public int ManagerId { get; set; }
 
     public bool? IsActive { get; set; }
 
-    public virtual ICollection<Moving> Movings { get; set; } = new List<Moving>();
+    public virtual User Manager { get; set; } = null!;
 
-    public virtual User User { get; set; } = null!;
+    public virtual ICollection<Moving> Movings { get; set; } = new List<Moving>();
 }

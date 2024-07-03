@@ -52,6 +52,11 @@ namespace Logic.Services
                 Id = x.Id,
                 Name = x.FirstName + " " + x.LastName
             }).ToList();
+            lists.Managers = dbService.entities.Users.Where(x => x.UserTypeId == 4 && x.IsActive).Select(x => new IdName()
+            {
+                Id = x.Id,
+                Name = x.FirstName + " " + x.LastName
+            }).ToList();
             return lists;
         }
 
