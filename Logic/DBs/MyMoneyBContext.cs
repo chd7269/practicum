@@ -23,6 +23,8 @@ public partial class MyMoneyBContext : DbContext
 
     public virtual DbSet<Document> Documents { get; set; }
 
+    public virtual DbSet<ManagerDesign> ManagerDesigns { get; set; }
+
     public virtual DbSet<Moving> Movings { get; set; }
 
     public virtual DbSet<PayOption> PayOptions { get; set; }
@@ -56,12 +58,12 @@ public partial class MyMoneyBContext : DbContext
 
         modelBuilder.Entity<City>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Cities__3214EC07534C2FBE");
+            entity.HasKey(e => e.Id).HasName("PK__Cities__3214EC07988EC890");
         });
 
         modelBuilder.Entity<Debt>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Debts__3214EC07C8DE5E19");
+            entity.HasKey(e => e.Id).HasName("PK__Debts__3214EC0710171BA5");
 
             entity.HasOne(d => d.Urgency).WithMany(p => p.Debts)
                 .HasForeignKey(d => d.UrgencyId)
@@ -76,7 +78,7 @@ public partial class MyMoneyBContext : DbContext
 
         modelBuilder.Entity<Document>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Document__3214EC076BCEDAEC");
+            entity.HasKey(e => e.Id).HasName("PK__Document__3214EC07E7413EF0");
 
             entity.Property(e => e.Content).HasColumnType("image");
 
@@ -84,6 +86,27 @@ public partial class MyMoneyBContext : DbContext
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Documents__UserI__160F4887");
+        });
+
+        modelBuilder.Entity<ManagerDesign>(entity =>
+        {
+            entity.HasKey(e => e.ManagerId).HasName("PK__ManagerD__3BA2AAE1BBE0A0A5");
+
+            entity.ToTable("ManagerDesign");
+
+            entity.Property(e => e.ManagerId).ValueGeneratedNever();
+            entity.Property(e => e.HeaderColor)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.ImageContent)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+            entity.Property(e => e.Slogan)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+            entity.Property(e => e.Title)
+                .HasMaxLength(255)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<Moving>(entity =>
@@ -107,15 +130,15 @@ public partial class MyMoneyBContext : DbContext
         {
             entity.ToTable("PayOption");
 
-            entity.HasOne(d => d.User).WithMany(p => p.PayOptions)
-                .HasForeignKey(d => d.UserId)
+            entity.HasOne(d => d.Manager).WithMany(p => p.PayOptions)
+                .HasForeignKey(d => d.ManagerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PayOption_User");
         });
 
         modelBuilder.Entity<Presence>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Presence__3214EC07B54D15FD");
+            entity.HasKey(e => e.Id).HasName("PK__Presence__3214EC07F8C3E5C2");
 
             entity.ToTable("Presence");
 
@@ -131,7 +154,7 @@ public partial class MyMoneyBContext : DbContext
 
         modelBuilder.Entity<Status>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Status__3214EC076EEBFA3C");
+            entity.HasKey(e => e.Id).HasName("PK__Status__3214EC07DFD4AEAE");
 
             entity.ToTable("Status");
         });
@@ -160,7 +183,7 @@ public partial class MyMoneyBContext : DbContext
 
         modelBuilder.Entity<UrgencyDebt>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__UrgencyD__3214EC0746247550");
+            entity.HasKey(e => e.Id).HasName("PK__UrgencyD__3214EC07CB4D6F1C");
 
             entity.ToTable("UrgencyDebt");
         });
@@ -188,7 +211,7 @@ public partial class MyMoneyBContext : DbContext
 
         modelBuilder.Entity<User2Area>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__User2Are__3214EC07C2E49832");
+            entity.HasKey(e => e.Id).HasName("PK__User2Are__3214EC07380B85A3");
 
             entity.ToTable("User2Area");
 
