@@ -39,9 +39,9 @@ namespace Logic.Services
         {
             var newManagerDesign = new ManagerDesign();
                 newManagerDesign.ManagerId = CurrentUserId;
-                managerDesign.HeaderColor =(managerDesign.HeaderColor);
+                newManagerDesign.HeaderColor =(managerDesign.HeaderColor);
                 newManagerDesign.ImageContent =(managerDesign.ImageContent);
-                managerDesign.Title =(managerDesign.Title);
+                newManagerDesign.Title =(managerDesign.Title);
                 newManagerDesign.Slogan =(managerDesign.Slogan);
             dbService.entities.ManagerDesigns.Add(newManagerDesign);
 

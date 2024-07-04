@@ -34,13 +34,8 @@ namespace Api.Controllers
         [HttpPut]
         public Result UpdateManagerDesign(ManagerDesignDTO mDesign)
         {
+
             return Success(managerDesignService.UpdateManagerDesign(mDesign, UserId.Value));
-
-            //    if (!success)
-
-            //        return Fail();
-
-            //    return Success();
         }
     }
 }
