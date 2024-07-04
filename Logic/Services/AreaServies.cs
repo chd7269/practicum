@@ -22,10 +22,14 @@ namespace Logic.Services
     public class AreaServies : IAreaServies
     {
         private IDBService dbService;
+        //private IReportsService iReportsService;
+        private IReportsServies reportsService;
 
-        public AreaServies(IDBService dbService)
+        public AreaServies(IDBService dbService,IReportsServies reportsService)
         {
             this.dbService = dbService;
+            this.reportsService = reportsService;
+
         }
 
         public List<AreaDTO> GetAreas(int CurrentUserId, int? type)
@@ -123,27 +127,12 @@ namespace Logic.Services
                 return false;
             }
             var dbUser2Area = dbService.entities.User2Areas.FirstOrDefault(x => x.Id == area.Id);
-            //var subject = dbService.entities.Subjects.FirstOrDefault(x => x.Id == user2Subject.Description.Id);
-            //if (user2Subject.Description.Id == 0)
-            //{
-            //    var newSubject = new Subject()
-            //    {
-            //        Description = user2Subject.Description.Name,
-            //        Type = user2Subject.Type,
-            //        IsGlobal = false
-            //    };
-            //    dbService.entities.Subjects.Add(newSubject);
-            //    dbService.Save();
-            //    user2Subject.Description.Id = newSubject.Id;
-            //}
+            
+        
             if (dbUser2Area != null)
             {
-                //if (dbUser2Sub.Subject.IsGlobal != true)
-                //{
-                //    dbUser2Sub.Subject.Description = user2Subject.Description.Name;
-                //}
-                //dbUser2Area.SubjectId = user2Subject.Description.Id;
-                //dbUser2Area.Global = user2Subject.Global;
+                reportsService.AddHistory(CurrentUserId, dbUser2Area, area);
+
                 dbUser2Area.Index = area.Index;
                 dbUser2Area.IsActive = area.IsActive;
                 dbUser2Area.IsMaaser = area.IsMaaser;
@@ -154,7 +143,7 @@ namespace Logic.Services
                     var dbUser = dbService.entities.Users.FirstOrDefault(x => x.Id == CurrentUserId);
                     dbUser.AreaIndexOn = true;
                 }
-                dbService.Save();
+                dbService.entities.SaveChanges();
                 var dbIndexOn = dbService.entities.Users.FirstOrDefault(x => x.Id == CurrentUserId).AreaIndexOn;
                 if (area.IndexOn != true && dbIndexOn != true)
                 {

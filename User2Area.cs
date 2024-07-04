@@ -1,0 +1,31 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace Logic;
+
+public partial class User2Area
+{
+    public int Id { get; set; }
+
+    public int UserId { get; set; }
+
+    public bool? IsMaaser { get; set; }
+
+    public int? Sum { get; set; }
+
+    public bool? IsActive { get; set; }
+
+    public int? DebtId { get; set; }
+
+    public int Index { get; set; }
+
+    public string? Description { get; set; }
+
+    public int Type { get; set; }
+
+    public virtual Debt? Debt { get; set; }
+
+    public virtual ICollection<Moving> Movings { get; set; } = new List<Moving>();
+
+    public virtual User User { get; set; } = null!;
+}
