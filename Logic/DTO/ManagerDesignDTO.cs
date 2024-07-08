@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,5 +15,8 @@ namespace Logic.DTO
         public string Title { get; set; }
         public string Slogan { get; set; }
         public string HeaderColor { get; set; }
+
+        //רחל הוסיפה
+        public IFormFile File { get; set; }
     }
 }

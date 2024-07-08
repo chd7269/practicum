@@ -22,19 +22,43 @@ namespace Api.Controllers
         }
 
 
-        [HttpPost]
+        //[HttpPost]
 
-        public Result AddManagerDesign(ManagerDesignDTO mDesign)
-        {
+        //public Result AddManagerDesign(ManagerDesignDTO mDesign)
+        //{
 
-            return Success(managerDesignService.AddManagerDesign(mDesign, UserId.Value));
-        }
+        //    return Success(managerDesignService.AddManagerDesign(mDesign, UserId.Value));
+        //}
 
 
         [HttpPut]
-        public Result UpdateManagerDesign(ManagerDesignDTO mDesign)
+        public Result UpdateManagerDesign([FromForm] ManagerDesignDTO file)
         {
+            var request = Request;
+            ManagerDesignDTO mDesign = null;
+            if (request.Form != null && request.Form.Files != null && request.Form.Files.Count > 0 && request.Form.Files[0] != null && request.Form.Files[0].Length > 0)
+            {
+                
+                byte[] data = null;
 
+                using (var ms = new MemoryStream())
+                {
+                    request.Form.Files[0].CopyTo(ms);
+                    data = ms.ToArray();
+                }
+
+                mDesign = new ManagerDesignDTO()
+                {
+                    Id = file.Id,
+                    ManagerId = UserId.Value,
+                    ImageContent = data,
+                    Title = file.Title,
+                    Slogan = file.Slogan,
+                    HeaderColor = file.HeaderColor,
+                };
+
+
+            }
             return Success(managerDesignService.UpdateManagerDesign(mDesign, UserId.Value));
         }
     }
