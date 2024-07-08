@@ -90,24 +90,24 @@ public partial class MyMoneyBContext : DbContext
                 .HasConstraintName("FK__Documents__UserI__160F4887");
         });
 
-        modelBuilder.Entity<History>(entity =>
-        {
-            entity.HasKey(e => e.HistoryId).HasName("PK__History__4D7B4ABDB95DE1B0");
+        //modelBuilder.Entity<History>(entity =>
+        //{
+        //    entity.HasKey(e => e.HistoryId).HasName("PK__History__4D7B4ABDB95DE1B0");
 
-            entity.ToTable("History");
+        //    entity.ToTable("History");
 
-            entity.Property(e => e.DateofChange).HasColumnType("datetime");
-            entity.Property(e => e.NewDomain)
-                .HasMaxLength(255)
-                .IsUnicode(false);
-            entity.Property(e => e.OldDomain)
-                .HasMaxLength(255)
-                .IsUnicode(false);
+        //    entity.Property(e => e.DateofChange).HasColumnType("datetime");
+        //    entity.Property(e => e.NewDomain)
+        //        .HasMaxLength(255)
+        //        .IsUnicode(false);
+        //    entity.Property(e => e.OldDomain)
+        //        .HasMaxLength(255)
+        //        .IsUnicode(false);
 
-            entity.HasOne(d => d.IdNavigation).WithMany(p => p.Histories)
-                .HasForeignKey(d => d.Id)
-                .HasConstraintName("FK__History__Id__02FC7413");
-        });
+        //    entity.HasOne(d => d.IdNavigation).WithMany(p => p.Histories)
+        //        .HasForeignKey(d => d.Id)
+        //        .HasConstraintName("FK__History__Id__02FC7413");
+        //});
 
         modelBuilder.Entity<ManagerDesign>(entity =>
         {
