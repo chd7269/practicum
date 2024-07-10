@@ -18,20 +18,20 @@ namespace MoneySystemServer.Controllers
         [IsManager]
         public GResult<ListsDTO> GetAllLists()
         {
-            return Success(listService.GetAllLists());
+            return Success(listService.GetAllLists(UserId.Value));
         }
         [IsPermission]
         [HttpPost]
         public GResult<List<IdName>> GetList(IdNameDB item)
         {
-            return Success(listService.GetList(item));
+            return Success(listService.GetList(item, UserId.Value));
         }
 
         [HttpPost]
         [IsManager]
         public Result AddItem(IdNameDB idName)
         {
-            var isSuccess = listService.AddItem(idName);
+            var isSuccess = listService.AddItem(idName, UserId.Value);
             if (isSuccess)
             {
                 return Success();
@@ -44,18 +44,23 @@ namespace MoneySystemServer.Controllers
         public Result DeleteItem(IdNameDB idName)
         {
             var isSuccess = listService.DeleteItem(idName);
-            if (isSuccess)
+            if (isSuccess )
             {
-                return Success();
+                return Success("אפשרות תשלום הוגדרה כלא פעילה אין אפשרות למחוק תחומים  מסיבה שיש תנועות עם אפשרות זו");
             }
-            return Fail(message: "אין אפשרות למחוק תחומים עם תחום זה");
+            else if (isSuccess  )
+            {
+                return Success("נמחק בהצלחה");
+            }
+
+            return Fail(message: "אפשרות תשלום הוגדרה כלא פעילה אין אפשרות למחוק תחומים  מסיבה שיש תנועות עם אפשרות זו.");
         }
 
         [HttpPut]
         [IsManager]
         public Result UpdateItem(IdNameDB idName)
         {
-            var isSuccess = listService.UpdateItem(idName);
+            var isSuccess = listService.UpdateItem(idName, UserId.Value);
             if (isSuccess)
             {
                 return Success();

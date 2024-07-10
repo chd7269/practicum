@@ -9,11 +9,11 @@ namespace Logic.Services
 {
     public interface IListService
     {
-        ListsDTO GetAllLists();
-        List<IdName> GetList(IdNameDB item);
-        bool AddItem(IdNameDB idName);
-        bool DeleteItem(IdNameDB idName);
-        bool UpdateItem(IdNameDB idName);
+        ListsDTO GetAllLists(int userId);
+        List<IdName> GetList(IdNameDB item,int userId);
+        bool AddItem(IdNameDB idName,int userId);
+        bool DeleteItem(IdNameDB item);
+        bool UpdateItem(IdNameDB idName,int user);
     }
     public class ListService : IListService
     {
@@ -23,7 +23,7 @@ namespace Logic.Services
             this.dbService = dbService;
         }
 
-        public ListsDTO GetAllLists()
+        public ListsDTO GetAllLists(int userId)
         {
             var lists = new ListsDTO();
             lists.UserTypes = dbService.entities.UserTypes.Select(x => new IdName()
@@ -62,10 +62,17 @@ namespace Logic.Services
                 Id = x.Id,
                 Name = x.FirstName + " " + x.LastName
             }).ToList();
+
+            lists.PayOption = dbService.entities.PayOptions.Where(x => x.ManagerId == userId).Select(x => new IdName()
+            {
+                Id = x.Id,
+                Name = x.Description
+            }).ToList();
+
             return lists;
         }
 
-        public List<IdName> GetList(IdNameDB item)
+        public List<IdName> GetList(IdNameDB item, int userId)
         {
             List<IdName> list = new List<IdName>();
             if (item.TableCode == TableCode.UserTypes)
@@ -115,10 +122,20 @@ namespace Logic.Services
                     Name = x.FirstName + " " + x.LastName
                 }).ToList();
             }
+            else if (item.TableCode == TableCode.PayOption)
+            {
+                list = dbService.entities.PayOptions.Where(x => x.ManagerId == userId ).Select(x => new IdName()
+                {
+                    Id = x.Id,
+                    Name = x.Description
+                }).ToList();
+
+            }
+
             return list;
         }
 
-        public bool AddItem(IdNameDB idName)
+        public bool AddItem(IdNameDB idName, int userId)
         {
             switch (idName.TableCode)
             {
@@ -138,9 +155,9 @@ namespace Logic.Services
                     {
                         return AddUrgencyDebt(idName);
                     }
-                case TableCode.Status:
+                case TableCode.PayOption:
                     {
-                        return AddStatus(idName);
+                        return AddPayOptions(idName, userId);
                     }
                 default:
                     break;
@@ -148,29 +165,29 @@ namespace Logic.Services
             return false;
         }
 
-        public bool DeleteItem(IdNameDB idName)
+        public bool DeleteItem(IdNameDB item)
         {
-            switch (idName.TableCode)
+            switch (item.TableCode)
             {
-                case TableCode.UserTypes:
-                    {
-                        return DeleteUserType(idName.Id);
-                    }
+                //case TableCode.UserTypes:
+                //    {
+                //        return DeleteUserType(idName.Id);
+                //    }
                 case TableCode.Cities:
                     {
-                        return DeleteCity(idName.Id);
+                        return DeleteCity(item.Id);
                     }
                 case TableCode.Areas:
                     {
-                        return DeleteSubject(idName.Id);
+                        return DeleteAreas(item.Id);
                     }
                 case TableCode.UrgencyDebt:
                     {
-                        return DeleteUrgencyDebt(idName.Id);
+                        return DeleteUrgencyDebt(item.Id);
                     }
-                case TableCode.Status:
+                case TableCode.PayOption:
                     {
-                        return DeleteStatus(idName.Id);
+                        return DeletePayOption(item.Id);
                     }
                 default:
                     break;
@@ -178,14 +195,14 @@ namespace Logic.Services
             return false;
         }
 
-        public bool UpdateItem(IdNameDB idName)
+        public bool UpdateItem(IdNameDB idName,int userId)
         {
             switch (idName.TableCode)
             {
-                case TableCode.UserTypes:
-                    {
-                        return UpdateUserType(idName);
-                    }
+                //case TableCode.UserTypes:
+                //    {
+                //        return UpdateUserType(idName);
+                //    }
                 case TableCode.Cities:
                     {
                         return UpdateCity(idName);
@@ -198,9 +215,9 @@ namespace Logic.Services
                     {
                         return UpdateUrgencyDebt(idName);
                     }
-                case TableCode.Status:
+                case TableCode.PayOption:
                     {
-                        return UpdateStatus(idName);
+                        return UpdatePayOption(idName,userId);
                     }
                 default:
                     break;
@@ -259,6 +276,22 @@ namespace Logic.Services
             return false;
         }
 
+        public bool UpdatePayOption(IdName payOpt, int CurrentUserId)
+        {
+            if (dbService.entities.PayOptions.Any(x => x.ManagerId == CurrentUserId && x.Id == payOpt.Id && x.Description == payOpt.Name))
+            {
+                return true;
+            }
+            var dbDescrip = dbService.entities.PayOptions.FirstOrDefault(x => x.ManagerId == CurrentUserId && x.Id == payOpt.Id);
+            if (dbDescrip != null)
+            {
+                dbDescrip.Description = payOpt.Name;
+                dbDescrip.IsActive = payOpt.IsActive;
+                dbService.entities.SaveChanges();
+                return true;
+            }
+            return false;
+        }
         private bool DeleteUserType(int userTypeId)
         {
             var userType = dbService.entities.UserTypes.FirstOrDefault(x => x.Id == userTypeId);
@@ -284,9 +317,9 @@ namespace Logic.Services
             return false;
         }
 
-        private bool DeleteSubject(int id)
+        private bool DeleteAreas(int id)
         {
-            var ar = dbService.entities.User2Areas.FirstOrDefault(x => x.Id == id);
+            var ar = dbService.entities.Areas.FirstOrDefault(x => x.Id == id);
             if (ar != null)
             {
                 dbService.entities.Areas.Remove(dbService.entities.Areas.FirstOrDefault(x => x.Id == id));
@@ -303,6 +336,28 @@ namespace Logic.Services
                 dbService.entities.UrgencyDebts.Remove(dbService.entities.UrgencyDebts.FirstOrDefault(x => x.Id == id));
                 dbService.Save();
                 return true;
+            }
+            return false;
+        }
+
+        public bool DeletePayOption(int id)
+        {
+          
+            var dbPayOpt = dbService.entities.PayOptions.FirstOrDefault(x=> x.Id == id);
+            if (dbPayOpt != null)
+            {
+                if (dbPayOpt.Movings != null && dbPayOpt.Movings.Count > 0)
+                {
+                    dbPayOpt.IsActive = false;
+                    dbService.entities.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    dbService.entities.PayOptions.Remove(dbService.entities.PayOptions.FirstOrDefault(x => x.Id == id));
+                    dbService.entities.SaveChanges();
+                    return true;
+                }
             }
             return false;
         }
@@ -371,19 +426,21 @@ namespace Logic.Services
             dbService.Save();
             return true;
         }
-        private bool AddStatus(IdNameDB idName)
+        public bool AddPayOptions(IdName payOpt, int CurrentUserId)
         {
-            if (dbService.entities.Statuses.Any(x => x.Description == idName.Name))
+            if (!dbService.entities.PayOptions.Any(x => x.ManagerId == CurrentUserId && x.Description == payOpt.Name))
             {
-                return false;
+                var newPayOpt = new PayOption()
+                {
+                    Description = payOpt.Name,
+                    ManagerId = CurrentUserId,
+                    IsActive = true
+                };
+                dbService.entities.PayOptions.Add(newPayOpt);
+                dbService.entities.SaveChanges();
+                return true;
             }
-            var newItem = new Status()
-            {
-                Description = idName.Name
-            };
-            dbService.entities.Statuses.Add(newItem);
-            dbService.Save();
-            return true;
+            return false;
         }
     }
 }

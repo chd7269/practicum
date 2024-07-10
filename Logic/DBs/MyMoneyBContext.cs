@@ -68,7 +68,7 @@ public partial class MyMoneyBContext : DbContext
             entity.HasOne(d => d.Urgency).WithMany(p => p.Debts)
                 .HasForeignKey(d => d.UrgencyId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Debts__UrgencyId__52593CB8");
+                .HasConstraintName("FK__Debts__UrgencyId__3F466844");
 
             entity.HasOne(d => d.User).WithMany(p => p.Debts)
                 .HasForeignKey(d => d.UserId)
@@ -130,8 +130,8 @@ public partial class MyMoneyBContext : DbContext
         {
             entity.ToTable("PayOption");
 
-            entity.HasOne(d => d.User).WithMany(p => p.PayOptions)
-                .HasForeignKey(d => d.UserId)
+            entity.HasOne(d => d.Manager).WithMany(p => p.PayOptions)
+                .HasForeignKey(d => d.ManagerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PayOption_User");
         });
@@ -232,6 +232,8 @@ public partial class MyMoneyBContext : DbContext
         modelBuilder.Entity<UserType>(entity =>
         {
             entity.ToTable("UserType");
+
+            entity.Property(e => e.Id).HasColumnName("id");
         });
 
         OnModelCreatingPartial(modelBuilder);

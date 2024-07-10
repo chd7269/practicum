@@ -39,6 +39,8 @@ public partial class User
 
     public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
 
+    public virtual ICollection<History> Histories { get; set; } = new List<History>();
+
     public virtual ICollection<User> InverseLender { get; set; } = new List<User>();
 
     public virtual ICollection<User> InverseManager { get; set; } = new List<User>();
@@ -46,6 +48,8 @@ public partial class User
     public virtual User? Lender { get; set; }
 
     public virtual User? Manager { get; set; }
+
+    public virtual ICollection<ManagerDesign> ManagerDesigns { get; set; } = new List<ManagerDesign>();
 
     public virtual ICollection<PayOption> PayOptions { get; set; } = new List<PayOption>();
 

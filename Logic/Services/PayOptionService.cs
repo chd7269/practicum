@@ -26,9 +26,10 @@ namespace Logic.Services
         public List<IdName> GetPayOptions(int CurrentUserId)
         {
             List<IdName> list = new List<IdName>();
-            if (dbService.entities.PayOptions.Any(x => x.UserId == CurrentUserId))
+            var mngrId = dbService.entities.Users.Where(u => u.Id == CurrentUserId).FirstOrDefault().ManagerId;
+            if (dbService.entities.PayOptions.Any(x => x.ManagerId == CurrentUserId||x.ManagerId ==mngrId))
             {
-                list = dbService.entities.PayOptions.Where(x => x.UserId == CurrentUserId).Select(x => new IdName()
+                list = dbService.entities.PayOptions.Where(x => x.ManagerId == CurrentUserId || x.ManagerId == mngrId).Select(x => new IdName()
                 {
                     Id = x.Id,
                     Name = x.Description,
@@ -39,12 +40,12 @@ namespace Logic.Services
         }
         public bool AddPayOptions(IdName payOpt, int CurrentUserId)
         {
-            if (!dbService.entities.PayOptions.Any(x => x.UserId == CurrentUserId && x.Description == payOpt.Name))
+            if (!dbService.entities.PayOptions.Any(x => x.ManagerId == CurrentUserId && x.Description == payOpt.Name))
             {
                 var newPayOpt = new PayOption()
                 {
                     Description = payOpt.Name,
-                    UserId = CurrentUserId,
+                    ManagerId = CurrentUserId,
                     IsActive = true
                 };
                 dbService.entities.PayOptions.Add(newPayOpt);
@@ -55,11 +56,11 @@ namespace Logic.Services
         }
         public bool UpdatePayOption(IdName payOpt, int CurrentUserId)
         {
-            if (dbService.entities.PayOptions.Any(x => x.UserId == CurrentUserId && x.Id != payOpt.Id && x.Description == payOpt.Name))
+            if (dbService.entities.PayOptions.Any(x => x.ManagerId == CurrentUserId && x.Id != payOpt.Id && x.Description == payOpt.Name))
             {
                 return true;
             }
-            var dbDescrip = dbService.entities.PayOptions.FirstOrDefault(x => x.UserId == CurrentUserId && x.Id == payOpt.Id);
+            var dbDescrip = dbService.entities.PayOptions.FirstOrDefault(x => x.ManagerId == CurrentUserId && x.Id == payOpt.Id);
             if (dbDescrip != null)
             {
                 dbDescrip.Description = payOpt.Name;
@@ -71,7 +72,7 @@ namespace Logic.Services
         }
         public bool DeletePayOption(int id, int CurrentUserId)
         {
-            var dbPayOpt = dbService.entities.PayOptions.FirstOrDefault(x => x.UserId == CurrentUserId && x.Id == id);
+            var dbPayOpt = dbService.entities.PayOptions.FirstOrDefault(x => x.ManagerId == CurrentUserId && x.Id == id);
             if (dbPayOpt != null)
             {
                 if (dbPayOpt.Movings != null && dbPayOpt.Movings.Count > 0)
@@ -82,7 +83,7 @@ namespace Logic.Services
                 }
                 else
                 {
-                    dbService.entities.PayOptions.Remove(dbService.entities.PayOptions.FirstOrDefault(x => x.UserId == CurrentUserId && x.Id == id));
+                    dbService.entities.PayOptions.Remove(dbService.entities.PayOptions.FirstOrDefault(x => x.ManagerId == CurrentUserId && x.Id == id));
                     dbService.entities.SaveChanges();
                     return true;
                 }
