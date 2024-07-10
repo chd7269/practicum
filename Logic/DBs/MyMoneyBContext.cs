@@ -94,15 +94,15 @@ public partial class MyMoneyBContext : DbContext
         {
             entity.HasKey(e => e.HistoryId).HasName("PK__History__4D7B4ABDE175DF9C");
 
-            entity.ToTable("History");
+        //    entity.ToTable("History");
 
-            entity.Property(e => e.DateofChange).HasColumnType("datetime");
-            entity.Property(e => e.NewDomain)
-                .HasMaxLength(255)
-                .IsUnicode(false);
-            entity.Property(e => e.OldDomain)
-                .HasMaxLength(255)
-                .IsUnicode(false);
+        //    entity.Property(e => e.DateofChange).HasColumnType("datetime");
+        //    entity.Property(e => e.NewDomain)
+        //        .HasMaxLength(255)
+        //        .IsUnicode(false);
+        //    entity.Property(e => e.OldDomain)
+        //        .HasMaxLength(255)
+        //        .IsUnicode(false);
 
             entity.HasOne(d => d.IdNavigation).WithMany(p => p.Histories)
                 .HasForeignKey(d => d.Id)

@@ -26,10 +26,10 @@ namespace Logic.Services
         public List<IdName> GetPayOptions(int CurrentUserId)
         {
             List<IdName> list = new List<IdName>();
-  
-            if (dbService.entities.PayOptions.Any(x => x.ManagerId == CurrentUserId))
+            var mngrId = dbService.entities.Users.Where(u => u.Id == CurrentUserId).FirstOrDefault().ManagerId;
+            if (dbService.entities.PayOptions.Any(x => x.ManagerId == CurrentUserId||x.ManagerId ==mngrId))
             {
-                list = dbService.entities.PayOptions.Where(x => x.ManagerId == CurrentUserId).Select(x => new IdName()
+                list = dbService.entities.PayOptions.Where(x => x.ManagerId == CurrentUserId || x.ManagerId == mngrId).Select(x => new IdName()
                 {
                     Id = x.Id,
                     Name = x.Description,
@@ -60,7 +60,7 @@ namespace Logic.Services
             {
                 return true;
             }
-            var dbDescrip = dbService.entities.PayOptions.FirstOrDefault(x => x.ManagerId== CurrentUserId && x.Id == payOpt.Id);
+            var dbDescrip = dbService.entities.PayOptions.FirstOrDefault(x => x.ManagerId == CurrentUserId && x.Id == payOpt.Id);
             if (dbDescrip != null)
             {
                 dbDescrip.Description = payOpt.Name;

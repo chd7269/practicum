@@ -12,7 +12,7 @@ namespace Logic.Services
         ManagerDesignDTO GetManagerDesign(int ManagerId);
 
         bool AddManagerDesign(ManagerDesignDTO managerDesign, int CurrentUserId);
-        bool UpdateManagerDesign(ManagerDesignDTO mDesign, int CurrentUserId);
+        bool UpdateManagerDesign(ManagerDesignDTO managerDesign, int CurrentUserId);
     }
     public class ManagerDesignService: IManagerDesignService
     {

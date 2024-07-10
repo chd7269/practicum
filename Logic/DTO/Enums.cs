@@ -19,7 +19,8 @@ namespace Logic.DTO
         Areas = 3,
         UrgencyDebt = 4,
         Status = 5,
-        Users = 8
+        Users = 8,
+        PayOption = 9,
     }
 
     public enum AnsOption
