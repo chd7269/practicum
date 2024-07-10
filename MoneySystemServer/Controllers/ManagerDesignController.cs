@@ -3,6 +3,7 @@ using Logic.DTO;
 using Logic.Services;
 using Microsoft.AspNetCore.Mvc;
 using MoneySystemServer.Controllers;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Api.Controllers
 {
@@ -36,6 +37,17 @@ namespace Api.Controllers
         {
             var request = Request;
             ManagerDesignDTO mDesign = null;
+            mDesign = new ManagerDesignDTO()
+            {
+                Id = file.Id,
+                ManagerId = UserId.Value,
+                Title = file.Title,
+                Slogan = file.Slogan,
+                HeaderColor = file.HeaderColor,
+                TextColor = file.TextColor,
+                FileName = file.FileName,
+                ImageContent = file.ImageContent,
+            };
             if (request.Form != null && request.Form.Files != null && request.Form.Files.Count > 0 && request.Form.Files[0] != null && request.Form.Files[0].Length > 0)
             {
                 
@@ -46,17 +58,7 @@ namespace Api.Controllers
                     request.Form.Files[0].CopyTo(ms);
                     data = ms.ToArray();
                 }
-
-                mDesign = new ManagerDesignDTO()
-                {
-                    Id = file.Id,
-                    ManagerId = UserId.Value,
-                    ImageContent = data,
-                    Title = file.Title,
-                    Slogan = file.Slogan,
-                    HeaderColor = file.HeaderColor,
-                };
-
+                mDesign.ImageContent = data;
 
             }
             return Success(managerDesignService.UpdateManagerDesign(mDesign, UserId.Value));

@@ -112,7 +112,7 @@ public partial class MyMoneyBContext : DbContext
 
         modelBuilder.Entity<ManagerDesign>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ManagerD__3214EC07413B34C2");
+            entity.HasKey(e => e.Id).HasName("PK__ManagerD__3214EC0702C31D92");
 
             entity.ToTable("ManagerDesign");
 

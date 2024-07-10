@@ -10,9 +10,9 @@ namespace Logic.Services
     public interface IManagerDesignService
     {
         ManagerDesignDTO GetManagerDesign(int ManagerId);
-
         bool AddManagerDesign(ManagerDesignDTO managerDesign, int CurrentUserId);
         bool UpdateManagerDesign(ManagerDesignDTO managerDesign, int CurrentUserId);
+        ManagerDesignDTO GetFile(int id);
     }
     public class ManagerDesignService: IManagerDesignService
     {
@@ -32,6 +32,10 @@ namespace Logic.Services
                 mDesign.Slogan = dbmDesign.Slogan;
                 mDesign.HeaderColor = dbmDesign.HeaderColor;
                 mDesign.ImageContent = dbmDesign.ImageContent;
+                mDesign.TextColor = dbmDesign.TextColor;
+                mDesign.FileName = dbmDesign.FileName;
+                mDesign.Src = "File/ShowFileDesign/" + dbmDesign.Id;
+
             }
             return mDesign;
         }
@@ -43,6 +47,9 @@ namespace Logic.Services
                 newManagerDesign.ImageContent =(managerDesign.ImageContent);
                 newManagerDesign.Title =(managerDesign.Title);
                 newManagerDesign.Slogan =(managerDesign.Slogan);
+                newManagerDesign.TextColor = (managerDesign.TextColor);
+                newManagerDesign.FileName = (managerDesign.FileName);
+
             dbService.entities.ManagerDesigns.Add(newManagerDesign);
 
             dbService.Save();
@@ -63,9 +70,23 @@ namespace Logic.Services
                 dbUpdateManagerDesign.ImageContent = (managerDesign.ImageContent);
                 dbUpdateManagerDesign.Title = (managerDesign.Title);
                 dbUpdateManagerDesign.Slogan = (managerDesign.Slogan);
+                dbUpdateManagerDesign.TextColor = (managerDesign.TextColor);
+                dbUpdateManagerDesign.FileName = (managerDesign.FileName);
                 dbService.Save();
             }
             return true;
+        }
+
+        public ManagerDesignDTO GetFile(int id)
+        {
+            var mdFile = new ManagerDesignDTO();
+            var dbFile = dbService.entities.ManagerDesigns.FirstOrDefault(x => x.Id == id);
+            if (dbFile != null)
+            {
+                mdFile.ImageContent = dbFile.ImageContent;
+                mdFile.FileName = dbFile.FileName;
+            }
+            return mdFile;
         }
     }
 }
