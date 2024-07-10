@@ -10,4 +10,6 @@ public partial class Area
     public string Description { get; set; } = null!;
 
     public int Type { get; set; }
+
+    public int? ManagerId { get; set; }
 }

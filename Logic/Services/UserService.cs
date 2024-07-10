@@ -240,6 +240,8 @@ namespace Logic.Services
                     dbUser.IsYearlyPay = user.IsYearlyPay;
                     dbUser.RegisterDate = user.RegisterDate;
                     dbUser.PayDate = user.PayDate;
+                    //צריך לבדוק  אם הנתון Isbusiness באמת נשמר שגיאה של הטוקן
+                    dbUser.Isbusiness = user.Isbusiness;
                     if (user.Lender.Id > 0)
                     {
                         dbUser.LenderId = user.Lender.Id;

@@ -59,8 +59,9 @@ namespace Logic.Services
         public bool UpdateManagerDesign(ManagerDesignDTO managerDesign, int CurrentUserId)
         {
             var dbUpdateManagerDesign = dbService.entities.ManagerDesigns.FirstOrDefault(x => x.Id == managerDesign.Id);
-            if (dbUpdateManagerDesign == null) {
-                return(AddManagerDesign(managerDesign, CurrentUserId));
+            if (dbUpdateManagerDesign == null)
+            {
+                return (AddManagerDesign(managerDesign, CurrentUserId));
             }
             else
             {

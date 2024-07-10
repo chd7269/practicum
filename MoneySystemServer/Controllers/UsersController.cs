@@ -37,7 +37,8 @@ namespace MoneySystemServer.Controllers
         [HttpPost]
         public Result AddUser(UserDTO newUser)
         {
-            var a = userTypeDTO.systemAdministrator;
+
+            //var a = userTypeDTO.systemAdministrator;
             //var task = sessionService.GetCurrentUser();
             //UserDTO currentUser = null;
             //if (task != null)

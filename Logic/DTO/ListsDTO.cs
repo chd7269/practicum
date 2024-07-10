@@ -14,5 +14,8 @@ namespace Logic.DTO
         public List<IdName> UrgencyDebts { get; set; }
         public List<IdName> Lenders { get;set; }
         public List<IdName> Managers { get; set; }
+        public List<IdName> Statuses { get; set; }
+
+        public List<IdName> PayOption { get; set; }
     }
 }
