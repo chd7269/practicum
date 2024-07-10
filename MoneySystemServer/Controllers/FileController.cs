@@ -10,9 +10,12 @@ namespace MoneySystemServer.Controllers
     public class FileController : GlobalController
     {
         private IDocumentService documentService;
-        public FileController(IDocumentService documentService)
+        private IManagerDesignService managerDesignService;
+
+        public FileController(IDocumentService documentService, IManagerDesignService managerDesignService)
         {
             this.documentService = documentService;
+            this.managerDesignService = managerDesignService;
         }
 
         [HttpGet("{id}")]
@@ -22,6 +25,28 @@ namespace MoneySystemServer.Controllers
             file.ContentType = GetContentType(file.FileName);
             return File(file.Content, file.ContentType);
         }
+
+        [HttpGet("{id}")]
+        public ActionResult ShowFileDesign(int id)
+        {
+            var file = managerDesignService.GetFile(id);
+            var contentType = GetContentType(file.FileName);
+            return File(file.ImageContent, contentType);
+        }
+
+        // אם גט מצליח לקבל שתי נתונים להפוך את הפונקציה לגלובלית בערך ככה
+        //[HttpGet("{id}")]
+        //public ActionResult ShowFile(int id)
+        //{
+        //    // string fileName = string.Empty;
+        //    // byte[] content = string.Empty;
+
+        //    var file = documentService.GetFile(id);
+        //    //var file = managerService.GetFile();//byte[], contentType
+
+        //    var contentType = GetContentType(file.FileName);
+        //    return File(file.Content, contentType);
+        //}
 
         private string GetContentType(string fileName)
         {

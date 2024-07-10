@@ -15,8 +15,13 @@ namespace Logic.DTO
         public string Title { get; set; }
         public string Slogan { get; set; }
         public string HeaderColor { get; set; }
+        public string? TextColor { get; set; }
+        public string? Src { get; set; }
+
+        public string? FileName { get; set; }
 
         //רחל הוסיפה
-        public IFormFile File { get; set; }
+        public IFormFile? File { get; set; }
     }
+
 }

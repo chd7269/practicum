@@ -17,5 +17,9 @@ public partial class ManagerDesign
 
     public int ManagerId { get; set; }
 
+    public string? TextColor { get; set; }
+
+    public string? FileName { get; set; }
+
     public virtual User Manager { get; set; } = null!;
 }
