@@ -31,8 +31,6 @@ public partial class User
 
     public int? ManagerId { get; set; }
 
-    public bool? AreaIndexOn { get; set; }
-
     public bool? Isbusiness { get; set; }
 
     public virtual ICollection<Debt> Debts { get; set; } = new List<Debt>();
