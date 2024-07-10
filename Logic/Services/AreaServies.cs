@@ -29,7 +29,6 @@ namespace Logic.Services
         {
             this.dbService = dbService;
             this.reportsService = reportsService;
-
         }
 
         public List<AreaDTO> GetAreas(int CurrentUserId, int? type)
@@ -43,11 +42,7 @@ namespace Logic.Services
                 {
                     query = query.Where(x => x.UserId == CurrentUserId && x.Type == (int)type).ToList();
                 }
-                if (!query.Any(x => x.Index > 0))
-                {
-                    SortByName(CurrentUserId, type);
-                }
-                query = query.OrderBy(x => x.Index).ToList();
+                
                 list = query.Select(x => new AreaDTO()
                 {
                     Id = x.Id,
@@ -55,7 +50,6 @@ namespace Logic.Services
                     Type = x.Type,
                     Sum = x.Sum,
                     IsMaaser = x.IsMaaser,
-                    Index = x.Index,
                     IsActive = x.IsActive
                 }).ToList();
             }
@@ -100,23 +94,12 @@ namespace Logic.Services
                 IsMaaser = user2Area.IsMaaser,
                 IsActive = user2Area.IsActive,
                 Description = user2Area.Description,
-                Index = user2Area.Index,
                 Type = user2Area.Type
             };
             dbService.entities.User2Areas.Add(newUser2Subject);
 
-
-            if (user2Area.IndexOn == true)
-            {
-                var dbUser = dbService.entities.Users.FirstOrDefault(x => x.Id == CurrentUserId);
-                dbUser.AreaIndexOn = true;
-            }
             dbService.Save();
-            var dbIndexOn = dbService.entities.Users.FirstOrDefault(x => x.Id == CurrentUserId).AreaIndexOn;
-            if (user2Area.IndexOn != true && dbIndexOn != true)
-            {
-                SortByName(CurrentUserId, newUser2Subject.Type);
-            }
+            SortByName(CurrentUserId, newUser2Subject.Type);
             return true;
         }
 
@@ -127,28 +110,16 @@ namespace Logic.Services
                 return false;
             }
             var dbUser2Area = dbService.entities.User2Areas.FirstOrDefault(x => x.Id == area.Id);
-            
         
             if (dbUser2Area != null)
             {
                 reportsService.AddHistory(CurrentUserId, dbUser2Area, area);
-
-                dbUser2Area.Index = area.Index;
                 dbUser2Area.IsActive = area.IsActive;
                 dbUser2Area.IsMaaser = area.IsMaaser;
                 dbUser2Area.Description = area.Description;
                 dbUser2Area.Sum = area.Sum;
-                if (area.IndexOn == true)
-                {
-                    var dbUser = dbService.entities.Users.FirstOrDefault(x => x.Id == CurrentUserId);
-                    dbUser.AreaIndexOn = true;
-                }
                 dbService.entities.SaveChanges();
-                var dbIndexOn = dbService.entities.Users.FirstOrDefault(x => x.Id == CurrentUserId).AreaIndexOn;
-                if (area.IndexOn != true && dbIndexOn != true)
-                {
-                    SortByName(CurrentUserId, area.Type);
-                }
+                SortByName(CurrentUserId, area.Type);
                 return true;
             }
             return false;
@@ -181,10 +152,6 @@ namespace Logic.Services
         {
             var list = dbService.entities.User2Areas.Where(x => x.UserId == CurrentUserId && x.Type == type).ToList();
             list = list.OrderBy(x => x.Description).ToList();
-            for (int i = 0; i < list.Count; i++)
-            {
-                list[i].Index = i + 1;
-            }
             dbService.Save();
         }
 
