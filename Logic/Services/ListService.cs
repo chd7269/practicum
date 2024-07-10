@@ -18,9 +18,13 @@ namespace Logic.Services
     public class ListService : IListService
     {
         private IDBService dbService;
+        //private User currentUser;
+        //private int currentUserId;
         public ListService(IDBService dbService)
         {
             this.dbService = dbService;
+            //this.currentUser = dbService.entities.Users.FirstOrDefault(x => x.Id == currentUserId);
+
         }
 
         public ListsDTO GetAllLists(int userId)
@@ -34,7 +38,9 @@ namespace Logic.Services
             lists.Cities = dbService.entities.Cities.Select(x => new IdName()
             {
                 Id = x.Id,
-                Name = x.Name
+                Name = x.Name,
+                //chevy
+                ManagerId=userId
             }).ToList();
             lists.Statuses = dbService.entities.Statuses.Select(x => new IdName()
             {
@@ -73,7 +79,8 @@ namespace Logic.Services
         }
 
         public List<IdName> GetList(IdNameDB item, int userId)
-        {
+        {            
+            //var currentUser = dbService.entities.Users.FirstOrDefault(x => x.Id == userId);
             List<IdName> list = new List<IdName>();
             if (item.TableCode == TableCode.UserTypes)
             {
@@ -85,10 +92,13 @@ namespace Logic.Services
             }
             else if (item.TableCode == TableCode.Cities)
             {
+                //להוסיף אחרי הסלקט
+                //.Where(x => x.ManagerId == currentUser.ManagerId)
                 list = dbService.entities.Cities.Select(x => new IdName()
                 {
                     Id = x.Id,
-                    Name = x.Name
+                    Name = x.Name,
+                    ManagerId=x.ManagerId,
                 }).ToList();
             }
             else if (item.TableCode == TableCode.Status)
@@ -145,7 +155,7 @@ namespace Logic.Services
                     }
                 case TableCode.Cities:
                     {
-                        return AddCity(idName);
+                        return AddCity(idName, userId);
                     }
                 case TableCode.Areas:
                     {
@@ -384,12 +394,14 @@ namespace Logic.Services
             return true;
         }
 
-        private bool AddCity(IdNameDB idName)
+        private bool AddCity(IdNameDB idName, int currentUserId)
         {
             if (dbService.entities.Cities.Any(x => x.Name == idName.Name)) return false;
+             var currentUser = dbService.entities.Users.FirstOrDefault(x => x.Id == currentUserId);
             var newItem = new City()
             {
-                Name = idName.Name
+                Name = idName.Name,
+                ManagerId = currentUser.Id
             };
             dbService.entities.Cities.Add(newItem);
             dbService.Save();
