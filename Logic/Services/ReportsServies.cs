@@ -88,12 +88,7 @@ namespace Logic.Services
         public List<HistoryDTO> GetHistory(int current)
         {
             var history = dbService.entities.Histories.Where(x => x.UserId == current);
-            //var lists = new ListsDTO();
-            //lists.UserTypes = dbService.entities.UserTypes.Select(x => new IdName()
-            //{
-            //    Id = x.Id,
-            //    Name = x.Description
-            //}).ToList();
+            
             List<HistoryDTO> historys = new List<HistoryDTO>();
             historys= dbService.entities.Histories.Where(x => x.UserId == current).Select(x => new HistoryDTO()
             {
@@ -106,10 +101,7 @@ namespace Logic.Services
               NewAmount = x.NewAmount
             }).ToList();
 
-            //history.Add(new HistoryDTO()
-            //{
-            //    Id = current,
-            //});
+            
             return historys;
         }
 
@@ -117,16 +109,24 @@ namespace Logic.Services
         public bool AddHistory(int Id, User2Area oldDetails, AreaDTO newDetails)
         {
             History newHistory = new History();
+            int noAmount = 0;
             newHistory.UserId = Id;
             newHistory.DateofChange = DateTime.Now;
             newHistory.OldDomain = oldDetails.Description;
             newHistory.NewDomain = newDetails.Description;
+            if(newHistory.NewDomain == null)
+            {
+                newHistory.NewDomain = "התחום בוטל";
+            }
             newHistory.OldAmount = oldDetails.Sum;
             newHistory.NewAmount = newDetails.Sum;
+            if (newHistory.NewAmount == null)
+            {
+                newHistory.NewAmount = noAmount;
+            }
             dbService.entities.Histories.Add(newHistory);
             try
             {
-                //dbService.Save();
                 dbService.entities.SaveChanges();
 
                 return true;

@@ -22,7 +22,7 @@ namespace Logic.Services
     public class AreaServies : IAreaServies
     {
         private IDBService dbService;
-        //private IReportsService iReportsService;
+        
         private IReportsServies reportsService;
 
         public AreaServies(IDBService dbService,IReportsServies reportsService)
@@ -139,6 +139,8 @@ namespace Logic.Services
                 }
                 else
                 {
+                    AreaDTO area = new AreaDTO();
+                    reportsService.AddHistory(CurrentUserId, dbUser2area, area);
                     dbService.entities.User2Areas.Remove(dbService.entities.User2Areas.FirstOrDefault(x => x.UserId == CurrentUserId && x.Id == id));
                     dbService.Save();
 
