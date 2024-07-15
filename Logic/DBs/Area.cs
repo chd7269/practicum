@@ -12,4 +12,6 @@ public partial class Area
     public int Type { get; set; }
 
     public int? ManagerId { get; set; }
+
+    public virtual ICollection<Debt> Debts { get; set; } = new List<Debt>();
 }

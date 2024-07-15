@@ -13,7 +13,7 @@ namespace Logic.DTO
         public string Name { get; set; }
 
         //   public bool? IsGlobal { get; set; }
-
+        public int? ManagerId { get; set; }
         public bool? IsActive { get; set; }
 
         public int? Type { get; set; }
