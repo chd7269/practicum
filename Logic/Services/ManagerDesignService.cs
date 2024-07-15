@@ -14,7 +14,7 @@ namespace Logic.Services
         bool UpdateManagerDesign(ManagerDesignDTO managerDesign, int CurrentUserId);
         ManagerDesignDTO GetFile(int id);
     }
-    public class ManagerDesignService: IManagerDesignService
+    public class ManagerDesignService : IManagerDesignService
     {
         private IDBService dbService;
         public ManagerDesignService(IDBService dbService)
@@ -24,7 +24,12 @@ namespace Logic.Services
         public ManagerDesignDTO GetManagerDesign(int managerId)
         {
             var mDesign = new ManagerDesignDTO();
-            var dbmDesign = dbService.entities.ManagerDesigns.FirstOrDefault(x => x.ManagerId == managerId);
+            ManagerDesign dbmDesign = null;
+            var managerUser = dbService.entities.Users.FirstOrDefault(x => x.Id == managerId);
+            if (managerUser.UserTypeId != 1 && managerUser.UserTypeId != 4)
+                dbmDesign = dbService.entities.ManagerDesigns.FirstOrDefault(x => x.ManagerId == managerUser.ManagerId);
+            else if (managerUser.UserTypeId == 1 || managerUser.UserTypeId == 4)
+                dbmDesign = dbService.entities.ManagerDesigns.FirstOrDefault(x => x.ManagerId == managerId);
             if (dbmDesign != null)
             {
                 mDesign.Id = dbmDesign.Id;
@@ -39,16 +44,16 @@ namespace Logic.Services
             }
             return mDesign;
         }
-        public bool AddManagerDesign(ManagerDesignDTO managerDesign,int CurrentUserId)
+        public bool AddManagerDesign(ManagerDesignDTO managerDesign, int CurrentUserId)
         {
             var newManagerDesign = new ManagerDesign();
-                newManagerDesign.ManagerId = CurrentUserId;
-                newManagerDesign.HeaderColor =(managerDesign.HeaderColor);
-                newManagerDesign.ImageContent =(managerDesign.ImageContent);
-                newManagerDesign.Title =(managerDesign.Title);
-                newManagerDesign.Slogan =(managerDesign.Slogan);
-                newManagerDesign.TextColor = (managerDesign.TextColor);
-                newManagerDesign.FileName = (managerDesign.FileName);
+            newManagerDesign.ManagerId = CurrentUserId;
+            newManagerDesign.HeaderColor = (managerDesign.HeaderColor);
+            newManagerDesign.ImageContent = (managerDesign.ImageContent);
+            newManagerDesign.Title = (managerDesign.Title);
+            newManagerDesign.Slogan = (managerDesign.Slogan);
+            newManagerDesign.TextColor = (managerDesign.TextColor);
+            newManagerDesign.FileName = (managerDesign.FileName);
 
             dbService.entities.ManagerDesigns.Add(newManagerDesign);
 
