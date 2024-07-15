@@ -22,6 +22,11 @@ namespace MoneySystemServer.Controllers
         {
             return Success(repotsService.GetMovingReports(UserId.Value));
         }
+        //[HttpGet]
+        //public GResult<List<DebtReportsDTO>> GetMovingReports()
+        //{
+        //    return Success(repotsService.GetMovingReports(UserId.Value));
+        //}
 
         //האם לעשות את זה בקונטרולר
         [HttpGet]

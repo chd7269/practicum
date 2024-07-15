@@ -19,6 +19,10 @@ public partial class Debt
 
     public int Sum { get; set; }
 
+    public int? AreaId { get; set; }
+
+    public virtual Area? Area { get; set; }
+
     public virtual UrgencyDebt Urgency { get; set; } = null!;
 
     public virtual User User { get; set; } = null!;
