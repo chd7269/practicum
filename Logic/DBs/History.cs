@@ -7,7 +7,7 @@ public partial class History
 {
     public int Id { get; set; }
 
-    public int UserId { get; set; }
+    public int? UserId { get; set; }
 
     public DateTime? DateofChange { get; set; }
 
@@ -19,5 +19,5 @@ public partial class History
 
     public int? NewAmount { get; set; }
 
-    public virtual User User { get; set; } = null!;
+    public virtual User? User { get; set; }
 }

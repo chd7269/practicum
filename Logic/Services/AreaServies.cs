@@ -113,6 +113,10 @@ namespace Logic.Services
         
             if (dbUser2Area != null)
             {
+                if (area.IsActive == false)
+                {
+                    area.ActionOption = actionOptions.IsNotActive;
+                }
                 reportsService.AddHistory(CurrentUserId, dbUser2Area, area);
                 dbUser2Area.IsActive = area.IsActive;
                 dbUser2Area.IsMaaser = area.IsMaaser;
@@ -139,7 +143,9 @@ namespace Logic.Services
                 }
                 else
                 {
+                    //לבדוק שאופן ההבאת תחום תקין פנינה
                     AreaDTO area = new AreaDTO();
+                    area.ActionOption = actionOptions.delete;
                     reportsService.AddHistory(CurrentUserId, dbUser2area, area);
                     dbService.entities.User2Areas.Remove(dbService.entities.User2Areas.FirstOrDefault(x => x.UserId == CurrentUserId && x.Id == id));
                     dbService.Save();

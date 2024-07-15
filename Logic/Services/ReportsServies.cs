@@ -109,18 +109,23 @@ namespace Logic.Services
         public bool AddHistory(int Id, User2Area oldDetails, AreaDTO newDetails)
         {
             History newHistory = new History();
+            //לבדוק שזה תקין בשביל המחיקה פנינה
             int noAmount = 0;
             newHistory.UserId = Id;
             newHistory.DateofChange = DateTime.Now;
             newHistory.OldDomain = oldDetails.Description;
             newHistory.NewDomain = newDetails.Description;
-            if(newHistory.NewDomain == null)
+            if (newDetails.ActionOption == actionOptions.delete)
             {
-                newHistory.NewDomain = "התחום בוטל";
+                newHistory.NewDomain = "The domain deleted";
             }
+            //if(string.IsNullOrEmpty(newHistory.NewDomain))
+            //{
+            //    newHistory.NewDomain = "The domain deleted";
+            //}
             newHistory.OldAmount = oldDetails.Sum;
             newHistory.NewAmount = newDetails.Sum;
-            if (newHistory.NewAmount == null)
+            if (newDetails.ActionOption == actionOptions.delete || newDetails.ActionOption == actionOptions.IsNotActive)
             {
                 newHistory.NewAmount = noAmount;
             }
