@@ -39,13 +39,15 @@ namespace Logic.Services
             {
                 Id = x.Id,
                 Name = x.Name,
-                //chevy
-                ManagerId=userId
+                ManagerId=x.ManagerId
+
             }).ToList();
             lists.Statuses = dbService.entities.Statuses.Select(x => new IdName()
             {
                 Id = x.Id,
-                Name = x.Description
+                Name = x.Description,
+                ManagerId = x.ManagerId
+
             }).ToList();
             lists.Areas = dbService.entities.Areas.Select(x => new IdName()
             {
@@ -56,7 +58,9 @@ namespace Logic.Services
             lists.UrgencyDebts = dbService.entities.UrgencyDebts.Select(x => new IdName()
             {
                 Id = x.Id,
-                Name = x.Description
+                Name = x.Description,
+                ManagerId = x.ManagerId
+
             }).ToList();
             lists.Lenders = dbService.entities.Users.Where(x => x.UserTypeId == 2 && x.IsActive).Select(x => new IdName()
             {
@@ -98,7 +102,8 @@ namespace Logic.Services
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    ManagerId=x.ManagerId,
+                    ManagerId=x.
+                    ManagerId   
                 }).ToList();
             }
             else if (item.TableCode == TableCode.Status)
@@ -114,7 +119,9 @@ namespace Logic.Services
                 list = dbService.entities.UrgencyDebts.Select(x => new IdName()
                 {
                     Id = x.Id,
-                    Name = x.Description
+                    Name = x.Description,
+                    ManagerId = x.ManagerId
+
                 }).ToList();
             }
             else if (item.TableCode == TableCode.Areas)
