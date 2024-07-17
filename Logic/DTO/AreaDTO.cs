@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,8 @@ namespace Logic.DTO
         public bool? IsMaaser { get; set; }
 
         public bool? IsActive { get; set; }
+        // chak pnina
+        public actionOptions ActionOption  { get; set; } = actionOptions.update;
 
     }
 }

@@ -46,10 +46,6 @@ namespace MoneySystemServer.Controllers
             var isSuccess = listService.DeleteItem(idName);
             if (isSuccess )
             {
-                return Success("אפשרות תשלום הוגדרה כלא פעילה אין אפשרות למחוק תחומים  מסיבה שיש תנועות עם אפשרות זו");
-            }
-            else if (isSuccess  )
-            {
                 return Success("נמחק בהצלחה");
             }
 

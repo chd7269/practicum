@@ -10,7 +10,7 @@ namespace Logic.DTO
     {
        
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public DateTime? DateofChange { get; set; }
         public string? OldDomain { get; set; }
         public string? NewDomain { get; set; }
