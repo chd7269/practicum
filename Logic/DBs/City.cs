@@ -10,4 +10,6 @@ public partial class City
     public string Name { get; set; } = null!;
 
     public int? ManagerId { get; set; }
+
+    public virtual User? Manager { get; set; }
 }

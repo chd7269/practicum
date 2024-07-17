@@ -14,4 +14,6 @@ public partial class Area
     public int? ManagerId { get; set; }
 
     public virtual ICollection<Debt> Debts { get; set; } = new List<Debt>();
+
+    public virtual User? Manager { get; set; }
 }
