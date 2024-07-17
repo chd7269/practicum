@@ -23,6 +23,8 @@ public partial class User2Area
 
     public virtual Debt? Debt { get; set; }
 
+    public virtual ICollection<Debt> Debts { get; set; } = new List<Debt>();
+
     public virtual ICollection<Moving> Movings { get; set; } = new List<Moving>();
 
     public virtual User User { get; set; } = null!;
