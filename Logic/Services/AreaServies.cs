@@ -116,6 +116,7 @@ namespace Logic.Services
                 if (area.IsActive == false)
                 {
                     area.ActionOption = actionOptions.IsNotActive;
+
                 }
                 reportsService.AddHistory(CurrentUserId, dbUser2Area, area);
                 dbUser2Area.IsActive = area.IsActive;
