@@ -20,7 +20,7 @@ namespace Logic.DTO
         public bool? IsMaaser { get; set; }
 
         public bool? IsActive { get; set; }
-        // chak pnina
+       
         public actionOptions ActionOption  { get; set; } = actionOptions.update;
 
     }

@@ -64,16 +64,5 @@ namespace MoneySystemServer.Controllers
             return Success(movingService.GetFilters(type, UserId.Value));
         }
 
-        [HttpPost]
-        public GResult<TithesDataDTO> GetSumOfTithe(SerchTitheDTO s )
-        {
-            return Success(movingService.RepoTithe( UserId.Value,s));
-        }
-
-        [HttpGet]
-        public GResult<List<int>> GetYears()
-        {
-            return Success(movingService.YearsMoovings(UserId.Value));
-        }
     }
 }

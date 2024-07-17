@@ -79,11 +79,11 @@ public partial class MyMoneyBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Debts__3214EC070DF8562F");
 
-            entity.Property(e => e.AreaId).HasColumnName("area_id");
+            entity.Property(e => e.PersonalExpenseId).HasColumnName("Personal_expenseId");
 
-            entity.HasOne(d => d.Area).WithMany(p => p.Debts)
-                .HasForeignKey(d => d.AreaId)
-                .HasConstraintName("fk_Debts_Area");
+            entity.HasOne(d => d.PersonalExpense).WithMany(p => p.Debts)
+                .HasForeignKey(d => d.PersonalExpenseId)
+                .HasConstraintName("fk_Debts_User2Area");
 
             entity.HasOne(d => d.Urgency).WithMany(p => p.Debts)
                 .HasForeignKey(d => d.UrgencyId)
@@ -115,12 +115,6 @@ public partial class MyMoneyBContext : DbContext
             entity.ToTable("History");
 
             entity.Property(e => e.DateofChange).HasColumnType("datetime");
-            entity.Property(e => e.NewDomain)
-                .HasMaxLength(255)
-                .IsUnicode(false);
-            entity.Property(e => e.OldDomain)
-                .HasMaxLength(255)
-                .IsUnicode(false);
 
             entity.HasOne(d => d.User).WithMany(p => p.Histories)
                 .HasForeignKey(d => d.UserId)
@@ -183,6 +177,18 @@ public partial class MyMoneyBContext : DbContext
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Presence__UserId__71D1E811");
+        });
+
+        modelBuilder.Entity<PresenceSetting>(entity =>
+        {
+            entity.HasKey(e => e.PresenceId).HasName("PK__Presence__4980E863639046C4");
+
+            entity.Property(e => e.Day).HasColumnName("day");
+            entity.Property(e => e.Hours).HasColumnName("hours");
+
+            entity.HasOne(d => d.User).WithMany(p => p.PresenceSettings)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK__PresenceS__UserI__787EE5A0");
         });
 
         modelBuilder.Entity<PresenceSetting>(entity =>

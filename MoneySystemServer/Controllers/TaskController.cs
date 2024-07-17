@@ -1,4 +1,5 @@
-﻿using Logic.DTO;
+﻿using Logic;
+using Logic.DTO;
 using Logic.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,11 +15,10 @@ namespace MoneySystemServer.Controllers
         {
             this.TaskService = taskService;
         }
-
-        [HttpGet]
-        public GResult<List<TaskDTO>> GetTasks()
+        [HttpPost]
+        public GResult<List<TaskDTO>> GetTasks(TaskSearch taskSearch)
         {
-            return Success(TaskService.GetTasks(UserId.Value));
+            return Success(TaskService.GetTasks(UserId.Value,taskSearch));
 
         }
 

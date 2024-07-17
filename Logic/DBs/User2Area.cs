@@ -17,11 +17,13 @@ public partial class User2Area
 
     public int? DebtId { get; set; }
 
-    public string? Description { get; set; }
+    public string Description { get; set; } = null!;
 
     public int Type { get; set; }
 
     public virtual Debt? Debt { get; set; }
+
+    public virtual ICollection<Debt> Debts { get; set; } = new List<Debt>();
 
     public virtual ICollection<Moving> Movings { get; set; } = new List<Moving>();
 

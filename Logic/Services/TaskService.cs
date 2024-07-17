@@ -9,7 +9,7 @@ namespace Logic.Services
 {
     public interface ITaskService
     {
-        List<TaskDTO> GetTasks(int CurrentUserId);
+        List<TaskDTO> GetTasks(int CurrentUserId, TaskSearch taskSearch);
 
         // TaskDTO GetTask(int id);
         bool AddTask(TaskDTO task, int currentUserId);
@@ -27,13 +27,39 @@ namespace Logic.Services
         {
             this.dbService = dbService;
         }
-
-        public List<TaskDTO> GetTasks(int CurrentUserId)
+        public List<TaskDTO> GetTasks(int CurrentUserId, TaskSearch taskSearch)
         {
             List<TaskDTO> tasks = new List<TaskDTO>();            
             if (dbService.entities.Tasks.Any(x => x.UserId == CurrentUserId))
             {
-                tasks = dbService.entities.Tasks.Where(x => x.UserId == CurrentUserId).Select(x => new TaskDTO()
+                var query = dbService.entities.Tasks.Where(x => x.UserId == CurrentUserId);
+
+                //
+                if (taskSearch != null){
+                    if (!string.IsNullOrEmpty(taskSearch.Description))
+                    {
+                        query = query.Where(x => x.Description.Contains(taskSearch.Description));
+                    }
+                    if (!string.IsNullOrEmpty(taskSearch.Comments))
+                    {
+                        query = query.Where(x => x.Comment.Contains(taskSearch.Comments));
+                    }
+                    if (!string.IsNullOrEmpty(taskSearch.Urgency))
+                    {
+                        query = query.Where(x => x.Urgency.Description.Contains(taskSearch.Urgency));
+                    }
+                    if (!string.IsNullOrEmpty(taskSearch.Status))
+                    {
+                        query = query.Where(x => x.Status.Description.Contains(taskSearch.Status));
+                    }
+
+                }
+                //if  !string.isNullOrEmpy(search.status)  
+                //query = query.Where(x=>x.Status.Name.contains(
+
+                //
+
+                tasks = query.Select(x => new TaskDTO()
                 {
                     Id = x.Id,
                     Description = x.Description,

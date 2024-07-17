@@ -60,6 +60,15 @@ namespace MoneySystemServer.Controllers
             {
                 type = "image/jpg";
             }
+            else if (extention == ".docx" || extention == ".doc")
+            {
+                type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            }
+            else if (extention == ".xlsx" || extention == ".xls")
+            {
+                type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            }
+         
             return type;
         }
     }

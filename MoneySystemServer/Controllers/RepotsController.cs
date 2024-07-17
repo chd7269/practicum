@@ -35,6 +35,17 @@ namespace MoneySystemServer.Controllers
             return Success(repotsService.GetHistory(UserId.Value));
         }
 
+        [HttpPost]
+        public GResult<TithesDataDTO> GetSumOfTithe(SerchTitheDTO s)
+        {
+            return Success(repotsService.RepoTithe(UserId.Value, s));
+        }
+
+        [HttpGet]
+        public GResult<List<int>> GetYears()
+        {
+            return Success(repotsService.YearsMoovings(UserId.Value));
+        }
 
         //[HttpPost]
         //public Result AddHistory(int iD,AreaDTO area, AreaDTO area1)
@@ -47,5 +58,5 @@ namespace MoneySystemServer.Controllers
         //    return Success();
         //}
 
-}
+    }
 }
