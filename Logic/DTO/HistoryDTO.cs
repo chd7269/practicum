@@ -16,6 +16,7 @@ namespace Logic.DTO
         public string? NewDomain { get; set; }
         public int? OldAmount { get; set; }
         public int? NewAmount { get; set; }
+        public int? actionOption { get; set; } = 2;
 
 
     }
