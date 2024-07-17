@@ -14,10 +14,10 @@ namespace MoneySystemServer.Controllers
             this.documentService = documentService;
         }
 
-        [HttpGet]
-        public GResult<List<DocumentDTO>> GetDocuments()
+        [HttpPost]
+        public GResult<List<DocumentDTO>> GetDocuments(SerchDocument searchDoc)
         {
-            return Success(documentService.GetDocuments(UserId.Value));
+            return Success(documentService.GetDocuments(UserId.Value, searchDoc));
         }
 
         [HttpPost]
@@ -77,7 +77,8 @@ namespace MoneySystemServer.Controllers
 
             return Success();
         }
-
+   
+   
 
     }
 }

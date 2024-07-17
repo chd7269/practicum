@@ -24,4 +24,10 @@ namespace Logic.DTO
         public string Description { get; set; }
 
     }
+    public class SerchDocument
+    {
+        public string Description { get; set; }
+        public string Name { get; set; }
+
+    }
 }
