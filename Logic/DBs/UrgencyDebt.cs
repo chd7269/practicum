@@ -13,5 +13,7 @@ public partial class UrgencyDebt
 
     public virtual ICollection<Debt> Debts { get; set; } = new List<Debt>();
 
+    public virtual User? Manager { get; set; }
+
     public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();
 }

@@ -11,5 +11,7 @@ public partial class Status
 
     public int? ManagerId { get; set; }
 
+    public virtual User? Manager { get; set; }
+
     public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();
 }

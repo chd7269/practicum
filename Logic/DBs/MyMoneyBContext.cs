@@ -33,6 +33,10 @@ public partial class MyMoneyBContext : DbContext
 
     public virtual DbSet<Presence> Presences { get; set; }
 
+    public virtual DbSet<PresenceSetting> PresenceSettings { get; set; }
+
+    public virtual DbSet<ProductSettingsForDay> ProductSettingsForDays { get; set; }
+
     public virtual DbSet<Status> Statuses { get; set; }
 
     public virtual DbSet<Task> Tasks { get; set; }
@@ -56,22 +60,30 @@ public partial class MyMoneyBContext : DbContext
             entity.HasKey(e => e.Id).HasName("PK_Subject");
 
             entity.ToTable("Area");
+
+            entity.HasOne(d => d.Manager).WithMany(p => p.Areas)
+                .HasForeignKey(d => d.ManagerId)
+                .HasConstraintName("FK__Area__ManagerId__787EE5A0");
         });
 
         modelBuilder.Entity<City>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Cities__3214EC07C6F4B699");
+
+            entity.HasOne(d => d.Manager).WithMany(p => p.Cities)
+                .HasForeignKey(d => d.ManagerId)
+                .HasConstraintName("FK__Cities__ManagerI__778AC167");
         });
 
         modelBuilder.Entity<Debt>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Debts__3214EC076E4C03CD");
 
-            entity.Property(e => e.AreaId).HasColumnName("area_id");
+            entity.Property(e => e.PersonalExpenseId).HasColumnName("Personal_expenseId");
 
-            entity.HasOne(d => d.Area).WithMany(p => p.Debts)
-                .HasForeignKey(d => d.AreaId)
-                .HasConstraintName("fk_Debts_Area");
+            entity.HasOne(d => d.PersonalExpense).WithMany(p => p.Debts)
+                .HasForeignKey(d => d.PersonalExpenseId)
+                .HasConstraintName("fk_Debts_User2Area");
 
             entity.HasOne(d => d.Urgency).WithMany(p => p.Debts)
                 .HasForeignKey(d => d.UrgencyId)
@@ -172,11 +184,46 @@ public partial class MyMoneyBContext : DbContext
                 .HasConstraintName("FK__Presence__UserId__71D1E811");
         });
 
+        modelBuilder.Entity<PresenceSetting>(entity =>
+        {
+            entity.HasKey(e => e.PresenceId).HasName("PK__Presence__4980E86348CF3CC2");
+
+            entity.Property(e => e.Day).HasColumnName("day");
+            entity.Property(e => e.Hours).HasColumnName("hours");
+
+            entity.HasOne(d => d.User).WithMany(p => p.PresenceSettings)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK__PresenceS__UserI__73BA3083");
+        });
+
+        modelBuilder.Entity<ProductSettingsForDay>(entity =>
+        {
+            entity.HasKey(e => e.ProductId).HasName("PK__ProductS__B40CC6CDDE8AAAD6");
+
+            entity.ToTable("ProductSettingsForDay");
+
+            entity.Property(e => e.Day).HasColumnName("day");
+            entity.Property(e => e.Product)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+            entity.Property(e => e.ProductType)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.User).WithMany(p => p.ProductSettingsForDays)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK__ProductSe__UserI__76969D2E");
+        });
+
         modelBuilder.Entity<Status>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Status__3214EC073D7024B1");
 
             entity.ToTable("Status");
+
+            entity.HasOne(d => d.Manager).WithMany(p => p.Statuses)
+                .HasForeignKey(d => d.ManagerId)
+                .HasConstraintName("FK__Status__ManagerI__797309D9");
         });
 
         modelBuilder.Entity<Task>(entity =>
@@ -206,6 +253,10 @@ public partial class MyMoneyBContext : DbContext
             entity.HasKey(e => e.Id).HasName("PK__UrgencyD__3214EC0780B0DD57");
 
             entity.ToTable("UrgencyDebt");
+
+            entity.HasOne(d => d.Manager).WithMany(p => p.UrgencyDebts)
+                .HasForeignKey(d => d.ManagerId)
+                .HasConstraintName("FK__UrgencyDe__Manag__7A672E12");
         });
 
         modelBuilder.Entity<User>(entity =>
