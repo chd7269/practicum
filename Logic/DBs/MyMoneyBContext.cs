@@ -57,13 +57,13 @@ public partial class MyMoneyBContext : DbContext
     {
         modelBuilder.Entity<AmountSetting>(entity =>
         {
-            entity.HasKey(e => e.ProductId).HasName("PK__ProductS__B40CC6CD122C1CB1");
+            entity.HasKey(e => e.ProductId).HasName("PK__ProductS__B40CC6CDDD9F23C1");
 
             entity.Property(e => e.Day).HasColumnName("day");
 
             entity.HasOne(d => d.User).WithMany(p => p.AmountSettings)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__ProductSe__UserI__7B5B524B");
+                .HasConstraintName("FK__ProductSe__UserI__68487DD7");
         });
 
         modelBuilder.Entity<Area>(entity =>
@@ -190,14 +190,14 @@ public partial class MyMoneyBContext : DbContext
 
         modelBuilder.Entity<PresenceSetting>(entity =>
         {
-            entity.HasKey(e => e.PresenceId).HasName("PK__Presence__4980E863639046C4");
+            entity.HasKey(e => e.PresenceId).HasName("PK__Presence__4980E863681EB51C");
 
             entity.Property(e => e.Day).HasColumnName("day");
             entity.Property(e => e.Hours).HasColumnName("hours");
 
             entity.HasOne(d => d.User).WithMany(p => p.PresenceSettings)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__PresenceS__UserI__787EE5A0");
+                .HasConstraintName("FK__PresenceS__UserI__656C112C");
         });
 
         modelBuilder.Entity<Status>(entity =>

@@ -26,7 +26,7 @@ namespace Logic.Services
             var mDesign = new ManagerDesignDTO();
             ManagerDesign dbmDesign = null;
 
-            if (managerId == 0)
+            if (managerId == null)
             {
                 // במידה ואין ID, שלוף את השורה הראשונה בטבלה
                 dbmDesign = dbService.entities.ManagerDesigns.FirstOrDefault();
@@ -45,7 +45,9 @@ namespace Logic.Services
                 mDesign.ImageContent = dbmDesign.ImageContent;
                 mDesign.TextColor = dbmDesign.TextColor;
                 mDesign.FileName = dbmDesign.FileName;
-                mDesign.Src = "File/ShowFileDesign/" + dbmDesign.Id;
+                //mDesign.Src = "File/ShowFileDesign/" + dbmDesign.Id;
+                mDesign.Src = "File/ShowFileDesign/" + dbmDesign.Id + "00000" + DateTime.Now.Millisecond;
+
 
             }
             return mDesign;
