@@ -63,12 +63,38 @@ namespace MoneySystemServer.Controllers
             return File(file.Content, file.ContentType);
         }
 
-        [HttpGet("{id}")]
-        public ActionResult ShowFileDesign(int id)
+        [HttpGet("{idString}")]
+        public ActionResult ShowFileDesign(int idString)
         {
+            //int index = idString.IndexOf("!");
+
+            //if (index != -1)
+            //{
+            //    string resultString = idString.Substring(0, index);
+            //    Console.WriteLine(resultString);
+            //}
+            //else
+            //{
+            //    Console.WriteLine("The string does not contain '!!'");
+            //}
+            int id =  RemoveTrailingZeros(idString);
             var file = managerDesignService.GetFile(id);
             var contentType = GetContentType(file.FileName);
             return File(file.ImageContent, contentType);
+        }
+
+        public static int RemoveTrailingZeros(int number)
+        {
+            string numberStr = number.ToString();
+            string zeros = "00000";
+            int index = numberStr.IndexOf(zeros);
+
+            if (index != -1)
+            {
+                return int.Parse(numberStr.Substring(0, index));
+            }
+
+            return number; 
         }
 
         // אם גט מצליח לקבל שתי נתונים להפוך את הפונקציה לגלובלית בערך ככה

@@ -33,6 +33,8 @@ public partial class User
 
     public bool? Isbusiness { get; set; }
 
+    public virtual ICollection<AmountSetting> AmountSettings { get; set; } = new List<AmountSetting>();
+
     public virtual ICollection<Area> Areas { get; set; } = new List<Area>();
 
     public virtual ICollection<City> Cities { get; set; } = new List<City>();
@@ -58,8 +60,6 @@ public partial class User
     public virtual ICollection<PresenceSetting> PresenceSettings { get; set; } = new List<PresenceSetting>();
 
     public virtual ICollection<Presence> Presences { get; set; } = new List<Presence>();
-
-    public virtual ICollection<ProductSettingsForDay> ProductSettingsForDays { get; set; } = new List<ProductSettingsForDay>();
 
     public virtual ICollection<Status> Statuses { get; set; } = new List<Status>();
 
