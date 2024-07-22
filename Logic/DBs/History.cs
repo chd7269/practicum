@@ -19,9 +19,8 @@ public partial class History
     public int? OldAmount { get; set; }
 
     public int? NewAmount { get; set; }
-    public int? ActionOption { get; set; }  
+    public ActionOptions ActionOption { get; set; }  
 
-    public ActionOptions ActionOption { get; set; }
 
     public virtual User User { get; set; } = null!;
 }
