@@ -11,7 +11,8 @@ namespace Logic.Services
 {
     public interface IUserService
     {
-        List<UserDTO> GetUsers(int currentUserId, userSerach userSerach, SearchDetails searchDetails);
+        List<UserDTO> GetUsers(int currentUserId, userSerach userSerach);
+        //, SearchDetails searchDetails
         List<IdName> GetUserTypes(int currentUserId);
         UserDTO GetUser(int id);
         bool AddUser(UserDTO user, int currentUserId);
@@ -35,38 +36,39 @@ namespace Logic.Services
             this.dbService = dbService;
         }
 
-        public List<UserDTO> GetUsers(int currentUserId, userSerach userSerach, SearchDetails searchDetails)
+        public List<UserDTO> GetUsers(int currentUserId, userSerach userSerach)
         {
+            //, SearchDetails searchDetails
             var users = dbService.entities.Users.ToList();
             List<String> searchOptionList = new List<String> { "סוגי משתמשים", "משתמשים תחת מלווה", "מלווים תחת מנהל" };
 
            
             var currentUser = dbService.entities.Users.FirstOrDefault(x => x.Id == currentUserId);
 
-            if (searchDetails != null)
-            {
-                if (!string.IsNullOrEmpty(searchDetails.Email))
-                {
-                    users = users.Where(x => x.Email.Contains(searchDetails.Email)).ToList();
-                }
-                if (!string.IsNullOrEmpty(searchDetails.FirstName))
-                {
-                    users = users.Where(x => x.FirstName.Contains(searchDetails.FirstName)).ToList();
-                }
-                if (!string.IsNullOrEmpty(searchDetails.LastName))
-                {
-                    users = users.Where(x => x.LastName.Contains(searchDetails.LastName)).ToList();
-                    if (!string.IsNullOrEmpty(searchDetails.Phone))
-                    {
-                        users = users.Where(x => x.Phone.Contains(searchDetails.Phone)).ToList();
-                    }
-                    if (!string.IsNullOrEmpty(searchDetails.usersType))
-                    {
-                        users = users.Where(x => x.UserType.Description.Contains(searchDetails.usersType)).ToList();
-                    }
+            //if (searchDetails != null)
+            //{
+            //    if (!string.IsNullOrEmpty(searchDetails.Email))
+            //    {
+            //        users = users.Where(x => x.Email.Contains(searchDetails.Email)).ToList();
+            //    }
+            //    if (!string.IsNullOrEmpty(searchDetails.FirstName))
+            //    {
+            //        users = users.Where(x => x.FirstName.Contains(searchDetails.FirstName)).ToList();
+            //    }
+            //    if (!string.IsNullOrEmpty(searchDetails.LastName))
+            //    {
+            //        users = users.Where(x => x.LastName.Contains(searchDetails.LastName)).ToList();
+            //        if (!string.IsNullOrEmpty(searchDetails.Phone))
+            //        {
+            //            users = users.Where(x => x.Phone.Contains(searchDetails.Phone)).ToList();
+            //        }
+            //        if (!string.IsNullOrEmpty(searchDetails.usersType))
+            //        {
+            //            users = users.Where(x => x.UserType.Description.Contains(searchDetails.usersType)).ToList();
+            //        }
 
-                }
-            }
+            //    }
+            //}
 
             //  if (currentUser.UserType.Id == 5)
             if (currentUser.UserType.Id == (int)userTypeDTO.userUnderLender)
