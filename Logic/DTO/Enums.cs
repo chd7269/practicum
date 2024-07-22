@@ -39,7 +39,8 @@ namespace Logic.DTO
         presenceUser = 6,
     }
 
-    public enum actionOptions {
+    public enum ActionOptions
+    {
         update = 1,
         delete = 2,
         IsNotActive = 3,

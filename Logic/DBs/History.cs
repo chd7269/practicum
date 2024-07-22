@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Logic.DTO;
+using System;
 using System.Collections.Generic;
 
 namespace Logic;
@@ -19,7 +20,7 @@ public partial class History
 
     public int? NewAmount { get; set; }
 
-    public int? ActionOption { get; set; }
+    public ActionOptions ActionOption { get; set; }
 
     public virtual User User { get; set; } = null!;
 }
