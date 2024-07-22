@@ -19,7 +19,10 @@ namespace Api.Controllers
         [HttpGet]
         public GResult<ManagerDesignDTO> GetManagerDesign()
         {
-            return Success(managerDesignService.GetManagerDesign(UserId.Value));
+            if(UserId.Value != null)
+                return Success(managerDesignService.GetManagerDesign(UserId.Value));
+            return Success(managerDesignService.GetManagerDesign(0));
+
         }
 
 
