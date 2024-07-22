@@ -79,10 +79,8 @@ public partial class MyMoneyBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Debts__3214EC076E4C03CD");
 
-            entity.Property(e => e.PersonalExpenseId).HasColumnName("Personal_expenseId");
-
-            entity.HasOne(d => d.PersonalExpense).WithMany(p => p.Debts)
-                .HasForeignKey(d => d.PersonalExpenseId)
+            entity.HasOne(d => d.Area).WithMany(p => p.Debts)
+                .HasForeignKey(d => d.AreaId)
                 .HasConstraintName("fk_Debts_User2Area");
 
             entity.HasOne(d => d.Urgency).WithMany(p => p.Debts)

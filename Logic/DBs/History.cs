@@ -14,13 +14,11 @@ public partial class History
     public string? OldDomain { get; set; }
 
     public string? NewDomain { get; set; }
-    public int ActionOption { get; set; }
 
     public int? OldAmount { get; set; }
 
     public int? NewAmount { get; set; }
+    public int? ActionOption { get; set; }  
 
     public virtual User? User { get; set; }
-
-
 }
