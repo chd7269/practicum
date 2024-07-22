@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Logic.DTO
 {
-    public class daysRevenuesExpanded
+    public class PresenceSettingsDTO
     {
         public int Id { get; set; }
         public int Day { get; set; }
         public int Hours { get; set; }
     }
 
-    public class productsRevenuesExpanded
+    public class AmountSettingsDTO
     {
         public int Id { get; set; }
         public int Day { get; set; }

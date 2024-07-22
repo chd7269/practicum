@@ -15,6 +15,8 @@ public partial class MyMoneyBContext : DbContext
     {
     }
 
+    public virtual DbSet<AmountSetting> AmountSettings { get; set; }
+
     public virtual DbSet<Area> Areas { get; set; }
 
     public virtual DbSet<City> Cities { get; set; }
@@ -35,8 +37,6 @@ public partial class MyMoneyBContext : DbContext
 
     public virtual DbSet<PresenceSetting> PresenceSettings { get; set; }
 
-    public virtual DbSet<ProductSettingsForDay> ProductSettingsForDays { get; set; }
-
     public virtual DbSet<Status> Statuses { get; set; }
 
     public virtual DbSet<Task> Tasks { get; set; }
@@ -55,6 +55,17 @@ public partial class MyMoneyBContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<AmountSetting>(entity =>
+        {
+            entity.HasKey(e => e.ProductId).HasName("PK__ProductS__B40CC6CDDD9F23C1");
+
+            entity.Property(e => e.Day).HasColumnName("day");
+
+            entity.HasOne(d => d.User).WithMany(p => p.AmountSettings)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK__ProductSe__UserI__68487DD7");
+        });
+
         modelBuilder.Entity<Area>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_Subject");
@@ -181,18 +192,6 @@ public partial class MyMoneyBContext : DbContext
 
         modelBuilder.Entity<PresenceSetting>(entity =>
         {
-            entity.HasKey(e => e.PresenceId).HasName("PK__Presence__4980E863639046C4");
-
-            entity.Property(e => e.Day).HasColumnName("day");
-            entity.Property(e => e.Hours).HasColumnName("hours");
-
-            entity.HasOne(d => d.User).WithMany(p => p.PresenceSettings)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__PresenceS__UserI__787EE5A0");
-        });
-
-        modelBuilder.Entity<PresenceSetting>(entity =>
-        {
             entity.HasKey(e => e.PresenceId).HasName("PK__Presence__4980E863681EB51C");
 
             entity.Property(e => e.Day).HasColumnName("day");
@@ -201,25 +200,6 @@ public partial class MyMoneyBContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.PresenceSettings)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK__PresenceS__UserI__656C112C");
-        });
-
-        modelBuilder.Entity<ProductSettingsForDay>(entity =>
-        {
-            entity.HasKey(e => e.ProductId).HasName("PK__ProductS__B40CC6CDDD9F23C1");
-
-            entity.ToTable("ProductSettingsForDay");
-
-            entity.Property(e => e.Day).HasColumnName("day");
-            entity.Property(e => e.Product)
-                .HasMaxLength(255)
-                .IsUnicode(false);
-            entity.Property(e => e.ProductType)
-                .HasMaxLength(255)
-                .IsUnicode(false);
-
-            entity.HasOne(d => d.User).WithMany(p => p.ProductSettingsForDays)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__ProductSe__UserI__68487DD7");
         });
 
         modelBuilder.Entity<Status>(entity =>
