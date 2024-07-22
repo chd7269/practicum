@@ -19,9 +19,9 @@ namespace MoneySystemServer.Controllers
         [IsActive]
         [IsPermission]
         [HttpPost]
-        public GResult<List<UserDTO>> GetUsers(userSerach userSerach)
+        public GResult<List<UserDTO>> GetUsers(userSerach userSerach, SearchDetails searchDetails)
         {
-            return Success(userService.GetUsers(UserId.Value, userSerach));
+            return Success(userService.GetUsers(UserId.Value, userSerach, searchDetails));
         }
 
         [HttpGet("{id}")]
