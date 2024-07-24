@@ -90,8 +90,6 @@ namespace Logic.Services
 
         public List<HistoryDTO> GetHistory(int current)
         {
-            var history = dbService.entities.Histories.Where(x => x.UserId == current);
-
             List<HistoryDTO> historys = new List<HistoryDTO>();
             historys = dbService.entities.Histories.Where(x => x.UserId == current).Select(x => new HistoryDTO()
             {
@@ -101,7 +99,8 @@ namespace Logic.Services
                 OldDomain = x.OldDomain,
                 NewDomain = x.NewDomain,
                 OldAmount = x.OldAmount,
-                NewAmount = x.NewAmount
+                NewAmount = x.NewAmount,
+                ActionOption = x.ActionOption
             }).ToList();
 
 
@@ -117,21 +116,18 @@ namespace Logic.Services
             newHistory.DateofChange = DateTime.Now;
             newHistory.OldDomain = oldDetails.Description;
             newHistory.NewDomain = newDetails.Description;
-            if (newDetails.ActionOption == actionOptions.delete)
+            if (newDetails.ActionOption == ActionOptions.delete)
             {
                 newHistory.NewDomain = "התחום נמחק";
-                newHistory.ActionOption=2;
             }
             newHistory.OldAmount = oldDetails.Sum;
             newHistory.NewAmount = newDetails.Sum;
-            if (newDetails.ActionOption == actionOptions.delete|| newDetails.ActionOption == actionOptions.IsNotActive)
+            newHistory.ActionOption = newDetails.ActionOption;
+            if (newDetails.ActionOption == ActionOptions.delete|| newDetails.ActionOption == ActionOptions.IsNotActive)
             {
                 newHistory.NewAmount = noAmount;
             }
-            if(newDetails.ActionOption == actionOptions.IsNotActive)
-            {
-                newHistory.ActionOption = 3;
-            }
+           
 
             dbService.entities.Histories.Add(newHistory);
             try

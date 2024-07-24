@@ -1,41 +1,61 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Logic.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using MoneySystemServer.Controllers;
+using Newtonsoft.Json;
+using System.Reflection.Emit;
+using System.Security.Claims;
 
 namespace MoneySystemServer.Code
 {
     public class IsManagerAttribute : ActionFilterAttribute
     {
-        public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+
         {
-            //var sessionService = context.HttpContext.RequestServices.GetService<IT>();
+            if (filterContext.ActionDescriptor.EndpointMetadata.OfType<AllowAnonymousAttribute>().Any())
+                return;
 
-            //if (sessionService == null)
-            //{
-            //    context.Result = GlobalController.GetJsonResult("Error 8888");
-            //    return;
-            //}
+            IDBService service = filterContext
+               .HttpContext
+               .RequestServices
+               .GetRequiredService<IDBService>();
 
-            //if (!context.HttpContext.User.Identity.IsAuthenticated)
-            //{
-            //    context.Result = GlobalController.GetJsonResult("Error 8888");
-            //    return;
-            //}
+            var userId = "";
 
-            //var user = await sessionService.GetCurrentUser();
-            //if (user == null)
-            //{
-            //    context.Result = GlobalController.GetJsonResult("Error 8888");
-            //    return;
-            //}
+            if (filterContext.HttpContext.User.Identity is ClaimsIdentity identity2)
+            {
+                userId = identity2.FindFirst(ClaimTypes.Name)?.Value;
+            }
 
-            //if (user.UserType.Id != 1)
-            //{
-            //    context.Result = GlobalController.GetJsonResult("Error 8888");
-            //    return;
-            //}
+            if (userId != null && userId != "" && int.TryParse(userId, out int thesId1) && thesId1 > 0)
+            {
+                var user = service.entities.Users.FirstOrDefault(x => x.Id == thesId1);
+                if (user != null && user.UserTypeId == 1)
+                {
+                    return;
+                }
+                else { 
+                    NoPermission(filterContext); 
+                }
 
-            await next();
+            }
+
+
+            base.OnActionExecuting(filterContext);
         }
+
+        private static void NoPermission(ActionExecutingContext filterContext)
+        {
+            filterContext.Result = new ContentResult()
+            {
+                Content = GlobalController.GetResultDate("מצטערים, אין הרשאות לביצוע פעולה זו", 1412),
+                ContentType = "application/json",
+            };
+        }
+        
 
     }
 }

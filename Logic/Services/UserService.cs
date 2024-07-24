@@ -11,7 +11,7 @@ namespace Logic.Services
 {
     public interface IUserService
     {
-        List<UserDTO> GetUsers(int currentUserId, userSerach userSerach);
+        List<UserDTO> GetUsers(int currentUserId, UserSerach userSerach);
         List<IdName> GetUserTypes(int currentUserId);
         UserDTO GetUser(int id);
         bool AddUser(UserDTO user, int currentUserId);
@@ -28,26 +28,54 @@ namespace Logic.Services
         //  בעמוד זה יש שורות מוסלשות כי רחל אמרה שנטפל בקוד הזה בשבוע של ההרשאות לא למחוק פנינה
 
         private IDBService dbService;
-        private userSerach userSerach;
+        private UserSerach userSerach;
 
         public UserService(IDBService dbService)
         {
             this.dbService = dbService;
         }
-        
-        public List<UserDTO> GetUsers(int currentUserId, userSerach userSerach)
+
+        public List<UserDTO> GetUsers(int currentUserId, UserSerach userSerach)
         {
             var users = dbService.entities.Users.ToList();
             List<String> searchOptionList = new List<String> { "סוגי משתמשים", "משתמשים תחת מלווה", "מלווים תחת מנהל" };
 
+
             var currentUser = dbService.entities.Users.FirstOrDefault(x => x.Id == currentUserId);
+
+            if (userSerach != null)
+            {
+                if (!string.IsNullOrEmpty(userSerach.Email))
+                {
+                    users = users.Where(x => x.Email.Contains(userSerach.Email)).ToList();
+                }
+                if (!string.IsNullOrEmpty(userSerach.FirstName))
+                {
+                    users = users.Where(x => x.FirstName.Contains(userSerach.FirstName)).ToList();
+                }
+                if (!string.IsNullOrEmpty(userSerach.LastName))
+                {
+                    users = users.Where(x => x.LastName.Contains(userSerach.LastName)).ToList();
+                }
+                if (!string.IsNullOrEmpty(userSerach.Phone))
+                {
+                    users = users.Where(x => x.Phone.Contains(userSerach.Phone)).ToList();
+                }
+                if (!string.IsNullOrEmpty(userSerach.usersType.Name))
+                {
+                    users = users.Where(x => x.UserType.Description.Contains(userSerach.usersType.Name)).ToList();
+                }
+
+
+            }
+
             //  if (currentUser.UserType.Id == 5)
             if (currentUser.UserType.Id == (int)userTypeDTO.userUnderLender)
             {
                 users = users.Where(x => x.ManagerId == currentUser.Id).ToList();
             }
             //else if (currentUser.UserType.Id == 2)
-            else if (currentUser.UserType.Id == (int)userTypeDTO.lender) 
+            else if (currentUser.UserType.Id == (int)userTypeDTO.lender)
             {
                 users = users.Where(x => x.LenderId == currentUser.Id).ToList();
             }
@@ -76,8 +104,7 @@ namespace Logic.Services
                     }
                 }
             }
-
-            return users.Select(x => new UserDTO()
+            List <UserDTO> list = users.Select(x => new UserDTO()
             {
                 Id = x.Id,
                 Email = x.Email,
@@ -97,8 +124,10 @@ namespace Logic.Services
 
             }).ToList();
 
-        }
+            return list;
 
+
+        }
         public UserDTO GetUser(int id)
         {
             var dbUser = dbService.entities.Users.FirstOrDefault(x => x.Id == id);

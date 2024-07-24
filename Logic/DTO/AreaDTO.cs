@@ -20,8 +20,8 @@ namespace Logic.DTO
         public bool? IsMaaser { get; set; }
 
         public bool? IsActive { get; set; }
-       
-        public actionOptions ActionOption  { get; set; } = actionOptions.update;
+
+        public ActionOptions ActionOption { get; set; }
 
     }
 }
