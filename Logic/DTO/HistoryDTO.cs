@@ -8,7 +8,6 @@ namespace Logic.DTO
 {
     public class HistoryDTO
     {
-       
         public int Id { get; set; }
         public int? UserId { get; set; }
         public DateTime? DateofChange { get; set; }
@@ -16,7 +15,7 @@ namespace Logic.DTO
         public string? NewDomain { get; set; }
         public int? OldAmount { get; set; }
         public int? NewAmount { get; set; }
-
+        public ActionOptions ActionOption { get; set; }
 
     }
 }

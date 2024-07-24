@@ -21,7 +21,7 @@ public partial class Debt
 
     public int? AreaId { get; set; }
 
-    public virtual Area? Area { get; set; }
+    public virtual User2Area? Area { get; set; }
 
     public virtual UrgencyDebt Urgency { get; set; } = null!;
 

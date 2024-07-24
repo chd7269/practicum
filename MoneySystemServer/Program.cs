@@ -60,7 +60,7 @@ builder.Services.AddScoped<IAreaServies, AreaServies>();
 builder.Services.AddScoped<IDocumentService, DocumentService>();
 builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<IManagerDesignService, ManagerDesignService>();
-
+builder.Services.AddScoped<IExpandedRevenuesService, ExpandedRevenuesSettingService>();
 
 builder.Services.AddSingleton<ITokenService, TokenService>();
 

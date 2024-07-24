@@ -21,6 +21,8 @@ namespace MoneySystemServer.Controllers
         [HttpPost]
         public GResult<List<UserDTO>> GetUsers(userSerach userSerach)
         {
+            //, SearchDetails searchDetails
+            //, searchDetails
             return Success(userService.GetUsers(UserId.Value, userSerach));
         }
 

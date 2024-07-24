@@ -110,13 +110,21 @@ namespace Logic.Services
                 return false;
             }
             var dbUser2Area = dbService.entities.User2Areas.FirstOrDefault(x => x.Id == area.Id);
-        
+
             if (dbUser2Area != null)
             {
-                if (area.IsActive == false)
+                if (area.IsActive == false && dbUser2Area.IsActive == true)
                 {
-                    area.ActionOption = actionOptions.IsNotActive;
+
+                  area.ActionOption = ActionOptions.IsNotActive;
+
                 }
+                else
+                {
+                area.ActionOption = ActionOptions.update;
+
+                }
+
                 reportsService.AddHistory(CurrentUserId, dbUser2Area, area);
                 dbUser2Area.IsActive = area.IsActive;
                 dbUser2Area.IsMaaser = area.IsMaaser;
@@ -143,9 +151,9 @@ namespace Logic.Services
                 }
                 else
                 {
-                    //לבדוק שאופן ההבאת תחום תקין פנינה
+
                     AreaDTO area = new AreaDTO();
-                    area.ActionOption = actionOptions.delete;
+                    area.ActionOption = ActionOptions.delete;
                     reportsService.AddHistory(CurrentUserId, dbUser2area, area);
                     dbService.entities.User2Areas.Remove(dbService.entities.User2Areas.FirstOrDefault(x => x.UserId == CurrentUserId && x.Id == id));
                     dbService.Save();
