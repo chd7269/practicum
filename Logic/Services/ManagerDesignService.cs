@@ -46,7 +46,7 @@ namespace Logic.Services
                 mDesign.TextColor = dbmDesign.TextColor;
                 mDesign.FileName = dbmDesign.FileName;
                 //mDesign.Src = "File/ShowFileDesign/" + dbmDesign.Id;
-                mDesign.Src = "File/ShowFileDesign/" + dbmDesign.Id + "00000" + DateTime.Now.Millisecond;
+                mDesign.Src = "File/ShowFileDesign/" + dbmDesign.Id + "!" + DateTime.Now.Millisecond;
 
 
             }

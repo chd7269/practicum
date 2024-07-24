@@ -19,11 +19,7 @@ namespace MoneySystemServer.Controllers
     [CheckToken(Order = 50)]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class GlobalController : ControllerBase
-    {
-        //DBService dbService;
-        //public GlobalController(DBService dBService) {
-        //    this.dbService = dbService;
-        //}      
+    {        
         protected GResult<bool> Success()
         {
             return Success(true);
@@ -107,31 +103,51 @@ namespace MoneySystemServer.Controllers
                 return null;
             }
         }
-        //protected int? ManagerId
-        //{
-        //    get
-        //    {
-        //        if (HttpContext.User.Identity is ClaimsIdentity identity)
-        //        {
-        //            var item = identity.FindFirst(ClaimTypes.Name);
-        //            if (item != null)
-        //            {
-        //                var value = item.Value;
-        //                if (int.TryParse(value, out int id))
-        //                {
-        //                    var user = this.dbService.entities.Users.FirstOrDefault(x => x.Id == id);
-        //                        var userTyper = user.UserType;
-        //                         if(userTyper == 1) return user.Id;
-        //                         else 
-        //                        if(UserTyper==2) return user.Id;
-        //                }
-        //            }
+        protected int? ManagerId
+        {
+            get
+            {
+                if (HttpContext.User.Identity is ClaimsIdentity identity)
+                {
+                    var item = identity.FindFirst("managerId");
+                    if (item != null)
+                    {
+                        var value = item.Value;
+                        if (int.TryParse(value, out int userId))
+                        {
 
-        //        }
+                            //    int? id = 0;
+                            //    var user = this.dbService.entities.Users.FirstOrDefault(x => x.Id == userId);
+                            //    int userTyper = user.UserTypeId;
+                            //    if (userTyper == 4)
+                            //    {
+                            //        id = userId;
+                            //    }
+                            //    if (userTyper == 2)
+                            //    {
+                            //        id = user.ManagerId;
+                            //    }
+                            //    if (userTyper == 5)
+                            //    {
+                            //        id = user.Lender.ManagerId;
+                            //    }
+                            //    else
+                            //    {
 
-        //        return null;
-        //    }
-        //}
+                            //        this.dbService.entities.Users.FirstOrDefault(x => x.UserTypeId == 1).Id = userId;
+
+                            //    };
+
+
+                            return userId;
+                        }
+                    }
+
+                }
+
+                return null;
+            }
+        }
 
         protected int? SuperUserId
         {

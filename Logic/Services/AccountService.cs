@@ -62,11 +62,37 @@ namespace Logic.Services
 
         public JWTResponseToken GetToken(User user)
         {
+            int managerId = 0;
+            var userId = this.dbService.entities.Users.FirstOrDefault(x => x.Id == user.Id);
+            int userTyper = user.UserTypeId;
+            if (userTyper == 4)
+            {
+                managerId = userId.Id;
+            }
+            if (userTyper == 2)
+            {
+                managerId = user.ManagerId.Value;
+            }
+            if (userTyper == 5)
+            {
+                managerId = user.Lender.ManagerId.Value;
+            }
+            if(userTyper==1) 
+            {
+                managerId = this.dbService.entities.Users.FirstOrDefault(x => x.UserTypeId == 1).Id;
+
+            }
+            ;
+
             var authClaims = new List<Claim> {
                 new Claim(ClaimTypes.Name, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim("loginDate", DateTime.Now.ToString()),
                 new Claim("isActive", user.IsActive.ToString()),
+                new Claim("managerId",managerId.ToString()),
+
+
+
 
              };
             var token = CreateToken(authClaims, false);

@@ -9,7 +9,7 @@ namespace Logic.Services
 {
     public interface IDebtsService
     {
-        List<DebtDTO> GetDebts(int currentUserId);
+        List<DebtDTO> GetDebts(int currentUserId, debtSearchDetails debtSearchDetails);
         void AddDebt(DebtDTO debt, int currentUserId);
         bool UpdateDebt(DebtDTO debt);
         bool DeleteDebt(int debtId);
@@ -50,12 +50,25 @@ namespace Logic.Services
             return false;
         }
 
-        public List<DebtDTO> GetDebts(int currentUserId)
+        public List<DebtDTO> GetDebts(int currentUserId, debtSearchDetails debtSearchDetails)
         {
             List<DebtDTO> list = new List<DebtDTO>();
             if (dBService.entities.Debts.Any(x => x.UserId == currentUserId))
             {
-                list = dBService.entities.Debts.Where(x => x.UserId == currentUserId).Select(x => new DebtDTO()
+                var query = dBService.entities.Debts.Where(x => x.UserId == currentUserId);
+                if (debtSearchDetails != null)
+                {
+                    if (!string.IsNullOrEmpty(debtSearchDetails.Description))
+                    {
+                        query = query.Where(x => x.Description.Contains(debtSearchDetails.Description));
+                    }
+                    if (!string.IsNullOrEmpty(debtSearchDetails.Urgency))
+                    {
+                        query = query.Where(x => x.Description.Contains(debtSearchDetails.Urgency));
+                    }
+                }
+
+                list = query.Select(x => new DebtDTO()
                 {
                     Description = x.Description,
                     Id = x.Id,
@@ -63,7 +76,7 @@ namespace Logic.Services
                     Payments = x.Payments,
                     Urgency = new IdName()
                     {
-                        Id = x.UrgencyId,
+                        Id = x.Id,
                         Name = x.Urgency.Description
                     },
                     UserId = x.UserId,
@@ -103,3 +116,5 @@ namespace Logic.Services
 
     }
 }
+
+
