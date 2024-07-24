@@ -12,6 +12,7 @@ namespace Api.Controllers
     {
         private EmailService emailService;
         private IConfiguration config;
+        private DBService dbService;
 
         public ContactController(EmailService emailService, IConfiguration config)
         {
