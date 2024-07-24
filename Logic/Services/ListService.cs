@@ -102,8 +102,7 @@ namespace Logic.Services
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    ManagerId=x.
-                    ManagerId   
+                    ManagerId=x.ManagerId   
                 }).ToList();
             }
             else if (item.TableCode == TableCode.Status)
