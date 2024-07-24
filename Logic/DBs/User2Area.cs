@@ -17,7 +17,7 @@ public partial class User2Area
 
     public int? DebtId { get; set; }
 
-    public string? Description { get; set; }
+    public string Description { get; set; } = null!;
 
     public int Type { get; set; }
 

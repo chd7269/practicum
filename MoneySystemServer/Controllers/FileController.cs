@@ -22,6 +22,43 @@ namespace MoneySystemServer.Controllers
         public ActionResult ShowFile(int id)
         {
             var file = documentService.GetFile(id);
+            //if (contentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            //{
+            //    using (MemoryStream ms = new MemoryStream(file.Content))
+            //    {
+            //        Workbook workbook = new Workbook(ms);
+            //        var sheet = workbook.Worksheets[0]; // Process the first worksheet
+
+            //        using (MemoryStream imageStream = new MemoryStream())
+            //        {
+            //            // Set image options
+            //            var options = new ImageOrPrintOptions
+            //            {
+            //                ImageFormat = ImageFormat.Jpeg, // Set image format
+            //                HorizontalResolution = 96,
+            //                VerticalResolution = 96
+            //            };
+
+            //            // Create a renderer for the worksheet
+            //            var sheetRenderer = new SheetRender(sheet, options);
+
+            //            // Render the image of the first worksheet to the MemoryStream
+            //            var image = sheetRenderer.ToImage(0); // Render the image of the first page
+
+            //            // Save the image to the MemoryStream
+            //            image.Save(imageStream, ImageFormat.Jpeg);
+
+            //            // Return the image file
+            //            imageStream.Position = 0; // Reset stream position before returning
+            //            return File(imageStream.ToArray(), "image/jpeg");
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    // Handle other file types if needed
+            //    return File(file.Content, contentType);
+            //}
             file.ContentType = GetContentType(file.FileName);
             return File(file.Content, file.ContentType);
         }
@@ -84,7 +121,7 @@ namespace MoneySystemServer.Controllers
             {
                 type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             }
-         
+
             return type;
         }
     }
