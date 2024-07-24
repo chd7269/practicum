@@ -9,11 +9,11 @@ namespace Logic.Services
 {
     public interface IListService
     {
-        ListsDTO GetAllLists(int userId);
-        List<IdName> GetList(IdNameDB item,int userId);
-        bool AddItem(IdNameDB idName,int userId);
-        bool DeleteItem(IdNameDB item);
-        bool UpdateItem(IdNameDB idName,int user);
+        ListsDTO GetAllLists(int userId,int managerId);
+        List<IdName> GetList(IdNameDB item,int userId, int managerId);
+        bool AddItem(IdNameDB idName,int userId,int managerId);
+        bool DeleteItem(IdNameDB item, int managerId);
+        bool UpdateItem(IdNameDB idName,int user, int managerId);
     }
     public class ListService : IListService
     {
@@ -27,7 +27,7 @@ namespace Logic.Services
 
         }
 
-        public ListsDTO GetAllLists(int userId)
+        public ListsDTO GetAllLists(int userId, int managerId)
         {
             var lists = new ListsDTO();
             lists.UserTypes = dbService.entities.UserTypes.Select(x => new IdName()
@@ -35,7 +35,7 @@ namespace Logic.Services
                 Id = x.Id,
                 Name = x.Description
             }).ToList();
-            lists.Cities = dbService.entities.Cities.Select(x => new IdName()
+            lists.Cities = dbService.entities.Cities.Where(x=>x.ManagerId==managerId).Select(x => new IdName()
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -49,17 +49,18 @@ namespace Logic.Services
                 ManagerId = x.ManagerId
 
             }).ToList();
-            lists.Areas = dbService.entities.Areas.Select(x => new IdName()
+            lists.Areas = dbService.entities.Areas.Where(x => x.ManagerId == managerId).Select(x => new IdName()
             {
                 Id = x.Id,
                 Name = x.Description,
-                Type = x.Type
+                Type = x.Type,
+                ManagerId = managerId
             }).ToList();
-            lists.UrgencyDebts = dbService.entities.UrgencyDebts.Select(x => new IdName()
+            lists.UrgencyDebts = dbService.entities.UrgencyDebts.Where(x => x.ManagerId == managerId).Select(x => new IdName()
             {
                 Id = x.Id,
                 Name = x.Description,
-                ManagerId = x.ManagerId
+                ManagerId = managerId
 
             }).ToList();
             lists.Lenders = dbService.entities.Users.Where(x => x.UserTypeId == 2 && x.IsActive).Select(x => new IdName()
@@ -76,13 +77,15 @@ namespace Logic.Services
             lists.PayOption = dbService.entities.PayOptions.Where(x => x.ManagerId == userId).Select(x => new IdName()
             {
                 Id = x.Id,
-                Name = x.Description
+                Name = x.Description,
+                ManagerId= x.ManagerId
+
             }).ToList();
 
             return lists;
         }
 
-        public List<IdName> GetList(IdNameDB item, int userId)
+        public List<IdName> GetList(IdNameDB item, int userId,int managerId)
         {            
             //var currentUser = dbService.entities.Users.FirstOrDefault(x => x.Id == userId);
             List<IdName> list = new List<IdName>();
@@ -91,19 +94,16 @@ namespace Logic.Services
                 list = dbService.entities.UserTypes.Select(x => new IdName()
                 {
                     Id = x.Id,
-                    Name = x.Description
+                    Name = x.Description,
                 }).ToList();
             }
             else if (item.TableCode == TableCode.Cities)
             {
-                //להוסיף אחרי הסלקט
-                //.Where(x => x.ManagerId == currentUser.ManagerId)
-                list = dbService.entities.Cities.Select(x => new IdName()
+                list = dbService.entities.Cities.Where(x => x.ManagerId == managerId).Select(x => new IdName()
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    ManagerId=x.
-                    ManagerId   
+                    ManagerId = x.ManagerId
                 }).ToList();
             }
             else if (item.TableCode == TableCode.Status)
@@ -111,12 +111,14 @@ namespace Logic.Services
                 list = dbService.entities.Statuses.Select(x => new IdName()
                 {
                     Id = x.Id,
-                    Name = x.Description
+                    Name = x.Description,
+                    ManagerId = x.ManagerId
+
                 }).ToList();
             }
             else if (item.TableCode == TableCode.UrgencyDebt)
             {
-                list = dbService.entities.UrgencyDebts.Select(x => new IdName()
+                list = dbService.entities.UrgencyDebts.Where(x => x.ManagerId == managerId).Select(x => new IdName()
                 {
                     Id = x.Id,
                     Name = x.Description,
@@ -125,17 +127,29 @@ namespace Logic.Services
                 }).ToList();
             }
             else if (item.TableCode == TableCode.Areas)
-                list = dbService.entities.Areas.Where(x => x.Type == item.Type).Select(x => new IdName()
+                list = dbService.entities.Areas.Where(x => x.ManagerId==managerId).Select(x => new IdName()
                 {
                     Id = x.Id,
                     Name = x.Description,
-                    Type = x.Type
+                    Type = x.Type,
+                    ManagerId =x.ManagerId
+
                 }).ToList();
+            //else if (item.TableCode == TableCode.Users)
+            //{
+            //    list = dbService.entities.Users.Where(x => x.UserTypeId == item.Type && x.IsActive).Select(x => new IdName()
+            //    {
+            //        Id = x.Id,
+            //        Name = x.FirstName + " " + x.LastName
+            //    }).ToList();
+            //}
             else if (item.TableCode == TableCode.Users)
             {
-                list = dbService.entities.Users.Where(x => x.UserTypeId == item.Type && x.IsActive).Select(x => new IdName()
+                list = dbService.entities.Users.Where(x => x.ManagerId == managerId ).Select(x => new IdName()
                 {
                     Id = x.Id,
+                    ManagerId=x.ManagerId,
+                   
                     Name = x.FirstName + " " + x.LastName
                 }).ToList();
             }
@@ -144,7 +158,9 @@ namespace Logic.Services
                 list = dbService.entities.PayOptions.Where(x => x.ManagerId == userId ).Select(x => new IdName()
                 {
                     Id = x.Id,
-                    Name = x.Description
+                    Name = x.Description,
+                    ManagerId=x.ManagerId
+                
                 }).ToList();
 
             }
@@ -152,7 +168,7 @@ namespace Logic.Services
             return list;
         }
 
-        public bool AddItem(IdNameDB idName, int userId)
+        public bool AddItem(IdNameDB idName, int userId, int managerId)
         {
             switch (idName.TableCode)
             {
@@ -162,15 +178,15 @@ namespace Logic.Services
                     }
                 case TableCode.Cities:
                     {
-                        return AddCity(idName, userId);
+                        return AddCity(idName, userId,managerId);
                     }
                 case TableCode.Areas:
                     {
-                        return AddSubject(idName);
+                        return AddSubject(idName,userId,managerId);
                     }
                 case TableCode.UrgencyDebt:
                     {
-                        return AddUrgencyDebt(idName);
+                        return AddUrgencyDebt(idName,userId,managerId);
                     }
                 case TableCode.PayOption:
                     {
@@ -182,7 +198,7 @@ namespace Logic.Services
             return false;
         }
 
-        public bool DeleteItem(IdNameDB item)
+        public bool DeleteItem(IdNameDB item, int managerId)
         {
             switch (item.TableCode)
             {
@@ -212,7 +228,7 @@ namespace Logic.Services
             return false;
         }
 
-        public bool UpdateItem(IdNameDB idName,int userId)
+        public bool UpdateItem(IdNameDB idName,int userId, int managerId)
         {
             switch (idName.TableCode)
             {
@@ -391,7 +407,7 @@ namespace Logic.Services
 
         private bool AddUserType(IdName idName)
         {
-            if (dbService.entities.UserTypes.Any(x => x.Description == idName.Name)) return false;
+            if (dbService.entities.UserTypes.Any(x => x.Description == idName.Name )) return false;
             var newItem = new UserType()
             {
                 Description = idName.Name
@@ -401,45 +417,47 @@ namespace Logic.Services
             return true;
         }
 
-        private bool AddCity(IdNameDB idName, int currentUserId)
+        private bool AddCity(IdNameDB idName, int currentUserId,int managerId)
         {
-            if (dbService.entities.Cities.Any(x => x.Name == idName.Name)) return false;
+            if (dbService.entities.Cities.Any(x => x.Name == idName.Name && x.ManagerId==managerId)) return false;
              var currentUser = dbService.entities.Users.FirstOrDefault(x => x.Id == currentUserId);
             var newItem = new City()
             {
                 Name = idName.Name,
-                ManagerId = currentUser.Id
+                ManagerId = managerId
             };
             dbService.entities.Cities.Add(newItem);
             dbService.Save();
             return true;
         }
 
-        private bool AddSubject(IdNameDB idName)
+        private bool AddSubject(IdNameDB idName, int currentUserId, int managerId)
         {
-            if (dbService.entities.Areas.Any(x => x.Description == idName.Name))
+            if (dbService.entities.Areas.Any(x => x.Description == idName.Name && x.ManagerId == managerId))
             {
                 return false;
             }
             var newItem = new Area()
             {
                 Description = idName.Name,
-                Type = (int)idName.Type
+                Type = (int)idName.Type,
+                ManagerId=managerId
             };
             dbService.entities.Areas.Add(newItem);
             dbService.Save();
             return true;
         }
 
-        private bool AddUrgencyDebt(IdNameDB idName)
+        private bool AddUrgencyDebt(IdNameDB idName,int userId,int managerId)
         {
-            if (dbService.entities.UrgencyDebts.Any(x => x.Description == idName.Name))
+            if (dbService.entities.UrgencyDebts.Any(x => x.Description == idName.Name && x.ManagerId == managerId))
             {
                 return false;
             }
             var newItem = new UrgencyDebt()
             {
-                Description = idName.Name
+                Description = idName.Name,
+                ManagerId= managerId
             };
             dbService.entities.UrgencyDebts.Add(newItem);
             dbService.Save();

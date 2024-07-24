@@ -18,20 +18,20 @@ namespace MoneySystemServer.Controllers
         [IsManager]
         public GResult<ListsDTO> GetAllLists()
         {
-            return Success(listService.GetAllLists(UserId.Value));
+            return Success(listService.GetAllLists(UserId.Value,ManagerId.Value));
         }
         [IsPermission]
         [HttpPost]
         public GResult<List<IdName>> GetList(IdNameDB item)
         {
-            return Success(listService.GetList(item, UserId.Value));
+            return Success(listService.GetList(item, UserId.Value,ManagerId.Value));
         }
 
         [HttpPost]
         [IsManager]
         public Result AddItem(IdNameDB idName)
         {
-            var isSuccess = listService.AddItem(idName, UserId.Value);
+            var isSuccess = listService.AddItem(idName, UserId.Value,ManagerId.Value);
             if (isSuccess)
             {
                 return Success();
@@ -43,7 +43,7 @@ namespace MoneySystemServer.Controllers
         [IsManager]
         public Result DeleteItem(IdNameDB idName)
         {
-            var isSuccess = listService.DeleteItem(idName);
+            var isSuccess = listService.DeleteItem(idName,ManagerId.Value);
             if (isSuccess )
             {
                 return Success("נמחק בהצלחה");
@@ -56,7 +56,7 @@ namespace MoneySystemServer.Controllers
         [IsManager]
         public Result UpdateItem(IdNameDB idName)
         {
-            var isSuccess = listService.UpdateItem(idName, UserId.Value);
+            var isSuccess = listService.UpdateItem(idName, UserId.Value,ManagerId.Value);
             if (isSuccess)
             {
                 return Success();

@@ -16,10 +16,10 @@ namespace MoneySystemServer.Controllers
             this.debtsService = debtsService;
         }
 
-        [HttpGet]
-        public GResult<List<DebtDTO>> GetDebts()
+        [HttpPost]
+        public GResult<List<DebtDTO>> GetDebts(debtSearchDetails debtSearchDetails)
         {
-            return Success(debtsService.GetDebts(UserId.Value));
+            return Success(debtsService.GetDebts(UserId.Value, debtSearchDetails));
         }
 
         [HttpPost]

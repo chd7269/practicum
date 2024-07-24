@@ -34,21 +34,17 @@ namespace Logic.DTO
         public int? newLender { get; set; }
     }
 
-    public class userSerach
+    public class UserSerach
     {
         public IdName usersType { get; set; }
         public IdName usersUnderLender { get; set; }
         public IdName lendersUnderManager { get; set; }
-    }
 
-    public class SearchDetails
-    {
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Phone { get; set; }
-        public string usersType { get; set; }
-      
+        
     }
 
 }

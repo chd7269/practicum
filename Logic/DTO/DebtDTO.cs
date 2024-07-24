@@ -19,4 +19,16 @@ namespace Logic.DTO
         //כרגע אין צורך ב UserId 
         //האדם שנכנס הוא בעל החוב, בהמשך יהיה גם מלווה שיוכל להכנס
     }
+
+    public class debtSearchDetails
+    {
+        public int Id { get; set; }
+        public string Description { get; set; }
+        public int Payments { get; set; }
+        public string Urgency { get; set; }
+        public int UserId { get; set; }
+        public bool IsActive { get; set; }
+        public int Sum { get; set; }
+
+    }
 }
