@@ -11,8 +11,7 @@ namespace Logic.Services
 {
     public interface IUserService
     {
-        List<UserDTO> GetUsers(int currentUserId, userSerach userSerach);
-        //, SearchDetails searchDetails
+        List<UserDTO> GetUsers(int currentUserId, UserSerach userSerach);
         List<IdName> GetUserTypes(int currentUserId);
         UserDTO GetUser(int id);
         bool AddUser(UserDTO user, int currentUserId);
@@ -29,104 +28,105 @@ namespace Logic.Services
         //  בעמוד זה יש שורות מוסלשות כי רחל אמרה שנטפל בקוד הזה בשבוע של ההרשאות לא למחוק פנינה
 
         private IDBService dbService;
-        private userSerach userSerach;
+        private UserSerach userSerach;
 
         public UserService(IDBService dbService)
         {
             this.dbService = dbService;
         }
 
-        public List<UserDTO> GetUsers(int currentUserId, userSerach userSerach)
+        public List<UserDTO> GetUsers(int currentUserId, UserSerach userSerach)
         {
-            //, SearchDetails searchDetails
             var users = dbService.entities.Users.ToList();
             List<String> searchOptionList = new List<String> { "סוגי משתמשים", "משתמשים תחת מלווה", "מלווים תחת מנהל" };
 
-           
+
             var currentUser = dbService.entities.Users.FirstOrDefault(x => x.Id == currentUserId);
 
-            //if (searchDetails != null)
-            //{
-            //    if (!string.IsNullOrEmpty(searchDetails.Email))
-            //    {
-            //        users = users.Where(x => x.Email.Contains(searchDetails.Email)).ToList();
-            //    }
-            //    if (!string.IsNullOrEmpty(searchDetails.FirstName))
-            //    {
-            //        users = users.Where(x => x.FirstName.Contains(searchDetails.FirstName)).ToList();
-            //    }
-            //    if (!string.IsNullOrEmpty(searchDetails.LastName))
-            //    {
-            //        users = users.Where(x => x.LastName.Contains(searchDetails.LastName)).ToList();
-            //        if (!string.IsNullOrEmpty(searchDetails.Phone))
-            //        {
-            //            users = users.Where(x => x.Phone.Contains(searchDetails.Phone)).ToList();
-            //        }
-            //        if (!string.IsNullOrEmpty(searchDetails.usersType))
-            //        {
-            //            users = users.Where(x => x.UserType.Description.Contains(searchDetails.usersType)).ToList();
-            //        }
+            if (userSerach != null)
+            {
+                if (!string.IsNullOrEmpty(userSerach.Email))
+                {
+                    users = users.Where(x => x.Email.Contains(userSerach.Email)).ToList();
+                }
+                if (!string.IsNullOrEmpty(userSerach.FirstName))
+                {
+                    users = users.Where(x => x.FirstName.Contains(userSerach.FirstName)).ToList();
+                }
+                if (!string.IsNullOrEmpty(userSerach.LastName))
+                {
+                    users = users.Where(x => x.LastName.Contains(userSerach.LastName)).ToList();
+                }
+                if (!string.IsNullOrEmpty(userSerach.Phone))
+                {
+                    users = users.Where(x => x.Phone.Contains(userSerach.Phone)).ToList();
+                }
+                if (!string.IsNullOrEmpty(userSerach.usersType.Name))
+                {
+                    users = users.Where(x => x.UserType.Description.Contains(userSerach.usersType.Name)).ToList();
+                }
 
-            //    }
-            //}
+
+            }
 
             //  if (currentUser.UserType.Id == 5)
             if (currentUser.UserType.Id == (int)userTypeDTO.userUnderLender)
-                {
-                    users = users.Where(x => x.ManagerId == currentUser.Id).ToList();
-                }
-                //else if (currentUser.UserType.Id == 2)
-                else if (currentUser.UserType.Id == (int)userTypeDTO.lender)
-                {
-                    users = users.Where(x => x.LenderId == currentUser.Id).ToList();
-                }
+            {
+                users = users.Where(x => x.ManagerId == currentUser.Id).ToList();
+            }
+            //else if (currentUser.UserType.Id == 2)
+            else if (currentUser.UserType.Id == (int)userTypeDTO.lender)
+            {
+                users = users.Where(x => x.LenderId == currentUser.Id).ToList();
+            }
 
-                if (userSerach != null && !searchOptionList.Contains(userSerach.ToString()))
+            if (userSerach != null && !searchOptionList.Contains(userSerach.ToString()))
+            {
+                if (userSerach.usersType.Id > 0)
                 {
-                    if (userSerach.usersType.Id > 0)
+                    var u = users.Where(x => x.UserTypeId == userSerach.usersType.Id).ToList();
+                    users = u;
+                }
+                else
+                {
+                    if (userSerach.usersUnderLender.Id > 0)
                     {
-                        var u = users.Where(x => x.UserTypeId == userSerach.usersType.Id).ToList();
+                        var u = users.Where(x => x.UserTypeId == 5 && x.LenderId == userSerach.usersUnderLender.Id).ToList();
                         users = u;
                     }
                     else
                     {
-                        if (userSerach.usersUnderLender.Id > 0)
+                        if (userSerach.lendersUnderManager.Id > 0)
                         {
-                            var u = users.Where(x => x.UserTypeId == 5 && x.LenderId == userSerach.usersUnderLender.Id).ToList();
+                            var u = users.Where(x => x.UserTypeId == 2 && x.ManagerId == userSerach.lendersUnderManager.Id).ToList();
                             users = u;
-                        }
-                        else
-                        {
-                            if (userSerach.lendersUnderManager.Id > 0)
-                            {
-                                var u = users.Where(x => x.UserTypeId == 2 && x.ManagerId == userSerach.lendersUnderManager.Id).ToList();
-                                users = u;
-                            }
                         }
                     }
                 }
-
-                return users.Select(x => new UserDTO()
+            }
+            List <UserDTO> list = users.Select(x => new UserDTO()
+            {
+                Id = x.Id,
+                Email = x.Email,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Phone = x.Phone,
+                Password = "********",
+                UserType = new IdName
                 {
-                    Id = x.Id,
-                    Email = x.Email,
-                    FirstName = x.FirstName,
-                    LastName = x.LastName,
-                    Phone = x.Phone,
-                    Password = "********",
-                    UserType = new IdName
-                    {
-                        Id = x.UserTypeId,
-                        Name = x.UserType.Description
-                    },
-                    IsActive = x.IsActive,
-                    IsYearlyPay = x.IsYearlyPay,
-                    RegisterDate = x.RegisterDate,
-                    PayDate = x.PayDate,
+                    Id = x.UserTypeId,
+                    Name = x.UserType.Description
+                },
+                IsActive = x.IsActive,
+                IsYearlyPay = x.IsYearlyPay,
+                RegisterDate = x.RegisterDate,
+                PayDate = x.PayDate,
 
-                }).ToList();
+            }).ToList();
 
-           
+            return list;
+
+
         }
         public UserDTO GetUser(int id)
         {
