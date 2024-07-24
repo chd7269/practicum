@@ -1,9 +1,16 @@
 ﻿using Logic.DTO;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Identity.Client.Extensions.Msal;
+using OfficeOpenXml.Drawing;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.Linq;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Logic.Services
 {
@@ -31,26 +38,26 @@ namespace Logic.Services
         {
             List<DocumentDTO> list = new List<DocumentDTO>();
             var q = dBService.entities.Documents.Where(x => x.UserId == currentUserId).ToList();
-            //if (searchDoc.Description != "" || searchDoc.Name != "")
-            //{
-            //    if (searchDoc != null)
-            //    {
-            //        if (searchDoc.Description != null && searchDoc.Description != "")
-            //        {
-            //            q = q.Where(x => x.Description.Contains(searchDoc.Description)).ToList();
-            //        }
-            //        if (searchDoc.Name != null && searchDoc.Name != "")
-            //        {
-            //            if(searchDoc.Description != "")
-            //            q.AddRange(q.Where(x => x.FileName.Contains(searchDoc.Name)).ToList());
-            //            else
-            //              q =   q.Where(x => x.FileName.Contains(searchDoc.Name)  ).ToList();
+           if (searchDoc.Description != "" || searchDoc.Name != "")
+            {
+               if (searchDoc != null)
+                {
+             if (searchDoc.Description != null && searchDoc.Description != "")
+                  {
+                      q = q.Where(x => x.Description.Contains(searchDoc.Description)).ToList();
+                  }
+                if (searchDoc.Name != null && searchDoc.Name != "")
+                 {
+                     if(searchDoc.Description != "")
+                     q.AddRange(q.Where(x => x.FileName.Contains(searchDoc.Name)).ToList());
+                     else
+                      q =   q.Where(x => x.FileName.Contains(searchDoc.Name)  ).ToList();
 
-            //        }
-            //    }
-            //}
+                  }
+              }
+            }
 
-            list = q.Where(x => x.UserId == currentUserId && (x.FileName.Contains(searchDoc.Description) || x.FileName.Contains(searchDoc.Description))).Select(x => new DocumentDTO()
+            list = q.Where(x => x.UserId == currentUserId && (x.Description.Contains(searchDoc.Description) || x.FileName.Contains(searchDoc.Name))).Select(x => new DocumentDTO()
             {
                 Description = x.Description,
                 FileName = x.FileName,
@@ -58,7 +65,25 @@ namespace Logic.Services
                 Src = "File/ShowFile/" + x.Id
             }).ToList();
             return list;
+        
         }
+        //public File getImageXLXS(int userId)
+
+        //{
+        //    var x = dBService.entities.Documents.Where(x=>x.UserId == userId).FirstOrDefault().Content;
+        //    using (var package = new ExcelPackage(new MemoryStream(x)))
+        //    {
+        //        var worksheet = package.Workbook.Worksheets[0];
+        //        var image = worksheet.Drawings[0] as ExcelPicture;
+
+        //        using (var thumbStream = new MemoryStream())
+        //        {
+        //           // image.Image.Save(thumbStream, ImageFormat.Png);
+        //            return File(thumbStream.ToArray(), "image/png");
+        //        }
+             
+        //    }
+        //}
         public bool AddDocument(DocumentDTO document)
         {
             if (dBService.entities.Documents.Any(l => l.UserId == document.UserId && l.FileName == document.FileName))

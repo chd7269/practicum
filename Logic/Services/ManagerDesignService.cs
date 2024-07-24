@@ -42,6 +42,8 @@ namespace Logic.Services
                 mDesign.Src = "File/ShowFileDesign/" + dbmDesign.Id;
 
             }
+            else if (dbmDesign == null) {
+            }
             return mDesign;
         }
         public bool AddManagerDesign(ManagerDesignDTO managerDesign, int CurrentUserId)
