@@ -18,4 +18,16 @@ namespace Logic.DTO
         public DateTime? DoDate { get; set; }
 
     }
+
+    public class TaskSearch
+    {
+        public string Description { get; set; }
+        public string Comments { get; set; }
+        public string Urgency { get; set; }
+        public string Status { get; set; }
+
+
+    }
+
+
 }

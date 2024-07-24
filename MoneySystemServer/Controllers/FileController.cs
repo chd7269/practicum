@@ -10,18 +10,106 @@ namespace MoneySystemServer.Controllers
     public class FileController : GlobalController
     {
         private IDocumentService documentService;
-        public FileController(IDocumentService documentService)
+        private IManagerDesignService managerDesignService;
+
+        public FileController(IDocumentService documentService, IManagerDesignService managerDesignService)
         {
             this.documentService = documentService;
+            this.managerDesignService = managerDesignService;
         }
 
         [HttpGet("{id}")]
         public ActionResult ShowFile(int id)
         {
             var file = documentService.GetFile(id);
+            //if (contentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            //{
+            //    using (MemoryStream ms = new MemoryStream(file.Content))
+            //    {
+            //        Workbook workbook = new Workbook(ms);
+            //        var sheet = workbook.Worksheets[0]; // Process the first worksheet
+
+            //        using (MemoryStream imageStream = new MemoryStream())
+            //        {
+            //            // Set image options
+            //            var options = new ImageOrPrintOptions
+            //            {
+            //                ImageFormat = ImageFormat.Jpeg, // Set image format
+            //                HorizontalResolution = 96,
+            //                VerticalResolution = 96
+            //            };
+
+            //            // Create a renderer for the worksheet
+            //            var sheetRenderer = new SheetRender(sheet, options);
+
+            //            // Render the image of the first worksheet to the MemoryStream
+            //            var image = sheetRenderer.ToImage(0); // Render the image of the first page
+
+            //            // Save the image to the MemoryStream
+            //            image.Save(imageStream, ImageFormat.Jpeg);
+
+            //            // Return the image file
+            //            imageStream.Position = 0; // Reset stream position before returning
+            //            return File(imageStream.ToArray(), "image/jpeg");
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    // Handle other file types if needed
+            //    return File(file.Content, contentType);
+            //}
             file.ContentType = GetContentType(file.FileName);
             return File(file.Content, file.ContentType);
         }
+
+        [HttpGet("{idString}")]
+        public ActionResult ShowFileDesign(int idString)
+        {
+            //int index = idString.IndexOf("!");
+
+            //if (index != -1)
+            //{
+            //    string resultString = idString.Substring(0, index);
+            //    Console.WriteLine(resultString);
+            //}
+            //else
+            //{
+            //    Console.WriteLine("The string does not contain '!!'");
+            //}
+            int id =  RemoveTrailingZeros(idString);
+            var file = managerDesignService.GetFile(id);
+            var contentType = GetContentType(file.FileName);
+            return File(file.ImageContent, contentType);
+        }
+
+        public static int RemoveTrailingZeros(int number)
+        {
+            string numberStr = number.ToString();
+            string zeros = "00000";
+            int index = numberStr.IndexOf(zeros);
+
+            if (index != -1)
+            {
+                return int.Parse(numberStr.Substring(0, index));
+            }
+
+            return number; 
+        }
+
+        // אם גט מצליח לקבל שתי נתונים להפוך את הפונקציה לגלובלית בערך ככה
+        //[HttpGet("{id}")]
+        //public ActionResult ShowFile(int id)
+        //{
+        //    // string fileName = string.Empty;
+        //    // byte[] content = string.Empty;
+
+        //    var file = documentService.GetFile(id);
+        //    //var file = managerService.GetFile();//byte[], contentType
+
+        //    var contentType = GetContentType(file.FileName);
+        //    return File(file.Content, contentType);
+        //}
 
         private string GetContentType(string fileName)
         {
@@ -35,6 +123,15 @@ namespace MoneySystemServer.Controllers
             {
                 type = "image/jpg";
             }
+            else if (extention == ".docx" || extention == ".doc")
+            {
+                type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            }
+            else if (extention == ".xlsx" || extention == ".xls")
+            {
+                type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            }
+
             return type;
         }
     }

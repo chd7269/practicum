@@ -8,12 +8,14 @@ namespace Logic.DTO
 {
     public class HistoryDTO
     {
-        //אותיות גדולות בתחילת השם
-        public string Month { get; set; }
-        public string Year { get; set; }
-        public double? Expenses { get; set; }//הוצאות
-        public double? Revenues { get; set; }//הכנסות
-
+        public int Id { get; set; }
+        public int? UserId { get; set; }
+        public DateTime? DateofChange { get; set; }
+        public string? OldDomain { get; set; }
+        public string? NewDomain { get; set; }
+        public int? OldAmount { get; set; }
+        public int? NewAmount { get; set; }
+        public ActionOptions ActionOption { get; set; }
 
     }
 }

@@ -15,6 +15,8 @@ public partial class MyMoneyBContext : DbContext
     {
     }
 
+    public virtual DbSet<AmountSetting> AmountSettings { get; set; }
+
     public virtual DbSet<Area> Areas { get; set; }
 
     public virtual DbSet<City> Cities { get; set; }
@@ -23,11 +25,17 @@ public partial class MyMoneyBContext : DbContext
 
     public virtual DbSet<Document> Documents { get; set; }
 
+    public virtual DbSet<History> Histories { get; set; }
+
+    public virtual DbSet<ManagerDesign> ManagerDesigns { get; set; }
+
     public virtual DbSet<Moving> Movings { get; set; }
 
     public virtual DbSet<PayOption> PayOptions { get; set; }
 
     public virtual DbSet<Presence> Presences { get; set; }
+
+    public virtual DbSet<PresenceSetting> PresenceSettings { get; set; }
 
     public virtual DbSet<Status> Statuses { get; set; }
 
@@ -47,21 +55,44 @@ public partial class MyMoneyBContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<AmountSetting>(entity =>
+        {
+            entity.HasKey(e => e.ProductId).HasName("PK__ProductS__B40CC6CDDD9F23C1");
+
+            entity.Property(e => e.Day).HasColumnName("day");
+
+            entity.HasOne(d => d.User).WithMany(p => p.AmountSettings)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK__ProductSe__UserI__68487DD7");
+        });
+
         modelBuilder.Entity<Area>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_Subject");
 
             entity.ToTable("Area");
+
+            entity.HasOne(d => d.Manager).WithMany(p => p.Areas)
+                .HasForeignKey(d => d.ManagerId)
+                .HasConstraintName("FK__Area__ManagerId__73BA3083");
         });
 
         modelBuilder.Entity<City>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Cities__3214EC07534C2FBE");
+            entity.HasKey(e => e.Id).HasName("PK__Cities__3214EC07AB44D064");
+
+            entity.HasOne(d => d.Manager).WithMany(p => p.Cities)
+                .HasForeignKey(d => d.ManagerId)
+                .HasConstraintName("FK__Cities__ManagerI__72C60C4A");
         });
 
         modelBuilder.Entity<Debt>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Debts__3214EC07C8DE5E19");
+            entity.HasKey(e => e.Id).HasName("PK__Debts__3214EC074C897754");
+
+            entity.HasOne(d => d.Area).WithMany(p => p.Debts)
+                .HasForeignKey(d => d.AreaId)
+                .HasConstraintName("fk_Debts_User2Area");
 
             entity.HasOne(d => d.Urgency).WithMany(p => p.Debts)
                 .HasForeignKey(d => d.UrgencyId)
@@ -76,7 +107,7 @@ public partial class MyMoneyBContext : DbContext
 
         modelBuilder.Entity<Document>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Document__3214EC076BCEDAEC");
+            entity.HasKey(e => e.Id).HasName("PK__Document__3214EC076D60C1AA");
 
             entity.Property(e => e.Content).HasColumnType("image");
 
@@ -84,6 +115,34 @@ public partial class MyMoneyBContext : DbContext
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Documents__UserI__160F4887");
+        });
+
+        modelBuilder.Entity<History>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__History__4D7B4ABD0DD16D06");
+
+            entity.ToTable("History");
+
+            entity.Property(e => e.DateofChange).HasColumnType("datetime");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Histories)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__History__Id__6B24EA82");
+        });
+
+        modelBuilder.Entity<ManagerDesign>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__ManagerD__3214EC07240F01BC");
+
+            entity.ToTable("ManagerDesign");
+
+            entity.Property(e => e.ImageContent).HasColumnType("image");
+
+            entity.HasOne(d => d.Manager).WithMany(p => p.ManagerDesigns)
+                .HasForeignKey(d => d.ManagerId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ManagerId");
         });
 
         modelBuilder.Entity<Moving>(entity =>
@@ -107,15 +166,15 @@ public partial class MyMoneyBContext : DbContext
         {
             entity.ToTable("PayOption");
 
-            entity.HasOne(d => d.User).WithMany(p => p.PayOptions)
-                .HasForeignKey(d => d.UserId)
+            entity.HasOne(d => d.Manager).WithMany(p => p.PayOptions)
+                .HasForeignKey(d => d.ManagerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PayOption_User");
         });
 
         modelBuilder.Entity<Presence>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Presence__3214EC07B54D15FD");
+            entity.HasKey(e => e.Id).HasName("PK__Presence__3214EC07D7E4FABB");
 
             entity.ToTable("Presence");
 
@@ -129,11 +188,27 @@ public partial class MyMoneyBContext : DbContext
                 .HasConstraintName("FK__Presence__UserId__71D1E811");
         });
 
+        modelBuilder.Entity<PresenceSetting>(entity =>
+        {
+            entity.HasKey(e => e.PresenceId).HasName("PK__Presence__4980E863681EB51C");
+
+            entity.Property(e => e.Day).HasColumnName("day");
+            entity.Property(e => e.Hours).HasColumnName("hours");
+
+            entity.HasOne(d => d.User).WithMany(p => p.PresenceSettings)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK__PresenceS__UserI__656C112C");
+        });
+
         modelBuilder.Entity<Status>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Status__3214EC076EEBFA3C");
+            entity.HasKey(e => e.Id).HasName("PK__Status__3214EC075300C18E");
 
             entity.ToTable("Status");
+
+            entity.HasOne(d => d.Manager).WithMany(p => p.Statuses)
+                .HasForeignKey(d => d.ManagerId)
+                .HasConstraintName("FK__Status__ManagerI__74AE54BC");
         });
 
         modelBuilder.Entity<Task>(entity =>
@@ -160,9 +235,13 @@ public partial class MyMoneyBContext : DbContext
 
         modelBuilder.Entity<UrgencyDebt>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__UrgencyD__3214EC0746247550");
+            entity.HasKey(e => e.Id).HasName("PK__UrgencyD__3214EC07EEB2094F");
 
             entity.ToTable("UrgencyDebt");
+
+            entity.HasOne(d => d.Manager).WithMany(p => p.UrgencyDebts)
+                .HasForeignKey(d => d.ManagerId)
+                .HasConstraintName("FK__UrgencyDe__Manag__75A278F5");
         });
 
         modelBuilder.Entity<User>(entity =>
@@ -188,7 +267,7 @@ public partial class MyMoneyBContext : DbContext
 
         modelBuilder.Entity<User2Area>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__User2Are__3214EC07C2E49832");
+            entity.HasKey(e => e.Id).HasName("PK__User2Are__3214EC074E3F07E1");
 
             entity.ToTable("User2Area");
 

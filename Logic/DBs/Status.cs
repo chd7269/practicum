@@ -9,5 +9,9 @@ public partial class Status
 
     public string Description { get; set; } = null!;
 
+    public int? ManagerId { get; set; }
+
+    public virtual User? Manager { get; set; }
+
     public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();
 }

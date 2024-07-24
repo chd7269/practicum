@@ -1,4 +1,6 @@
-﻿using Logic.DTO;
+﻿using Logic;
+using Logic.DTO;
+using Logic.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +11,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Security.Claims;
 
+
 namespace MoneySystemServer.Controllers
 {
     [Route("api/[controller]/[action]")]
@@ -17,6 +20,10 @@ namespace MoneySystemServer.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class GlobalController : ControllerBase
     {
+        //DBService dbService;
+        //public GlobalController(DBService dBService) {
+        //    this.dbService = dbService;
+        //}      
         protected GResult<bool> Success()
         {
             return Success(true);
@@ -96,9 +103,35 @@ namespace MoneySystemServer.Controllers
 
                 }
 
+
                 return null;
             }
         }
+        //protected int? ManagerId
+        //{
+        //    get
+        //    {
+        //        if (HttpContext.User.Identity is ClaimsIdentity identity)
+        //        {
+        //            var item = identity.FindFirst(ClaimTypes.Name);
+        //            if (item != null)
+        //            {
+        //                var value = item.Value;
+        //                if (int.TryParse(value, out int id))
+        //                {
+        //                    var user = this.dbService.entities.Users.FirstOrDefault(x => x.Id == id);
+        //                        var userTyper = user.UserType;
+        //                         if(userTyper == 1) return user.Id;
+        //                         else 
+        //                        if(UserTyper==2) return user.Id;
+        //                }
+        //            }
+
+        //        }
+
+        //        return null;
+        //    }
+        //}
 
         protected int? SuperUserId
         {

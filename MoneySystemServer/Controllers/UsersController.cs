@@ -21,6 +21,8 @@ namespace MoneySystemServer.Controllers
         [HttpPost]
         public GResult<List<UserDTO>> GetUsers(userSerach userSerach)
         {
+            //, SearchDetails searchDetails
+            //, searchDetails
             return Success(userService.GetUsers(UserId.Value, userSerach));
         }
 
@@ -37,7 +39,8 @@ namespace MoneySystemServer.Controllers
         [HttpPost]
         public Result AddUser(UserDTO newUser)
         {
-            var a = userTypeDTO.systemAdministrator;
+
+            //var a = userTypeDTO.systemAdministrator;
             //var task = sessionService.GetCurrentUser();
             //UserDTO currentUser = null;
             //if (task != null)

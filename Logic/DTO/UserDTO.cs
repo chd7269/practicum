@@ -22,6 +22,9 @@ namespace Logic.DTO
         public DateTime? PayDate { get; set; }
         public IdName Lender { get; set; }
         public IdName Manager { get; set; }
+        public bool Isbusiness { get; set; }
+
+
     }
 
     public class LenderParams
@@ -36,6 +39,16 @@ namespace Logic.DTO
         public IdName usersType { get; set; }
         public IdName usersUnderLender { get; set; }
         public IdName lendersUnderManager { get; set; }
+    }
+
+    public class SearchDetails
+    {
+        public string Email { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Phone { get; set; }
+        public string usersType { get; set; }
+      
     }
 
 }
