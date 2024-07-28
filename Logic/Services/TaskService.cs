@@ -1,4 +1,5 @@
 ﻿using Logic.DTO;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,15 +28,15 @@ namespace Logic.Services
         {
             this.dbService = dbService;
         }
+
         public List<TaskDTO> GetTasks(int CurrentUserId, TaskSearch taskSearch)
         {
-            List<TaskDTO> tasks = new List<TaskDTO>();            
+            List<TaskDTO> tasks = new List<TaskDTO>();
             if (dbService.entities.Tasks.Any(x => x.UserId == CurrentUserId))
             {
                 var query = dbService.entities.Tasks.Where(x => x.UserId == CurrentUserId);
-
-                //
-                if (taskSearch != null){
+                if (taskSearch != null)
+                {
                     if (!string.IsNullOrEmpty(taskSearch.Description))
                     {
                         query = query.Where(x => x.Description.Contains(taskSearch.Description));
@@ -44,6 +45,15 @@ namespace Logic.Services
                     {
                         query = query.Where(x => x.Comment.Contains(taskSearch.Comments));
                     }
+                    if (taskSearch.CreateDate != default(DateTime))
+                    {
+                        query = query.Where(x => x.CreateDate.Date == taskSearch.CreateDate.Date);
+                    }
+                    // זה של פנינה לא למחוק
+                    //if (taskSearch.DoDate != null)
+                    //{
+                    //    query = query.Where(x => x.DoDate == taskSearch.DoDate.Date);
+                    //}
                     if (!string.IsNullOrEmpty(taskSearch.Urgency))
                     {
                         query = query.Where(x => x.Urgency.Description.Contains(taskSearch.Urgency));
@@ -52,13 +62,7 @@ namespace Logic.Services
                     {
                         query = query.Where(x => x.Status.Description.Contains(taskSearch.Status));
                     }
-
                 }
-                //if  !string.isNullOrEmpy(search.status)  
-                //query = query.Where(x=>x.Status.Name.contains(
-
-                //
-
                 tasks = query.Select(x => new TaskDTO()
                 {
                     Id = x.Id,
@@ -81,25 +85,6 @@ namespace Logic.Services
             }
             return tasks;
         }
-
-        //public TaskDTO GetTask(int id)
-        //{
-        //    var dbTask = dbService.entities.Tasks.FirstOrDefault(x => x.Id == id);
-        //    if (dbTask != null)
-        //    {
-        //        var task = new TaskDTO()
-        //        {
-        //            Id = dbTask.Id,
-        //            Description = dbTask.Description,
-        //            Remarks = dbTask.Remarks,
-        //            StatusId = dbTask.StatusId,
-        //            UserId = dbTask.UserId,
-        //            Date = dbTask.Date
-        //        };
-        //        return task;
-        //    }
-        //    return new TaskDTO();
-        //}
 
         public bool AddTask(TaskDTO task, int currentUserId)
         {

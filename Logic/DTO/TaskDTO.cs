@@ -25,7 +25,9 @@ namespace Logic.DTO
         public string Comments { get; set; }
         public string Urgency { get; set; }
         public string Status { get; set; }
+        public DateTime CreateDate { get; set; }
 
+        public DateTime DoDate { get; set; }
 
     }
 
