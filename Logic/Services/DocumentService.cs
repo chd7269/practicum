@@ -62,7 +62,9 @@ namespace Logic.Services
                 Description = x.Description,
                 FileName = x.FileName,
                 Id = x.Id,
-                Src = "File/ShowFile/" + x.Id
+                Src = "File/ShowFile/" + x.Id,
+                srcPreview = "File/Preview/" + x.Id,
+                
             }).ToList();
             return list;
         
