@@ -22,13 +22,10 @@ namespace Logic.DTO
 
     public class debtSearchDetails
     {
-        public int Id { get; set; }
         public string Description { get; set; }
-        public int Payments { get; set; }
+        public string Payments { get; set; }
         public string Urgency { get; set; }
-        public int UserId { get; set; }
-        public bool IsActive { get; set; }
-        public int Sum { get; set; }
+        public string Sum { get; set; }
 
     }
 }
