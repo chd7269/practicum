@@ -64,8 +64,17 @@ namespace Logic.Services
                     }
                     if (!string.IsNullOrEmpty(debtSearchDetails.Urgency))
                     {
-                        query = query.Where(x => x.Description.Contains(debtSearchDetails.Urgency));
+                        query = query.Where(x => x.Urgency.Description.Contains(debtSearchDetails.Urgency));
                     }
+                    if (!string.IsNullOrEmpty(debtSearchDetails.Sum))
+                    {
+                        query = query.Where(x => x.Sum.ToString().Contains(debtSearchDetails.Sum));
+                    }
+                    if (!string.IsNullOrEmpty(debtSearchDetails.Payments))
+                    {
+                        query = query.Where(x => x.Payments.ToString().Contains(debtSearchDetails.Payments));
+                    }
+
                 }
 
                 list = query.Select(x => new DebtDTO()
