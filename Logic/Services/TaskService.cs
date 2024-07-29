@@ -88,16 +88,33 @@ namespace Logic.Services
 
         public bool AddTask(TaskDTO task, int currentUserId)
         {
-            var newTask = new Task()
+            Task  newTask = new Task();
+            if (task.UserId != 0 && task.UserId != null)
             {
-                Description = task.Description,
-                Comment = task.Comments,
-                StatusId = task.Status.Id,
-                UserId = currentUserId,
-                CreateDate = DateTime.Now,
-                UrgencyId = task.Urgency.Id,
-                DoDate = task.DoDate
-            };
+                newTask = new Task()
+                {
+                    Description = task.Description,
+                    Comment = task.Comments,
+                    StatusId = task.Status.Id,
+                    UserId = task.UserId,
+                    CreateDate = DateTime.Now,
+                    UrgencyId = task.Urgency.Id,
+                    DoDate = task.DoDate
+                };
+            }
+            else if (task.UserId == 0)
+            {
+                newTask = new Task()
+                {
+                    Description = task.Description,
+                    Comment = task.Comments,
+                    StatusId = task.Status.Id,
+                    UserId = currentUserId,
+                    CreateDate = DateTime.Now,
+                    UrgencyId = task.Urgency.Id,
+                    DoDate = task.DoDate
+                };
+            }
             dbService.entities.Tasks.Add(newTask);
             dbService.Save();
 
