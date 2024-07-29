@@ -13,8 +13,8 @@ namespace Logic.Services
     {
         List<UserDTO> GetUsers(int currentUserId, UserSerach userSerach);
         List<IdName> GetUserTypes(int currentUserId);
-        UserDTO GetUser(int id);
-        bool AddUser(UserDTO user, int currentUserId);
+        UserGlobalDTO GetUser(int id);
+        bool AddUser(UserGlobalDTO user, int currentUserId);
         bool UpdateUser(UserDTO user);
         bool DeleteUser(int id);
         void ChangeUser2Manager(int id);
@@ -128,12 +128,12 @@ namespace Logic.Services
 
 
         }
-        public UserDTO GetUser(int id)
+        public UserGlobalDTO GetUser(int id)
         {
             var dbUser = dbService.entities.Users.FirstOrDefault(x => x.Id == id);
             if (dbUser != null)
             {
-                var user = new UserDTO()
+                var user = new UserGlobalDTO()
                 {
                     Id = dbUser.Id,
                     Email = dbUser.Email,
@@ -169,7 +169,7 @@ namespace Logic.Services
             return new UserDTO();
         }
 
-        public bool AddUser(UserDTO newUser, int currentUserId)
+        public bool AddUser(UserGlobalDTO newUser, int currentUserId)
         {
             bool isExist = dbService.entities.Users.Any(x => x.Email == newUser.Email);
             if (!isExist)
@@ -220,7 +220,7 @@ namespace Logic.Services
                     if (currentUser == null)
                     {
                         //dbuser.UserTypeId = 3;
-                        dbuser.UserTypeId = (int)userTypeDTO.user;
+                        dbuser.UserTypeId = newUser.UserType.Id;
 
                     }
                 }

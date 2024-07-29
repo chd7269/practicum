@@ -6,7 +6,26 @@ using System.Threading.Tasks;
 
 namespace Logic.DTO
 {
-    public class UserDTO
+    public class UserGlobalDTO
+    {
+        public int Id { get; set; }
+        public string Email { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Phone { get; set; }
+        public string Password { get; set; }
+        public bool IsActive { get; set; }
+        public IdName UserType { get; set; }
+        public bool IsYearlyPay { get; set; }
+        public DateTime RegisterDate { get; set; }
+        public DateTime? PayDate { get; set; }
+        public IdName Lender { get; set; }
+        public IdName Manager { get; set; }
+        public bool Isbusiness { get; set; }
+
+
+    }
+    public class UserDTO : UserGlobalDTO
     {
         public int Id { get; set; }
         public string Email { get; set; }
@@ -26,7 +45,7 @@ namespace Logic.DTO
 
 
     }
-
+   
     public class LenderParams
     {
         public int oldLender { get; set; }
