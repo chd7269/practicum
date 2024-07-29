@@ -57,13 +57,13 @@ public partial class MyMoneyBContext : DbContext
     {
         modelBuilder.Entity<AmountSetting>(entity =>
         {
-            entity.HasKey(e => e.ProductId).HasName("PK__ProductS__B40CC6CDDD9F23C1");
+            entity.HasKey(e => e.ProductId).HasName("PK__ProductS__B40CC6CD32380F37");
 
             entity.Property(e => e.Day).HasColumnName("day");
 
             entity.HasOne(d => d.User).WithMany(p => p.AmountSettings)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__ProductSe__UserI__68487DD7");
+                .HasConstraintName("FK__ProductSe__UserI__0A9D95DB");
         });
 
         modelBuilder.Entity<Area>(entity =>
@@ -74,21 +74,21 @@ public partial class MyMoneyBContext : DbContext
 
             entity.HasOne(d => d.Manager).WithMany(p => p.Areas)
                 .HasForeignKey(d => d.ManagerId)
-                .HasConstraintName("FK__Area__ManagerId__73BA3083");
+                .HasConstraintName("FK__Area__ManagerId__02FC7413");
         });
 
         modelBuilder.Entity<City>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Cities__3214EC07AB44D064");
+            entity.HasKey(e => e.Id).HasName("PK__Cities__3214EC0754C019D2");
 
             entity.HasOne(d => d.Manager).WithMany(p => p.Cities)
                 .HasForeignKey(d => d.ManagerId)
-                .HasConstraintName("FK__Cities__ManagerI__72C60C4A");
+                .HasConstraintName("FK__Cities__ManagerI__02084FDA");
         });
 
         modelBuilder.Entity<Debt>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Debts__3214EC074C897754");
+            entity.HasKey(e => e.Id).HasName("PK__Debts__3214EC0711DCE6E4");
 
             entity.HasOne(d => d.Area).WithMany(p => p.Debts)
                 .HasForeignKey(d => d.AreaId)
@@ -97,7 +97,7 @@ public partial class MyMoneyBContext : DbContext
             entity.HasOne(d => d.Urgency).WithMany(p => p.Debts)
                 .HasForeignKey(d => d.UrgencyId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Debts__UrgencyId__3F466844");
+                .HasConstraintName("FK__Debts__UrgencyId__52593CB8");
 
             entity.HasOne(d => d.User).WithMany(p => p.Debts)
                 .HasForeignKey(d => d.UserId)
@@ -107,7 +107,7 @@ public partial class MyMoneyBContext : DbContext
 
         modelBuilder.Entity<Document>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Document__3214EC076D60C1AA");
+            entity.HasKey(e => e.Id).HasName("PK__Document__3214EC07DC2B2ABF");
 
             entity.Property(e => e.Content).HasColumnType("image");
 
@@ -119,7 +119,7 @@ public partial class MyMoneyBContext : DbContext
 
         modelBuilder.Entity<History>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__History__4D7B4ABD0DD16D06");
+            entity.HasKey(e => e.Id).HasName("PK__History__4D7B4ABD9FE2FEE8");
 
             entity.ToTable("History");
 
@@ -128,12 +128,12 @@ public partial class MyMoneyBContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Histories)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__History__Id__6B24EA82");
+                .HasConstraintName("FK__History__Id__74AE54BC");
         });
 
         modelBuilder.Entity<ManagerDesign>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ManagerD__3214EC07240F01BC");
+            entity.HasKey(e => e.Id).HasName("PK__ManagerD__3214EC07CE1F25BE");
 
             entity.ToTable("ManagerDesign");
 
@@ -174,7 +174,7 @@ public partial class MyMoneyBContext : DbContext
 
         modelBuilder.Entity<Presence>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Presence__3214EC07D7E4FABB");
+            entity.HasKey(e => e.Id).HasName("PK__Presence__3214EC07CC3EBCA4");
 
             entity.ToTable("Presence");
 
@@ -190,25 +190,25 @@ public partial class MyMoneyBContext : DbContext
 
         modelBuilder.Entity<PresenceSetting>(entity =>
         {
-            entity.HasKey(e => e.PresenceId).HasName("PK__Presence__4980E863681EB51C");
+            entity.HasKey(e => e.PresenceId).HasName("PK__Presence__4980E863335670FE");
 
             entity.Property(e => e.Day).HasColumnName("day");
             entity.Property(e => e.Hours).HasColumnName("hours");
 
             entity.HasOne(d => d.User).WithMany(p => p.PresenceSettings)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__PresenceS__UserI__656C112C");
+                .HasConstraintName("FK__PresenceS__UserI__07C12930");
         });
 
         modelBuilder.Entity<Status>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Status__3214EC075300C18E");
+            entity.HasKey(e => e.Id).HasName("PK__Status__3214EC07DF1E0AAD");
 
             entity.ToTable("Status");
 
             entity.HasOne(d => d.Manager).WithMany(p => p.Statuses)
                 .HasForeignKey(d => d.ManagerId)
-                .HasConstraintName("FK__Status__ManagerI__74AE54BC");
+                .HasConstraintName("FK__Status__ManagerI__03F0984C");
         });
 
         modelBuilder.Entity<Task>(entity =>
@@ -235,13 +235,13 @@ public partial class MyMoneyBContext : DbContext
 
         modelBuilder.Entity<UrgencyDebt>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__UrgencyD__3214EC07EEB2094F");
+            entity.HasKey(e => e.Id).HasName("PK__UrgencyD__3214EC07E363C391");
 
             entity.ToTable("UrgencyDebt");
 
             entity.HasOne(d => d.Manager).WithMany(p => p.UrgencyDebts)
                 .HasForeignKey(d => d.ManagerId)
-                .HasConstraintName("FK__UrgencyDe__Manag__75A278F5");
+                .HasConstraintName("FK__UrgencyDe__Manag__04E4BC85");
         });
 
         modelBuilder.Entity<User>(entity =>
@@ -267,7 +267,7 @@ public partial class MyMoneyBContext : DbContext
 
         modelBuilder.Entity<User2Area>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__User2Are__3214EC074E3F07E1");
+            entity.HasKey(e => e.Id).HasName("PK__User2Are__3214EC074ECC7C49");
 
             entity.ToTable("User2Area");
 
