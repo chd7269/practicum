@@ -139,6 +139,12 @@ namespace MoneySystemServer.Controllers
             return Success(userService.GetAllUserType());
 
         }
+        [HttpGet]
+        public GResult<List<UserDTO>> getLenderByManager()
+        {
+            return Success(userService.getLenderByManager(ManagerId.Value));
+
+        }
 
     }
 }

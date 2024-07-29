@@ -20,7 +20,9 @@ namespace Logic.Services
         void ChangeUser2Manager(int id);
 
         bool ChangeUserTypeOrLenderAndDelete(int oldLender, int userType, int? newLender);
-        public List<userTypeDTO> GetAllUserType();
+
+        List<UserDTO> getLenderByManager(int managerId);
+        List<userTypeDTO> GetAllUserType();
     }
 
     public class UserService : IUserService
@@ -104,7 +106,7 @@ namespace Logic.Services
                     }
                 }
             }
-            List <UserDTO> list = users.Select(x => new UserDTO()
+            List<UserDTO> list = users.Select(x => new UserDTO()
             {
                 Id = x.Id,
                 Email = x.Email,
@@ -376,6 +378,21 @@ namespace Logic.Services
             }
 
             return userTypesList;
+        }
+        public List<UserDTO> getLenderByManager(int managerId)
+        {
+            var query = dbService.entities.Users.Where(x => x.ManagerId == managerId);
+            var list = query.Select(x => new UserDTO()
+            {
+                Id = x.Id,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Email = x.Email,
+                Password = x.Password,
+                IsActive = x.IsActive,
+            }).ToList();
+
+            return list;
         }
 
     }
