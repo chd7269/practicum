@@ -16,6 +16,7 @@ namespace Logic.DTO
         public int UserId { get; set; }
         public bool IsActive { get; set; }
         public int Sum { get; set; }
+        public Area Areaid { get; set; }
         //כרגע אין צורך ב UserId 
         //האדם שנכנס הוא בעל החוב, בהמשך יהיה גם מלווה שיוכל להכנס
     }

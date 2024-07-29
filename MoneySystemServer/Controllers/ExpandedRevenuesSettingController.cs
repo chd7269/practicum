@@ -19,38 +19,16 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public GResult<List<PresenceSettingsDTO>> GetDaysRevenuesExpanded()
-        {
+        public GResult<List<PresenceSettingsDTO>> GetDaysRevenuesExpanded() 
+        { 
             return Success(expandedRevenuesService.GetDaysRevenuesExpanded());
         }
 
         [HttpPost]
         public Result AddPresenceRevenue(PresenceSettingsDTO newRevenue)
         {
-            var isDayExist = expandedRevenuesService.AddPresenceRevenue(newRevenue, UserId.Value);
+            var isDayExist = expandedRevenuesService.AddPresenceRevenue(newRevenue);
 
-            return Success();
-        }
-
-        [HttpPut]
-        public Result UpdatePresenceRevenue(PresenceSettingsDTO newRevenue)
-        {
-            var isRevenueExist = expandedRevenuesService.updatePresenceRevenue(newRevenue, UserId.Value);
-            if (!isRevenueExist)
-            {
-                return Fail(message: "ההכנסה קיימת כבר");
-            }
-            return Success();
-        }
-
-        [HttpDelete("{id}")]
-        public Result DeletePresenceRevenue(int id)
-        {
-            var isRevenueExist = expandedRevenuesService.DeletePresenceRevenue(id, UserId.Value);
-            if (!isRevenueExist)
-            {
-                return Fail(message: "ההכנסה לא נמצאה");
-            }
             return Success();
         }
 
@@ -61,31 +39,9 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public Result AddAmountRevenue(AmountSettingsDTO newRevenue)
+        public Result AddAmountRevenue(AmountSettingsDTO newRevenue) 
         {
-            var isProductExist = expandedRevenuesService.AddAmountRevenue(newRevenue, UserId.Value);
-            return Success();
-        }
-
-        [HttpPut]
-        public Result UpdateAmountRevenue(AmountSettingsDTO newRevenue)
-        {
-            var isRevenueExist = expandedRevenuesService.updateAmountRevenue(newRevenue, UserId.Value);
-            if (!isRevenueExist)
-            {
-                return Fail(message: "ההכנסה קיימת כבר");
-            }
-            return Success();
-        }
-
-        [HttpDelete("{id}")]
-        public Result DeleteAmountRevenue(int id)
-        {
-            var isRevenueExist = expandedRevenuesService.DeleteAmountRevenue(id, UserId.Value);
-            if (!isRevenueExist)
-            {
-                return Fail(message: "ההכנסה לא נמצאה");
-            }
+            var isProductExist = expandedRevenuesService.AddAmountRevenue(newRevenue);
             return Success();
         }
 
