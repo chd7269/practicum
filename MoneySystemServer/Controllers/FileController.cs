@@ -9,6 +9,7 @@ using Aspose.Words;
 using Aspose.Words.Saving;
 using Aspose.Cells;
 using Aspose.Cells.Rendering;
+using iTextSharp.text;
 
 
 namespace MoneySystemServer.Controllers
@@ -29,16 +30,39 @@ namespace MoneySystemServer.Controllers
         [HttpGet("{id}")]
         public ActionResult ShowFile(int id)
         {
-            var x = Preview(id);
-            if (x == null)
-            {
+         
                 var file = documentService.GetFile(id);
 
                 file.ContentType = GetContentType(file.FileName);
 
                 return File(file.Content, file.ContentType);
+          
+        }
+        [HttpGet("{id}")]
+        public ActionResult Preview(int id)
+        {
+            var file = documentService.GetFile(id);
+            if (GetContentType(file.FileName) == "application/pdf")
+            {
+                var pdf = PreviewPDF(id, file);
+                return pdf;
             }
-            return x;
+            if (GetContentType(file.FileName) == "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+            {
+                var doc = PreviewDOC(id, file);
+                return doc;
+            }
+            if (GetContentType(file.FileName) == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            {
+                var xsl = PreviewXSL(id, file);
+                return xsl;
+            }
+            if (GetContentType(file.FileName) == "image/jpg"&& GetContentType(file.FileName) == "image/jpg")
+            {
+                var img = ShowFile(id);
+                return img;
+            }
+            return null;
         }
 
 
@@ -64,26 +88,6 @@ namespace MoneySystemServer.Controllers
             }
 
             return int.Parse(str);
-        }
-        public ActionResult Preview(int id)
-        {
-            var file = documentService.GetFile(id);
-            if (GetContentType(file.FileName) == "application/pdf")
-            {
-                var pdf = PreviewPDF(id, file);
-                return pdf;
-            }
-            if (GetContentType(file.FileName) == "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
-            {
-                var doc = PreviewDOC(id, file);
-                return doc;
-            }
-            if (GetContentType(file.FileName) == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-            {
-                var xsl = PreviewXSL(id, file);
-                return xsl;
-            }
-            return null;
         }
 
         // אם גט מצליח לקבל שתי נתונים להפוך את הפונקציה לגלובלית בערך ככה
