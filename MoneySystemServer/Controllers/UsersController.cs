@@ -26,7 +26,7 @@ namespace MoneySystemServer.Controllers
         }
 
         [HttpGet("{id}")]
-        public GResult<UserDTO> GetUser(int id)
+        public GResult<UserGlobalDTO> GetUser(int id)
         {
 
             return Success(userService.GetUser(id));
@@ -36,21 +36,21 @@ namespace MoneySystemServer.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public Result AddUser(UserDTO newUser)
+        public Result AddUser(UserGlobalDTO newUser)
         {
-
-            //var a = userTypeDTO.systemAdministrator;
-            //var task = sessionService.GetCurrentUser();
-            //UserDTO currentUser = null;
-            //if (task != null)
-            //{
-            //    currentUser = task.Result;
-            //}
             int userId = 0;
-            if (UserId.Value > 0)
+            if (newUser.Id == 0)
             {
-                userId= UserId.Value;
+                userId = 0;
             }
+            else
+            {
+                if (UserId.Value > 0)
+                {
+                    userId = UserId.Value;
+                }
+            }
+            
             var isEmailExist = userService.AddUser(newUser, userId);
             if (isEmailExist)
             {
@@ -137,6 +137,12 @@ namespace MoneySystemServer.Controllers
         public GResult<List<userTypeDTO>> getAllUserType()
         {
             return Success(userService.GetAllUserType());
+
+        }
+        [HttpGet]
+        public GResult<List<UserDTO>> getLenderByManager()
+        {
+            return Success(userService.getLenderByManager(ManagerId.Value));
 
         }
 

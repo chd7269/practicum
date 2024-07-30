@@ -13,14 +13,16 @@ namespace Logic.Services
     {
         List<UserDTO> GetUsers(int currentUserId, UserSerach userSerach);
         List<IdName> GetUserTypes(int currentUserId);
-        UserDTO GetUser(int id);
-        bool AddUser(UserDTO user, int currentUserId);
+        UserGlobalDTO GetUser(int id);
+        bool AddUser(UserGlobalDTO user, int currentUserId);
         bool UpdateUser(UserDTO user);
         bool DeleteUser(int id);
         void ChangeUser2Manager(int id);
 
         bool ChangeUserTypeOrLenderAndDelete(int oldLender, int userType, int? newLender);
-        public List<userTypeDTO> GetAllUserType();
+
+        List<UserDTO> getLenderByManager(int managerId);
+        List<userTypeDTO> GetAllUserType();
     }
 
     public class UserService : IUserService
@@ -104,7 +106,7 @@ namespace Logic.Services
                     }
                 }
             }
-            List <UserDTO> list = users.Select(x => new UserDTO()
+            List<UserDTO> list = users.Select(x => new UserDTO()
             {
                 Id = x.Id,
                 Email = x.Email,
@@ -128,12 +130,12 @@ namespace Logic.Services
 
 
         }
-        public UserDTO GetUser(int id)
+        public UserGlobalDTO GetUser(int id)
         {
             var dbUser = dbService.entities.Users.FirstOrDefault(x => x.Id == id);
             if (dbUser != null)
             {
-                var user = new UserDTO()
+                var user = new UserGlobalDTO()
                 {
                     Id = dbUser.Id,
                     Email = dbUser.Email,
@@ -169,7 +171,7 @@ namespace Logic.Services
             return new UserDTO();
         }
 
-        public bool AddUser(UserDTO newUser, int currentUserId)
+        public bool AddUser(UserGlobalDTO newUser, int currentUserId)
         {
             bool isExist = dbService.entities.Users.Any(x => x.Email == newUser.Email);
             if (!isExist)
@@ -220,7 +222,7 @@ namespace Logic.Services
                     if (currentUser == null)
                     {
                         //dbuser.UserTypeId = 3;
-                        dbuser.UserTypeId = (int)userTypeDTO.user;
+                        dbuser.UserTypeId = newUser.UserType.Id;
 
                     }
                 }
@@ -376,6 +378,21 @@ namespace Logic.Services
             }
 
             return userTypesList;
+        }
+        public List<UserDTO> getLenderByManager(int managerId)
+        {
+            var query = dbService.entities.Users.Where(x => x.ManagerId == managerId);
+            var list = query.Select(x => new UserDTO()
+            {
+                Id = x.Id,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Email = x.Email,
+                Password = x.Password,
+                IsActive = x.IsActive,
+            }).ToList();
+
+            return list;
         }
 
     }

@@ -100,7 +100,7 @@ namespace Logic.Services
                 NewDomain = x.NewDomain,
                 OldAmount = x.OldAmount,
                 NewAmount = x.NewAmount,
-                ActionOption = x.ActionOption
+                ActionOption = (ActionOptions)x.ActionOption
             }).ToList();
 
 

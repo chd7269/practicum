@@ -32,7 +32,8 @@ namespace Logic.Services
                 Payments = debt.Payments,
                 UrgencyId = debt.Urgency.Id,
                 UserId = currentUserId,
-                Sum = debt.Sum
+                Sum = debt.Sum,
+                AreaId = debt.Areaid.Id
             };
             dBService.entities.Debts.Add(newDebt);
             dBService.Save();
@@ -87,6 +88,11 @@ namespace Logic.Services
                     {
                         Id = x.Id,
                         Name = x.Urgency.Description
+                    },
+                    Areaid = new Area()
+                    {
+                        Id = x.Area.Id,
+                        Description = x.Area.Description
                     },
                     UserId = x.UserId,
                     Sum = x.Sum,

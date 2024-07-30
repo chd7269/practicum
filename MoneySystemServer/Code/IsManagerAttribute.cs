@@ -33,7 +33,7 @@ namespace MoneySystemServer.Code
             if (userId != null && userId != "" && int.TryParse(userId, out int thesId1) && thesId1 > 0)
             {
                 var user = service.entities.Users.FirstOrDefault(x => x.Id == thesId1);
-                if (user != null && user.UserTypeId == 1)
+                if (user != null && (user.UserTypeId == 1 || user.UserTypeId == 2 || user.UserTypeId == 4))
                 {
                     return;
                 }
