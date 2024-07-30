@@ -142,7 +142,7 @@ namespace MoneySystemServer.Controllers
         [HttpGet]
         public GResult<List<UserDTO>> getLenderByManager()
         {
-            return Success(userService.getLenderByManager(ManagerId.Value));
+            return Success(userService.getLenderByManager(UserId.Value));
 
         }
 

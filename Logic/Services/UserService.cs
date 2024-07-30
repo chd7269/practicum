@@ -379,9 +379,9 @@ namespace Logic.Services
 
             return userTypesList;
         }
-        public List<UserDTO> getLenderByManager(int managerId)
+        public List<UserDTO> getLenderByManager(int userId)
         {
-            var query = dbService.entities.Users.Where(x => x.ManagerId == managerId);
+            var query = dbService.entities.Users.Where(x => x.ManagerId == userId);
             var list = query.Select(x => new UserDTO()
             {
                 Id = x.Id,
