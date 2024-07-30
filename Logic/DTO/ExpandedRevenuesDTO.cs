@@ -8,14 +8,16 @@ namespace Logic.DTO
 {
     public class PresenceSettingsDTO
     {
-        public int Id { get; set; }
+        public int PresenceId { get; set; }
+        public int? UserId { get; set; }
         public int Day { get; set; }
         public int Hours { get; set; }
     }
 
     public class AmountSettingsDTO
     {
-        public int Id { get; set; }
+        public int ProductId { get; set; }
+        public int? UserId { get; set; }
         public int Day { get; set; }
         public string Product { get; set; }
         public string ProductType { get; set; }
