@@ -1,4 +1,5 @@
-﻿using Logic.DTO;
+﻿using Api.Code;
+using Logic.DTO;
 using Logic.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +31,7 @@ namespace Api.Controllers
         {
             return Success(areaService.GetAreaList(UserId.Value, type));
         }
-
+        [IsPermissionSettingAttribute]
         [HttpPost]
         public Result AddArea(AreaDTO area)
         {
@@ -41,7 +42,7 @@ namespace Api.Controllers
             }
             return Success();
         }
-
+        [IsPermissionSettingAttribute]
         [HttpPut]
         public Result UpdateArea(AreaDTO area)
         {
@@ -52,7 +53,7 @@ namespace Api.Controllers
             }
             return Success();
         }
-
+        [IsPermissionSettingAttribute]
         [HttpDelete("{id}")]
         public Result DeleteArea(int id)
         {
